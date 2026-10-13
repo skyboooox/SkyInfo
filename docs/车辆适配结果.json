@@ -1,0 +1,456 @@
+{
+  "firmware": "59.7.4.26080703.1",
+  "scope": "Compatibility observations, not guaranteed support or a live recording",
+  "fields": [
+    {
+      "id": "1014/5/1148190752",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1014/5/1148190736",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1014/5/1148190776",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1014/5/1147142192",
+      "subscription": "callback_observed",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1014/5/1147142160",
+      "subscription": "callback_observed",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1009/5/1145045000",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1039/5/677380120",
+      "subscription": "callback_observed",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1009/7/1145045016",
+      "subscription": "callback_observed",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1014/5/1145045032",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1014/7/1246777400",
+      "subscription": "registration_accepted",
+      "shell_quality": "available"
+    },
+    {
+      "id": "1014/5/1145045040",
+      "subscription": "registration_accepted",
+      "shell_quality": "available"
+    },
+    {
+      "id": "1014/5/877658136",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1014/5/877658120",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1009/5/876609586",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1009/5/876609560",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1009/5/89128973",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1009/5/876609592",
+      "subscription": "registration_accepted",
+      "shell_quality": "invalid"
+    },
+    {
+      "id": "1009/5/1132462112",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1009/5/89128974",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1009/7/842006552",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1009/7/785383452",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1009/7/666894360",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1009/5/1196425233",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1009/7/1249050652",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1012/5/339738642",
+      "subscription": "registration_accepted",
+      "shell_quality": "invalid"
+    },
+    {
+      "id": "1012/5/550502408",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1012/5/339738656",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1014/7/1246760996",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1007/5/1246761027",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1013/5/874512392",
+      "subscription": "registration_accepted",
+      "shell_quality": "available"
+    },
+    {
+      "id": "1013/5/874512400",
+      "subscription": "registration_accepted",
+      "shell_quality": "available"
+    },
+    {
+      "id": "1011/5/555745336",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1006/5/888143882",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1006/5/843055176",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1006/5/818937864",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1006/5/1186988096",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1012/5/1141899272",
+      "subscription": "callback_observed",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1012/5/621805576",
+      "subscription": "callback_observed",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1009/7/1186988040",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1009/7/1186988056",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1039/5/1302331672",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1039/5/1178624024",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1039/5/1302331756",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1039/5/1178624040",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1039/5/1302331648",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1039/5/1178624016",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1039/5/1302331748",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1039/5/1178624032",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1005/5/1031798840",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1005/5/1320169504",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1000/5/1031798832",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1000/5/1320181776",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1000/5/1077936144",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1000/5/1077936137",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1000/5/766509068",
+      "subscription": "registration_accepted",
+      "shell_quality": "invalid"
+    },
+    {
+      "id": "1000/5/1077936168",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1000/5/1077936176",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1032/7/1128267816",
+      "subscription": "registration_accepted",
+      "shell_quality": "available"
+    },
+    {
+      "id": "1032/7/1150289944",
+      "subscription": "callback_observed",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1039/5/919601208",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1016/5/-1728052956",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1016/5/-1728052952",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1016/5/-1728052948",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1016/5/-1728052944",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1007/5/1246797848",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1007/5/1246797860",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1007/5/1246797872",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1007/5/1246797884",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1001/5/692060168",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1001/5/692060170",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1001/5/692060172",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1001/5/692060174",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1001/5/692060188",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1001/5/692060186",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1032/5/1081081864",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1001/5/947912728",
+      "subscription": "registration_accepted",
+      "shell_quality": "available"
+    },
+    {
+      "id": "1001/5/1267728400",
+      "subscription": "registration_accepted",
+      "shell_quality": "available"
+    },
+    {
+      "id": "1001/5/947912736",
+      "subscription": "registration_accepted",
+      "shell_quality": "available"
+    },
+    {
+      "id": "1001/5/947912752",
+      "subscription": "registration_accepted",
+      "shell_quality": "available"
+    },
+    {
+      "id": "1000/5/1077936184",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1038/5/852492340",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1038/5/-1319108564",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1038/5/828375084",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1038/5/700448800",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1038/5/700448816",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1038/5/401604619",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1038/5/303038502",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "1038/5/305135676",
+      "subscription": "registration_accepted",
+      "shell_quality": "unverified"
+    },
+    {
+      "id": "system.android_version",
+      "subscription": "not_applicable",
+      "shell_quality": "available"
+    },
+    {
+      "id": "system.firmware_version",
+      "subscription": "not_applicable",
+      "shell_quality": "available"
+    }
+  ]
+}

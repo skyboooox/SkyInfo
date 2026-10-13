@@ -1,0 +1,21 @@
+name: 问题反馈
+description: 报告可复现的错误（请先移除私人数据）
+body:
+  - type: textarea
+    id: environment
+    attributes:
+      label: 版本与环境
+      description: SkyInfo、Android、车型/协议及已确认的接口权限，不填写设备标识。
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: 复现步骤、预期与实际结果
+    validations:
+      required: true
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: 脱敏诊断（可选）
+      description: 不上传令牌、密钥、私人网络地址、原始车屏或未经审阅的采样。

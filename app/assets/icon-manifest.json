@@ -1,0 +1,3557 @@
+{
+  "schema_version": 2,
+  "upstream": {
+    "repository": "https://github.com/tabler/tabler-icons",
+    "version": "3.49.0",
+    "commit": "a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d",
+    "license": "MIT"
+  },
+  "style": {
+    "viewbox": [
+      0,
+      0,
+      24,
+      24
+    ],
+    "stroke_width": 2,
+    "color": "currentColor",
+    "normalization": "Tabler SVG仅移除元数据注释；几何与描边不变。项目原创SVG同网格同线宽。"
+  },
+  "icons": [
+    {
+      "id": "tabler-battery-automotive",
+      "name": "车用电池",
+      "category": "电气与仪表",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/battery-automotive.svg",
+      "upstream_sha256": "fd175e489f4cf4491b5737c8cdae86155e05ed2176aa955767b8354843dd7caa",
+      "asset": "svg/tabler-battery-automotive.svg",
+      "sha256": "8e452f1315ea963649c1af2c745f72e7a33d6f8cd6b5369372a90fa4a1fdbdb6",
+      "license": "MIT",
+      "keywords": [
+        "车用电池",
+        "battery-automotive",
+        "battery automotive"
+      ],
+      "nameKey": "text_7bce7b8d24",
+      "categoryKey": "text_19ddbf688f"
+    },
+    {
+      "id": "tabler-battery-vertical",
+      "name": "竖向电池",
+      "category": "电气与仪表",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/battery-vertical.svg",
+      "upstream_sha256": "211ba74a2d7cf14650b2f9a998f5af71266a25377c5c13b1b4ec6935c8882a71",
+      "asset": "svg/tabler-battery-vertical.svg",
+      "sha256": "7192e8bfbea1b4c23ee1540f7f8b31f59b42110c7aa5a0ba9467906629e5d897",
+      "license": "MIT",
+      "keywords": [
+        "竖向电池",
+        "battery-vertical",
+        "battery vertical"
+      ],
+      "nameKey": "text_ab96e083c0",
+      "categoryKey": "text_19ddbf688f"
+    },
+    {
+      "id": "tabler-battery-eco",
+      "name": "电池与叶片",
+      "category": "电气与仪表",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/battery-eco.svg",
+      "upstream_sha256": "57192d072a0644a1e4f0d792ff2e6cb3939d05d974a0106cd83bc11b7b5ae066",
+      "asset": "svg/tabler-battery-eco.svg",
+      "sha256": "15a39c0b8ff6bd48ef7265d69a3dbce7db04c23e81e8aa3d886dfc3ba3eb68ea",
+      "license": "MIT",
+      "keywords": [
+        "电池与叶片",
+        "battery-eco",
+        "battery eco"
+      ],
+      "nameKey": "text_9e53ca9665",
+      "categoryKey": "text_19ddbf688f"
+    },
+    {
+      "id": "tabler-battery-3",
+      "name": "三格电池",
+      "category": "电气与仪表",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/battery-3.svg",
+      "upstream_sha256": "92837a1158449d18e4e0bbcffbc09602ccd7617d8d54a346880582647a2013c7",
+      "asset": "svg/tabler-battery-3.svg",
+      "sha256": "557ff828922f8879b8d3983562dc394ad87ba5693ebdefb1eca2675148351549",
+      "license": "MIT",
+      "keywords": [
+        "三格电池",
+        "battery-3",
+        "battery 3"
+      ],
+      "nameKey": "text_27310472ca",
+      "categoryKey": "text_19ddbf688f"
+    },
+    {
+      "id": "tabler-battery-charging",
+      "name": "电池与闪电",
+      "category": "电气与仪表",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/battery-charging.svg",
+      "upstream_sha256": "d8093f2c92ed48c85bc815011ab178e218c004e178f5f4287f9fc29eccf9aa58",
+      "asset": "svg/tabler-battery-charging.svg",
+      "sha256": "3629d551b9ee2513498893d3c06d5b74ddc9291855c19a65b16b15b943dbbbc7",
+      "license": "MIT",
+      "keywords": [
+        "电池与闪电",
+        "battery-charging",
+        "battery charging"
+      ],
+      "nameKey": "text_f26d7e3b14",
+      "categoryKey": "text_19ddbf688f"
+    },
+    {
+      "id": "tabler-battery-spark",
+      "name": "电池与火花",
+      "category": "电气与仪表",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/battery-spark.svg",
+      "upstream_sha256": "54eefac0bac7225376b990868cdb4dea80c1796ecfd06e220b2951698b86320a",
+      "asset": "svg/tabler-battery-spark.svg",
+      "sha256": "d65055348b5206d834f2550fc240993467b1416d2be99a0e8c35af77585a7e65",
+      "license": "MIT",
+      "keywords": [
+        "电池与火花",
+        "battery-spark",
+        "battery spark"
+      ],
+      "nameKey": "text_570f04f6d3",
+      "categoryKey": "text_19ddbf688f"
+    },
+    {
+      "id": "tabler-circuit-ammeter",
+      "name": "电流表",
+      "category": "电气与仪表",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/circuit-ammeter.svg",
+      "upstream_sha256": "b57b2549dc9a7c17478aefdf216d4a848be8c3c96bd567fa31ec75203c8261e2",
+      "asset": "svg/tabler-circuit-ammeter.svg",
+      "sha256": "2bc8dd9ec88b4ce92fe4add4bac17e1605bc83f16380802c12257134fce3c55d",
+      "license": "MIT",
+      "keywords": [
+        "电流表",
+        "circuit-ammeter",
+        "circuit ammeter"
+      ],
+      "nameKey": "text_31d3aa746b",
+      "categoryKey": "text_19ddbf688f"
+    },
+    {
+      "id": "tabler-circuit-voltmeter",
+      "name": "电压表",
+      "category": "电气与仪表",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/circuit-voltmeter.svg",
+      "upstream_sha256": "b1c705a8d9fd241eb67dd275437b05dcef5b5ea249333aa31063af55a02520bb",
+      "asset": "svg/tabler-circuit-voltmeter.svg",
+      "sha256": "5b967d136c635778f957fa5960b35ed690f1a9340eccbee98910f728062fbd70",
+      "license": "MIT",
+      "keywords": [
+        "电压表",
+        "circuit-voltmeter",
+        "circuit voltmeter"
+      ],
+      "nameKey": "text_fa64bb0296",
+      "categoryKey": "text_19ddbf688f"
+    },
+    {
+      "id": "tabler-circuit-motor",
+      "name": "电动机",
+      "category": "电气与仪表",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/circuit-motor.svg",
+      "upstream_sha256": "a8daeab57af1c5bf391a51ebed85bf62c0da5fa4a05cf48301ee1a117b1dff24",
+      "asset": "svg/tabler-circuit-motor.svg",
+      "sha256": "7b30bc5fccd5846a1ecc01a448e4865ac9f55c976401d38690cdcca4fa515e47",
+      "license": "MIT",
+      "keywords": [
+        "电动机",
+        "circuit-motor",
+        "circuit motor"
+      ],
+      "nameKey": "text_3cfbe999a9",
+      "categoryKey": "text_19ddbf688f"
+    },
+    {
+      "id": "tabler-engine",
+      "name": "发动机",
+      "category": "车辆与部件",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/engine.svg",
+      "upstream_sha256": "05526525a7fa6ebce96ace29fa5b5160d9f0709044afd6e673ab8e1dde477dc0",
+      "asset": "svg/tabler-engine.svg",
+      "sha256": "18854e348df807e29bff0c2e2ff3235757a5472084da82e7b1b0643d279dbf30",
+      "license": "MIT",
+      "keywords": [
+        "发动机",
+        "engine",
+        "engine"
+      ],
+      "nameKey": "text_c5f5fabb51",
+      "categoryKey": "text_0e2d28afc2"
+    },
+    {
+      "id": "tabler-gauge",
+      "name": "仪表盘",
+      "category": "电气与仪表",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/gauge.svg",
+      "upstream_sha256": "e7284d4e0f7e83f1b20ff31bd5254e4bd019ce89007e2b3c8f8b69358c9950e9",
+      "asset": "svg/tabler-gauge.svg",
+      "sha256": "f21d55b20faf1c21ce63c756e1cad3060e08e52de11af9962a637c9a469de7a5",
+      "license": "MIT",
+      "keywords": [
+        "仪表盘",
+        "gauge",
+        "gauge"
+      ],
+      "nameKey": "text_2c0ab88554",
+      "categoryKey": "text_19ddbf688f"
+    },
+    {
+      "id": "tabler-gas-station",
+      "name": "加油机",
+      "category": "设备与界面",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/gas-station.svg",
+      "upstream_sha256": "83f6f3cfefaba97cbde37a282758e84f4498ed0ec8453fec7a3230766b81d389",
+      "asset": "svg/tabler-gas-station.svg",
+      "sha256": "38dbc9982c5e6b9670f5ab20011c42e6c2b7e3e09efafe69b0c819e1f401a7d9",
+      "license": "MIT",
+      "keywords": [
+        "加油机",
+        "gas-station",
+        "gas station"
+      ],
+      "nameKey": "text_f63bf4f493",
+      "categoryKey": "text_ac6f1f8149"
+    },
+    {
+      "id": "tabler-ruler-measure",
+      "name": "量尺",
+      "category": "操作与方向",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/ruler-measure.svg",
+      "upstream_sha256": "a4f509cfca3c4f2e08f5be9149c563a1c84b39476a47c6fc2f997e20dd6ccb4a",
+      "asset": "svg/tabler-ruler-measure.svg",
+      "sha256": "913baa52cdb9708d5c5e156ad6de2f214943b4990b2e05d87fd8c697550bb46d",
+      "license": "MIT",
+      "keywords": [
+        "量尺",
+        "ruler-measure",
+        "ruler measure"
+      ],
+      "nameKey": "text_dd69101264",
+      "categoryKey": "text_78b4f826e7"
+    },
+    {
+      "id": "tabler-automatic-gearbox",
+      "name": "换挡杆",
+      "category": "车辆与部件",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/automatic-gearbox.svg",
+      "upstream_sha256": "d6fcd06edec281aa17ddab5bb52609ceee2132712d7a7a4d0953faca153ee925",
+      "asset": "svg/tabler-automatic-gearbox.svg",
+      "sha256": "c9ee7472f8d31a4fc4770721904c1e4ae73b611a801a1a6b5c156f157bd96699",
+      "license": "MIT",
+      "keywords": [
+        "换挡杆",
+        "automatic-gearbox",
+        "automatic gearbox"
+      ],
+      "nameKey": "text_0432a5dfe4",
+      "categoryKey": "text_0e2d28afc2"
+    },
+    {
+      "id": "tabler-temperature",
+      "name": "温度计",
+      "category": "温度与气流",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/temperature.svg",
+      "upstream_sha256": "8be450ec2f02f6ae9a0c73bd033f628ef87c46e94cd4a303163ce15c5ea45ad7",
+      "asset": "svg/tabler-temperature.svg",
+      "sha256": "d073943a29cac21cb6b6c6a3be0706aff6ac26d12bea921f44d572498bcf3796",
+      "license": "MIT",
+      "keywords": [
+        "温度计",
+        "temperature",
+        "temperature"
+      ],
+      "nameKey": "text_3bfea5b380",
+      "categoryKey": "text_8a91556890"
+    },
+    {
+      "id": "tabler-temperature-plus",
+      "name": "温度计加号",
+      "category": "温度与气流",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/temperature-plus.svg",
+      "upstream_sha256": "6fa0b12e1d24f383038d0925b798ce7516ed280357bc03a23923a1c46b86b216",
+      "asset": "svg/tabler-temperature-plus.svg",
+      "sha256": "64d1751bfb73bcafa6cbbf2ebbcdc89c7344816481df78d4d690edba265e6a00",
+      "license": "MIT",
+      "keywords": [
+        "温度计加号",
+        "temperature-plus",
+        "temperature plus"
+      ],
+      "nameKey": "text_b5b0f8e710",
+      "categoryKey": "text_8a91556890"
+    },
+    {
+      "id": "tabler-temperature-minus",
+      "name": "温度计减号",
+      "category": "温度与气流",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/temperature-minus.svg",
+      "upstream_sha256": "07eeb483a9d8a69fc9f91d8978fc6277f99b665c493cc228240a0c4161c2e88c",
+      "asset": "svg/tabler-temperature-minus.svg",
+      "sha256": "1bc74ec1a36d2249beceda0904234a7868ee2fbaee7a2f1104ed106d020d74a4",
+      "license": "MIT",
+      "keywords": [
+        "温度计减号",
+        "temperature-minus",
+        "temperature minus"
+      ],
+      "nameKey": "text_7ffee88a38",
+      "categoryKey": "text_8a91556890"
+    },
+    {
+      "id": "tabler-temperature-sun",
+      "name": "温度计与太阳",
+      "category": "温度与气流",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/temperature-sun.svg",
+      "upstream_sha256": "95edda3e276d986f3cae0c034c432610b17935cf2d4f0c1eec104b7909997186",
+      "asset": "svg/tabler-temperature-sun.svg",
+      "sha256": "35735ca7e977f08c5bd999ed01c560497523c63a5470ce8276f6720fd848b1e1",
+      "license": "MIT",
+      "keywords": [
+        "温度计与太阳",
+        "temperature-sun",
+        "temperature sun"
+      ],
+      "nameKey": "text_63a872b8b1",
+      "categoryKey": "text_8a91556890"
+    },
+    {
+      "id": "tabler-plug-connected",
+      "name": "连接插头",
+      "category": "电气与仪表",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/plug-connected.svg",
+      "upstream_sha256": "0894139c4c7995ddc73e69fe204d0fbebaed02fe27770e142cf2c5b20434d00b",
+      "asset": "svg/tabler-plug-connected.svg",
+      "sha256": "7f11220af45bfd62905c5ef7a7b65a2a3591f711a2b8ff5ed1093b45bd1ea79d",
+      "license": "MIT",
+      "keywords": [
+        "连接插头",
+        "plug-connected",
+        "plug connected"
+      ],
+      "nameKey": "text_c24bd8337a",
+      "categoryKey": "text_19ddbf688f"
+    },
+    {
+      "id": "tabler-charging-pile",
+      "name": "充电桩",
+      "category": "设备与界面",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/charging-pile.svg",
+      "upstream_sha256": "4380226b7c23bc982a6ef199fcd20016e6102d57483fff6139752c3b96c5fa06",
+      "asset": "svg/tabler-charging-pile.svg",
+      "sha256": "f46e496ae67bfdd77520146905adef8a4f4042c0f82820c54adc2dc8de273ad8",
+      "license": "MIT",
+      "keywords": [
+        "充电桩",
+        "charging-pile",
+        "charging pile"
+      ],
+      "nameKey": "text_0cc1a67a17",
+      "categoryKey": "text_ac6f1f8149"
+    },
+    {
+      "id": "tabler-plug",
+      "name": "插头",
+      "category": "电气与仪表",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/plug.svg",
+      "upstream_sha256": "b6df03adcf16818c31c1a96f1006557634da1f5a2aa4846cdc6dbcba713e3c6b",
+      "asset": "svg/tabler-plug.svg",
+      "sha256": "ca4246a72de546d3d78ccdb29960e6fda716dd83d79221de6cd2f4f3bb797764",
+      "license": "MIT",
+      "keywords": [
+        "插头",
+        "plug",
+        "plug"
+      ],
+      "nameKey": "text_bd71592527",
+      "categoryKey": "text_19ddbf688f"
+    },
+    {
+      "id": "tabler-calendar-time",
+      "name": "日历与时钟",
+      "category": "统计与时间",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/calendar-time.svg",
+      "upstream_sha256": "4d9b70807803de811d97a8988e46618e6faea354aca30795dcb95c5ce515040f",
+      "asset": "svg/tabler-calendar-time.svg",
+      "sha256": "2e51a606e599b0c5cf7ba014f4975a51ecd07e3aa74e7cb0214550e3451c9925",
+      "license": "MIT",
+      "keywords": [
+        "日历与时钟",
+        "calendar-time",
+        "calendar time"
+      ],
+      "nameKey": "text_157feaaf30",
+      "categoryKey": "text_313e6217d4"
+    },
+    {
+      "id": "tabler-lock",
+      "name": "锁",
+      "category": "安全与提示",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/lock.svg",
+      "upstream_sha256": "407856048124fdd63239f75a3640ca8f20a9acbc1f49cac9de0bcdb1cb42ec5f",
+      "asset": "svg/tabler-lock.svg",
+      "sha256": "31eb6d1d3187472de55c2153b54a1539c1d89b44ddc7c4032e42fb7b7a13a031",
+      "license": "MIT",
+      "keywords": [
+        "锁",
+        "lock",
+        "lock"
+      ],
+      "nameKey": "text_a9e2a28644",
+      "categoryKey": "text_a0edd1debd"
+    },
+    {
+      "id": "tabler-power",
+      "name": "电源",
+      "category": "操作与方向",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/power.svg",
+      "upstream_sha256": "2a872241a3059da7e3157fc5fbd8b8dfd40a10825934a23dd5e7f43cb4ae1df9",
+      "asset": "svg/tabler-power.svg",
+      "sha256": "10e170c96e06c0f41d3a4bba3b243ff2d604a42b67681251bf56aff5e86186cb",
+      "license": "MIT",
+      "keywords": [
+        "电源",
+        "power",
+        "power"
+      ],
+      "nameKey": "text_e2d69e9008",
+      "categoryKey": "text_78b4f826e7"
+    },
+    {
+      "id": "tabler-filter",
+      "name": "漏斗",
+      "category": "操作与方向",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/filter.svg",
+      "upstream_sha256": "69bbcca665588bd0b64c44c42ced4538b3e3c75a59e3fc46e58b1f10d99d15ec",
+      "asset": "svg/tabler-filter.svg",
+      "sha256": "9589610fcea4b716ab065e08e5e36919a6fe119c2a0ee0c4a1dd6ded9942ceca",
+      "license": "MIT",
+      "keywords": [
+        "漏斗",
+        "filter",
+        "filter"
+      ],
+      "nameKey": "text_babba67ba4",
+      "categoryKey": "text_78b4f826e7"
+    },
+    {
+      "id": "tabler-air-conditioning",
+      "name": "空调机",
+      "category": "温度与气流",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/air-conditioning.svg",
+      "upstream_sha256": "da4df3c4ecada1b971ef0bd835025a4080466bc80758c1ed4602421382001d90",
+      "asset": "svg/tabler-air-conditioning.svg",
+      "sha256": "a7384a4c0868c03f306f67b48ec04302726cd440deab950a6464794deac8f4b2",
+      "license": "MIT",
+      "keywords": [
+        "空调机",
+        "air-conditioning",
+        "air conditioning"
+      ],
+      "nameKey": "text_f9de750c2e",
+      "categoryKey": "text_8a91556890"
+    },
+    {
+      "id": "tabler-car-door",
+      "name": "车门",
+      "category": "车辆与部件",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/car-door.svg",
+      "upstream_sha256": "a275b8d817511a4351e8923a424d1c7e66060dd1fe7d281f8076a36158d32381",
+      "asset": "svg/tabler-car-door.svg",
+      "sha256": "c0df22ccdf4c8726745082a396852cd586e938baef7128ae2c9556dc13f225d7",
+      "license": "MIT",
+      "keywords": [
+        "车门",
+        "car-door",
+        "car door"
+      ],
+      "nameKey": "text_6de7516825",
+      "categoryKey": "text_0e2d28afc2"
+    },
+    {
+      "id": "tabler-steering-wheel",
+      "name": "方向盘",
+      "category": "车辆与部件",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/steering-wheel.svg",
+      "upstream_sha256": "5461409ff844ba96eee7a432027ee61154c13370acf92709cba77934ad0b6247",
+      "asset": "svg/tabler-steering-wheel.svg",
+      "sha256": "c8affa83a5914f477de5b3da26433c92b348ae338d076aac303f5c6945e924bd",
+      "license": "MIT",
+      "keywords": [
+        "方向盘",
+        "steering-wheel",
+        "steering wheel"
+      ],
+      "nameKey": "text_ffa6996b36",
+      "categoryKey": "text_0e2d28afc2"
+    },
+    {
+      "id": "tabler-hand-stop",
+      "name": "手掌",
+      "category": "安全与提示",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/hand-stop.svg",
+      "upstream_sha256": "4a434c0cf83b70d5b7900b12a7531c7759e1467927a611454cb4e71b7140e377",
+      "asset": "svg/tabler-hand-stop.svg",
+      "sha256": "5b68dac39d4f488ddea18ac65ff1b4cf381959f6f339405ec965c27386e72d9a",
+      "license": "MIT",
+      "keywords": [
+        "手掌",
+        "hand-stop",
+        "hand stop"
+      ],
+      "nameKey": "text_128403c2c0",
+      "categoryKey": "text_a0edd1debd"
+    },
+    {
+      "id": "tabler-road",
+      "name": "道路",
+      "category": "车辆与部件",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/road.svg",
+      "upstream_sha256": "3524dff35b2b15ff4d1d557cf1409ab54aa788b5a723a731304c669fa2d1cb0e",
+      "asset": "svg/tabler-road.svg",
+      "sha256": "a952bb911fd134c437f0b5ea9907051f779c23ce0919f169a20806adc6bbfb32",
+      "license": "MIT",
+      "keywords": [
+        "道路",
+        "road",
+        "road"
+      ],
+      "nameKey": "text_35cacc257a",
+      "categoryKey": "text_0e2d28afc2"
+    },
+    {
+      "id": "tabler-brand-android",
+      "name": "Android标志",
+      "category": "设备与界面",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/brand-android.svg",
+      "upstream_sha256": "cb31e0a80f7b2504b114172d69da4bd7bd2be53dba2f88b932545b7de01577c1",
+      "asset": "svg/tabler-brand-android.svg",
+      "sha256": "c4c0fd069bbc99e0217fc460891702e2ff9392398833a0ae32e66474dadea1f9",
+      "license": "MIT",
+      "keywords": [
+        "Android标志",
+        "brand-android",
+        "brand android"
+      ],
+      "nameKey": "text_b64389afb3",
+      "categoryKey": "text_ac6f1f8149"
+    },
+    {
+      "id": "tabler-device-desktop-cog",
+      "name": "显示器与齿轮",
+      "category": "设备与界面",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/device-desktop-cog.svg",
+      "upstream_sha256": "97be517a309df314c6aed5b0eb30d84f0d3dcdaafd268f14e468b9bcb21a68b9",
+      "asset": "svg/tabler-device-desktop-cog.svg",
+      "sha256": "4f54f1fef0b1a2564a3bd74a209609ed7220bf4aa878b4496bff3ba03a54751f",
+      "license": "MIT",
+      "keywords": [
+        "显示器与齿轮",
+        "device-desktop-cog",
+        "device desktop cog"
+      ],
+      "nameKey": "text_21d200c882",
+      "categoryKey": "text_ac6f1f8149"
+    },
+    {
+      "id": "tabler-help-hexagon",
+      "name": "六边形问号",
+      "category": "安全与提示",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/help-hexagon.svg",
+      "upstream_sha256": "4147a193e795838170166aca803df5ccb78338efcb705e8b21c31990369ad546",
+      "asset": "svg/tabler-help-hexagon.svg",
+      "sha256": "654ff4d2a6d97d73a5ea9f4a3fced644124d6fb670177fff29319193ae465cd3",
+      "license": "MIT",
+      "keywords": [
+        "六边形问号",
+        "help-hexagon",
+        "help hexagon"
+      ],
+      "nameKey": "text_9dd92ff420",
+      "categoryKey": "text_a0edd1debd"
+    },
+    {
+      "id": "tabler-bolt",
+      "name": "闪电",
+      "category": "电气与仪表",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/bolt.svg",
+      "upstream_sha256": "5321162cf117d3a83aec6c8f67a3bb0398068edb487b524d280b8fb47d6b98ce",
+      "asset": "svg/tabler-bolt.svg",
+      "sha256": "00603a3b883f8c752f2f554adf41513636bf2c39513c5672e1dd03f26da6e306",
+      "license": "MIT",
+      "keywords": [
+        "闪电",
+        "bolt",
+        "bolt"
+      ],
+      "nameKey": "text_796ce9f91b",
+      "categoryKey": "text_19ddbf688f"
+    },
+    {
+      "id": "vehicle-compressor",
+      "name": "压缩机",
+      "category": "车辆与部件",
+      "origin": "项目原创",
+      "source_url": null,
+      "asset": "svg/vehicle-compressor.svg",
+      "sha256": "65f2b35dee8915a9c3745b96022b0c4ccad1507d157452916fdfc4ef690666ae",
+      "license": "项目原创；授权随项目",
+      "keywords": [
+        "压缩机",
+        "compressor",
+        "compressor"
+      ],
+      "nameKey": "text_a217f3cf73",
+      "categoryKey": "text_0e2d28afc2"
+    },
+    {
+      "id": "vehicle-ptc-heater",
+      "name": "波形加热器",
+      "category": "温度与气流",
+      "origin": "项目原创",
+      "source_url": null,
+      "asset": "svg/vehicle-ptc-heater.svg",
+      "sha256": "bc7996dee4da10934d005e47a16cd568feeec1cbb48440253f4dd8e7de1038af",
+      "license": "项目原创；授权随项目",
+      "keywords": [
+        "波形加热器",
+        "ptc-heater",
+        "ptc heater"
+      ],
+      "nameKey": "text_8d13dc1655",
+      "categoryKey": "text_8a91556890"
+    },
+    {
+      "id": "vehicle-coolant-pump",
+      "name": "水泵",
+      "category": "车辆与部件",
+      "origin": "项目原创",
+      "source_url": null,
+      "asset": "svg/vehicle-coolant-pump.svg",
+      "sha256": "5c1a9db7fc8a47d0ed9e1975d4c63f99b6311393f02577f28a7bb6dab95efb6c",
+      "license": "项目原创；授权随项目",
+      "keywords": [
+        "水泵",
+        "coolant-pump",
+        "coolant pump"
+      ],
+      "nameKey": "text_b23932058f",
+      "categoryKey": "text_0e2d28afc2"
+    },
+    {
+      "id": "vehicle-dc-converter",
+      "name": "电源转换器",
+      "category": "电气与仪表",
+      "origin": "项目原创",
+      "source_url": null,
+      "asset": "svg/vehicle-dc-converter.svg",
+      "sha256": "7f0e588f63fad7110959082fd93ebe2cd98cf5a443ca221b73c94b1b5fb6aedb",
+      "license": "项目原创；授权随项目",
+      "keywords": [
+        "电源转换器",
+        "dc-converter",
+        "dc converter"
+      ],
+      "nameKey": "text_a11b27c1b5",
+      "categoryKey": "text_19ddbf688f"
+    },
+    {
+      "id": "vehicle-power-module",
+      "name": "电路模块",
+      "category": "电气与仪表",
+      "origin": "项目原创",
+      "source_url": null,
+      "asset": "svg/vehicle-power-module.svg",
+      "sha256": "2ef6e3fb18b08dbc72b631328d9f8cf15a4c6b86c83e8447ef2f2862373860c0",
+      "license": "项目原创；授权随项目",
+      "keywords": [
+        "电路模块",
+        "power-module",
+        "power module"
+      ],
+      "nameKey": "text_c574424541",
+      "categoryKey": "text_19ddbf688f"
+    },
+    {
+      "id": "vehicle-accelerator-pedal",
+      "name": "踏板",
+      "category": "车辆与部件",
+      "origin": "项目原创",
+      "source_url": null,
+      "asset": "svg/vehicle-accelerator-pedal.svg",
+      "sha256": "7031e55bfc8cc6fc2b2f4bf4fe4ef3e4f09c695327dae064d203ee07432b6346",
+      "license": "项目原创；授权随项目",
+      "keywords": [
+        "踏板",
+        "accelerator-pedal",
+        "accelerator pedal"
+      ],
+      "nameKey": "text_1bca5761a5",
+      "categoryKey": "text_0e2d28afc2"
+    },
+    {
+      "id": "vehicle-brake-pedal",
+      "name": "踏板与横纹",
+      "category": "车辆与部件",
+      "origin": "项目原创",
+      "source_url": null,
+      "asset": "svg/vehicle-brake-pedal.svg",
+      "sha256": "0c1a9c9eda1c1471be266fee00474a446345dd667c8c36cee2bda490d0d592e3",
+      "license": "项目原创；授权随项目",
+      "keywords": [
+        "踏板与横纹",
+        "brake-pedal",
+        "brake pedal"
+      ],
+      "nameKey": "text_0395a722d3",
+      "categoryKey": "text_0e2d28afc2"
+    },
+    {
+      "id": "vehicle-car-window",
+      "name": "车窗",
+      "category": "车辆与部件",
+      "origin": "项目原创",
+      "source_url": null,
+      "asset": "svg/vehicle-car-window.svg",
+      "sha256": "f506fa2bcce27d7bde5e449b1ae7d77d6fceb25c4ff9dc0c5c22353223225a45",
+      "license": "项目原创；授权随项目",
+      "keywords": [
+        "车窗",
+        "car-window",
+        "car window"
+      ],
+      "nameKey": "text_a054c77fa1",
+      "categoryKey": "text_0e2d28afc2"
+    },
+    {
+      "id": "vehicle-hood",
+      "name": "前舱盖",
+      "category": "车辆与部件",
+      "origin": "项目原创",
+      "source_url": null,
+      "asset": "svg/vehicle-hood.svg",
+      "sha256": "a0b641a0bb2572d5bc1edadce6cf94f6eea624881d9435312c107deb61ab9672",
+      "license": "项目原创；授权随项目",
+      "keywords": [
+        "前舱盖",
+        "hood",
+        "hood"
+      ],
+      "nameKey": "text_5a2a5715fa",
+      "categoryKey": "text_0e2d28afc2"
+    },
+    {
+      "id": "vehicle-car-tailgate",
+      "name": "尾门",
+      "category": "车辆与部件",
+      "origin": "项目原创",
+      "source_url": null,
+      "asset": "svg/vehicle-car-tailgate.svg",
+      "sha256": "6fcb5625a19b9d4e8c28cc1bf639b4a969b3ca83a1a20dae4f449058d140328b",
+      "license": "项目原创；授权随项目",
+      "keywords": [
+        "尾门",
+        "car-tailgate",
+        "car tailgate"
+      ],
+      "nameKey": "text_4b13ed91a6",
+      "categoryKey": "text_0e2d28afc2"
+    },
+    {
+      "id": "vehicle-tyre-pressure",
+      "name": "轮胎与仪表",
+      "category": "车辆与部件",
+      "origin": "项目原创",
+      "source_url": null,
+      "asset": "svg/vehicle-tyre-pressure.svg",
+      "sha256": "b418b6aa7cb606d890a2c733521442b1e9411e69fa6e64f0ff1a6061a5607954",
+      "license": "项目原创；授权随项目",
+      "keywords": [
+        "轮胎与仪表",
+        "tyre-pressure",
+        "tyre pressure"
+      ],
+      "nameKey": "text_21c39ab3d3",
+      "categoryKey": "text_0e2d28afc2"
+    },
+    {
+      "id": "vehicle-cruise-control",
+      "name": "仪表与箭头",
+      "category": "电气与仪表",
+      "origin": "项目原创",
+      "source_url": null,
+      "asset": "svg/vehicle-cruise-control.svg",
+      "sha256": "8fc308dce781413f81634425898abc73a5f7deadf09331ad80d92b9405c61a83",
+      "license": "项目原创；授权随项目",
+      "keywords": [
+        "仪表与箭头",
+        "cruise-control",
+        "cruise control"
+      ],
+      "nameKey": "text_095e5e0d6c",
+      "categoryKey": "text_19ddbf688f"
+    },
+    {
+      "id": "vehicle-lane-assist",
+      "name": "汽车与车道线",
+      "category": "车辆与部件",
+      "origin": "项目原创",
+      "source_url": null,
+      "asset": "svg/vehicle-lane-assist.svg",
+      "sha256": "d29a7e43c313bc3222c808340fc4a2de7591733b9a7c5b6752241335483c6493",
+      "license": "项目原创；授权随项目",
+      "keywords": [
+        "汽车与车道线",
+        "lane-assist",
+        "lane assist"
+      ],
+      "nameKey": "text_1ade810bc7",
+      "categoryKey": "text_0e2d28afc2"
+    },
+    {
+      "id": "vehicle-emergency-brake",
+      "name": "汽车与警示",
+      "category": "安全与提示",
+      "origin": "项目原创",
+      "source_url": null,
+      "asset": "svg/vehicle-emergency-brake.svg",
+      "sha256": "10033df61b9ec4ee11868da749c66faf1bacb4220fc8f0835bfba4c41d6a910c",
+      "license": "项目原创；授权随项目",
+      "keywords": [
+        "汽车与警示",
+        "emergency-brake",
+        "emergency brake"
+      ],
+      "nameKey": "text_7bc2c050d2",
+      "categoryKey": "text_a0edd1debd"
+    },
+    {
+      "id": "vehicle-stability-control",
+      "name": "汽车与曲线",
+      "category": "车辆与部件",
+      "origin": "项目原创",
+      "source_url": null,
+      "asset": "svg/vehicle-stability-control.svg",
+      "sha256": "dacf6e24abd04d01465db963a8158e423cab06c37430917c7700cb75133d054e",
+      "license": "项目原创；授权随项目",
+      "keywords": [
+        "汽车与曲线",
+        "stability-control",
+        "stability control"
+      ],
+      "nameKey": "text_1f186162a8",
+      "categoryKey": "text_0e2d28afc2"
+    },
+    {
+      "id": "tabler-car-fan",
+      "name": "风扇",
+      "category": "温度与气流",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/car-fan.svg",
+      "upstream_sha256": "725da1e0285c935688101cb0d79a1be99496ad85a9f353276af002a459b46cc8",
+      "asset": "svg/tabler-car-fan.svg",
+      "sha256": "a74e3730180a27ad7a60926ccba0c67de23c260835f214b9f8876e51ff353d11",
+      "license": "MIT",
+      "keywords": [
+        "风扇",
+        "car-fan",
+        "car fan"
+      ],
+      "nameKey": "text_bcca7c29f6",
+      "categoryKey": "text_8a91556890"
+    },
+    {
+      "id": "tabler-wind",
+      "name": "气流",
+      "category": "温度与气流",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/wind.svg",
+      "upstream_sha256": "4914d4e264b6da11bc8d3498e6dbba1485b4c8544f52a511a4935a5ba1943c9b",
+      "asset": "svg/tabler-wind.svg",
+      "sha256": "0576bb611018a2aa572c150a1d2b46ced519c6f47ff35db101e94f686286983a",
+      "license": "MIT",
+      "keywords": [
+        "气流",
+        "wind",
+        "wind"
+      ],
+      "nameKey": "text_aca38b7429",
+      "categoryKey": "text_8a91556890"
+    },
+    {
+      "id": "tabler-arrows-left-right",
+      "name": "水平双箭头",
+      "category": "操作与方向",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/arrows-left-right.svg",
+      "upstream_sha256": "1530a257f97b6d15d7391db8be839ffc6314d583ca8f7188c7f85f20a850bc12",
+      "asset": "svg/tabler-arrows-left-right.svg",
+      "sha256": "b49d12b613941722fd61f1ded813d37b0798d038a30d1e7332f2beaa21652d48",
+      "license": "MIT",
+      "keywords": [
+        "水平双箭头",
+        "arrows-left-right",
+        "arrows left right"
+      ],
+      "nameKey": "text_6689ed8d46",
+      "categoryKey": "text_78b4f826e7"
+    },
+    {
+      "id": "tabler-arrows-up-down",
+      "name": "垂直双箭头",
+      "category": "操作与方向",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/arrows-up-down.svg",
+      "upstream_sha256": "0fe5d572d27c487eeeab0e8e00421c820098bc6b25654de570509b9b3035d0f0",
+      "asset": "svg/tabler-arrows-up-down.svg",
+      "sha256": "127d87b475fd4c243f3935546d914be53a7157cc59f2751bce80fba8c48dada2",
+      "license": "MIT",
+      "keywords": [
+        "垂直双箭头",
+        "arrows-up-down",
+        "arrows up down"
+      ],
+      "nameKey": "text_52aded2b16",
+      "categoryKey": "text_78b4f826e7"
+    },
+    {
+      "id": "tabler-rotate-clockwise",
+      "name": "顺时针箭头",
+      "category": "操作与方向",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/rotate-clockwise.svg",
+      "upstream_sha256": "df4126db6c4a8ef7fc713b2497e21d3b8c70bac9a9fb45db1f58e5dd486f467d",
+      "asset": "svg/tabler-rotate-clockwise.svg",
+      "sha256": "7089de14abb87a8be27360868eb8763dc224ebe6ea455f9324ffc6a772d5a14e",
+      "license": "MIT",
+      "keywords": [
+        "顺时针箭头",
+        "rotate-clockwise",
+        "rotate clockwise"
+      ],
+      "nameKey": "text_8ffc341750",
+      "categoryKey": "text_78b4f826e7"
+    },
+    {
+      "id": "tabler-arrows-exchange",
+      "name": "交换箭头",
+      "category": "操作与方向",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/arrows-exchange.svg",
+      "upstream_sha256": "67be2e2afc04e53c70a4b81f58b18c232edd5b6124eff81a285fcd513f857016",
+      "asset": "svg/tabler-arrows-exchange.svg",
+      "sha256": "b6e118f2c7b47a6249644fc3da37ede2b2abe52e44976125750e3cbe0dc96660",
+      "license": "MIT",
+      "keywords": [
+        "交换箭头",
+        "arrows-exchange",
+        "arrows exchange"
+      ],
+      "nameKey": "text_233855b922",
+      "categoryKey": "text_78b4f826e7"
+    },
+    {
+      "id": "tabler-snowflake",
+      "name": "雪花",
+      "category": "温度与气流",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/snowflake.svg",
+      "upstream_sha256": "a500f1a5e87a0b1c17f9b4b2d1e4dd55ef91805c10b9c2d1295bf4d9b737c4b6",
+      "asset": "svg/tabler-snowflake.svg",
+      "sha256": "cc8230b2e53c16e23c6076d218618bd8e165a60deff4ed1799bbbed09150f499",
+      "license": "MIT",
+      "keywords": [
+        "雪花",
+        "snowflake",
+        "snowflake"
+      ],
+      "nameKey": "text_a81ba94099",
+      "categoryKey": "text_8a91556890"
+    },
+    {
+      "id": "tabler-sun",
+      "name": "太阳",
+      "category": "光线与声音",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/sun.svg",
+      "upstream_sha256": "6677490605af8987d55d6e4185b1f6c241eced65b63ccfece68cadb7ce90fbb5",
+      "asset": "svg/tabler-sun.svg",
+      "sha256": "737976ad081668728d924bd33b762abe094129152f0b14b8a27a0be8e737e83a",
+      "license": "MIT",
+      "keywords": [
+        "太阳",
+        "sun",
+        "sun"
+      ],
+      "nameKey": "text_89da31469c",
+      "categoryKey": "text_a8446a7bd7"
+    },
+    {
+      "id": "tabler-bulb",
+      "name": "灯泡",
+      "category": "光线与声音",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/bulb.svg",
+      "upstream_sha256": "4f4688352f60a3d65ca9abb8cebc9fc3c3d3b9f2fbc47784b44b22008a69f0fc",
+      "asset": "svg/tabler-bulb.svg",
+      "sha256": "dacbb19c084baafb6ac0a2c0c85306f85d93d0d67878f36f8ef79332211fa652",
+      "license": "MIT",
+      "keywords": [
+        "灯泡",
+        "bulb",
+        "bulb"
+      ],
+      "nameKey": "text_9f4671cfd2",
+      "categoryKey": "text_a8446a7bd7"
+    },
+    {
+      "id": "tabler-brightness-up",
+      "name": "亮度增加",
+      "category": "光线与声音",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/brightness-up.svg",
+      "upstream_sha256": "b393b24a50c7bb333514cc9e284155bca2df9a14ae70a217a940a1f8d59f82fc",
+      "asset": "svg/tabler-brightness-up.svg",
+      "sha256": "170460cf11dbdece5f6c7e0f2998deaafe2edf1509dc691df1ef65b664da2ecf",
+      "license": "MIT",
+      "keywords": [
+        "亮度增加",
+        "brightness-up",
+        "brightness up"
+      ],
+      "nameKey": "text_6ed4583313",
+      "categoryKey": "text_a8446a7bd7"
+    },
+    {
+      "id": "tabler-volume",
+      "name": "扬声器",
+      "category": "光线与声音",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/volume.svg",
+      "upstream_sha256": "1c2d4ffadf15616b7d27fcc66d28df9d5a43f34537ffc4da35c9d4c84c406450",
+      "asset": "svg/tabler-volume.svg",
+      "sha256": "f74fbd8c50b02ff0bc5604f3b5364d561934d1dfe470bfa5d2d883eb9b0d0817",
+      "license": "MIT",
+      "keywords": [
+        "扬声器",
+        "volume",
+        "volume"
+      ],
+      "nameKey": "text_fbf0f79924",
+      "categoryKey": "text_a8446a7bd7"
+    },
+    {
+      "id": "tabler-camera",
+      "name": "相机",
+      "category": "设备与界面",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/camera.svg",
+      "upstream_sha256": "a87eae819b9c5a98b07e635c5a52fd2aaed392000ce62bb8724cd5f5baba4bc7",
+      "asset": "svg/tabler-camera.svg",
+      "sha256": "06fc6190b43b8cd51cb1e03514b7b03e9d4482491e3691198e0fa19ee728166a",
+      "license": "MIT",
+      "keywords": [
+        "相机",
+        "camera",
+        "camera"
+      ],
+      "nameKey": "text_6042a0b155",
+      "categoryKey": "text_ac6f1f8149"
+    },
+    {
+      "id": "tabler-device-tv",
+      "name": "屏幕",
+      "category": "设备与界面",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/device-tv.svg",
+      "upstream_sha256": "e0bd48b49471d717666a473295a524493c1622c5746e357192a46f830548e6ee",
+      "asset": "svg/tabler-device-tv.svg",
+      "sha256": "6c4a5026693def284ada8900a79bf88af4c084b4ad424c3e6f875c52a443b3bb",
+      "license": "MIT",
+      "keywords": [
+        "屏幕",
+        "device-tv",
+        "device tv"
+      ],
+      "nameKey": "text_c68cb70ece",
+      "categoryKey": "text_ac6f1f8149"
+    },
+    {
+      "id": "tabler-fridge",
+      "name": "冰箱",
+      "category": "设备与界面",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/fridge.svg",
+      "upstream_sha256": "9b4d9459ee8aebbb5c8da639af49ec2907398dce2729eb5aed7e1f5f34f847e5",
+      "asset": "svg/tabler-fridge.svg",
+      "sha256": "cbc2b21b44d192948889c510e924020871dde601cb26aa72ba9a38a335963d4f",
+      "license": "MIT",
+      "keywords": [
+        "冰箱",
+        "fridge",
+        "fridge"
+      ],
+      "nameKey": "text_eb097d5a08",
+      "categoryKey": "text_ac6f1f8149"
+    },
+    {
+      "id": "tabler-shield",
+      "name": "盾牌",
+      "category": "安全与提示",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/shield.svg",
+      "upstream_sha256": "254faf50fe337be66083b5292d7a1d548bb24289a26a3496e367ea341c7869da",
+      "asset": "svg/tabler-shield.svg",
+      "sha256": "909220fb918a9d8704efe4389aaa746eb46febc9be1f31759e4e90a0e684bd0d",
+      "license": "MIT",
+      "keywords": [
+        "盾牌",
+        "shield",
+        "shield"
+      ],
+      "nameKey": "text_fa4cd6dd01",
+      "categoryKey": "text_a0edd1debd"
+    },
+    {
+      "id": "tabler-lock-open",
+      "name": "开锁",
+      "category": "安全与提示",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/lock-open.svg",
+      "upstream_sha256": "f1b1ef8aa7cdaad103e0062298ba5bf26c698b9f8a5c142cddeff19ab20b271c",
+      "asset": "svg/tabler-lock-open.svg",
+      "sha256": "dbd7c50bef5570c1536c5422bf5b0094e9ce85b2eb02ca8b008258d3192252e5",
+      "license": "MIT",
+      "keywords": [
+        "开锁",
+        "lock-open",
+        "lock open"
+      ],
+      "nameKey": "text_434f0ae3ef",
+      "categoryKey": "text_a0edd1debd"
+    },
+    {
+      "id": "tabler-settings",
+      "name": "齿轮",
+      "category": "设备与界面",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/settings.svg",
+      "upstream_sha256": "ef9cf42d822c00b4fad5bc5eeceddd4e1ec3774bb7ddd09891d0fba274bc3e95",
+      "asset": "svg/tabler-settings.svg",
+      "sha256": "6a8dc3ab186a37d72e6a565760609b6c5ff2847ddfa5740b937b6c7413391d4a",
+      "license": "MIT",
+      "keywords": [
+        "齿轮",
+        "settings",
+        "settings"
+      ],
+      "nameKey": "text_0f1b3f7e99",
+      "categoryKey": "text_ac6f1f8149"
+    },
+    {
+      "id": "tabler-adjustments-horizontal",
+      "name": "横向滑块",
+      "category": "操作与方向",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/adjustments-horizontal.svg",
+      "upstream_sha256": "51c876babc598cf69ad1146f0fb621919a975758df0cc7abf45052006358a353",
+      "asset": "svg/tabler-adjustments-horizontal.svg",
+      "sha256": "d34f8833672d755a4161103e6243a43d9c80f152359978ea1cb94058f0b02a5c",
+      "license": "MIT",
+      "keywords": [
+        "横向滑块",
+        "adjustments-horizontal",
+        "adjustments horizontal"
+      ],
+      "nameKey": "text_ba491ae712",
+      "categoryKey": "text_78b4f826e7"
+    },
+    {
+      "id": "tabler-player-stop",
+      "name": "停止",
+      "category": "操作与方向",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/player-stop.svg",
+      "upstream_sha256": "9ed8cfd7b7cffbc925dae2c28ad5fb5115f3db451511acc47348e01cb862e291",
+      "asset": "svg/tabler-player-stop.svg",
+      "sha256": "20812b7f88152a4218630119603f24314f9db7ab3030b537e7f47e6e0b404704",
+      "license": "MIT",
+      "keywords": [
+        "停止",
+        "player-stop",
+        "player stop"
+      ],
+      "nameKey": "text_a17f70a8d3",
+      "categoryKey": "text_78b4f826e7"
+    },
+    {
+      "id": "tabler-refresh",
+      "name": "循环箭头",
+      "category": "操作与方向",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/refresh.svg",
+      "upstream_sha256": "9dd8ab8cac268489501cbb0a106d93cc3f367add493d20c47ec1e1d9804c760a",
+      "asset": "svg/tabler-refresh.svg",
+      "sha256": "4c836d26a37be1bdf64ee4d7834599e0b6d2643d230f7cd34eccab2e4dcb39a5",
+      "license": "MIT",
+      "keywords": [
+        "循环箭头",
+        "refresh",
+        "refresh"
+      ],
+      "nameKey": "text_d0742727a2",
+      "categoryKey": "text_78b4f826e7"
+    },
+    {
+      "id": "tabler-device-floppy",
+      "name": "软盘",
+      "category": "设备与界面",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/device-floppy.svg",
+      "upstream_sha256": "332fb64778e96e0de3ef6a4262baa8bf2c1983d478bb14d284c4a2450f9e0130",
+      "asset": "svg/tabler-device-floppy.svg",
+      "sha256": "a8bc57a7edf0749a33ccd6093be4129045c42b81a0cdd97be3a9a75c262395c9",
+      "license": "MIT",
+      "keywords": [
+        "软盘",
+        "device-floppy",
+        "device floppy"
+      ],
+      "nameKey": "text_2fd248d490",
+      "categoryKey": "text_ac6f1f8149"
+    },
+    {
+      "id": "tabler-restore",
+      "name": "回退箭头",
+      "category": "操作与方向",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/restore.svg",
+      "upstream_sha256": "57a880b76fb6730c03490dccbe4a5cd2f3c2eee41223f2091838e2ae17ed9e52",
+      "asset": "svg/tabler-restore.svg",
+      "sha256": "91c9b64d42df4b8f6db966424a1f16b0e2d1cd0e4b578b1ed8e21d373bb1899b",
+      "license": "MIT",
+      "keywords": [
+        "回退箭头",
+        "restore",
+        "restore"
+      ],
+      "nameKey": "text_ef5bebf54f",
+      "categoryKey": "text_78b4f826e7"
+    },
+    {
+      "id": "tabler-moon",
+      "name": "月亮",
+      "category": "光线与声音",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/moon.svg",
+      "upstream_sha256": "7cabaae40eea65310da478d3cad30b23cf1d7e99adad56378f82824338079668",
+      "asset": "svg/tabler-moon.svg",
+      "sha256": "f4e0c49fc12027dfa1a068d4158c6b3056263b9e082ae539e906bc7d5e59e2aa",
+      "license": "MIT",
+      "keywords": [
+        "月亮",
+        "moon",
+        "moon"
+      ],
+      "nameKey": "text_a6a01d14a2",
+      "categoryKey": "text_a8446a7bd7"
+    },
+    {
+      "id": "tabler-car",
+      "name": "汽车",
+      "category": "车辆与部件",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/car.svg",
+      "upstream_sha256": "778ae49c8b59c1c3cdd619a5f55d2dd79b97709bb177469d8de6c4cc580c01d6",
+      "asset": "svg/tabler-car.svg",
+      "sha256": "48ff3bfcfa59c4b1089ab425f4a67fdedf15c098c21696ec3d275240112b54f2",
+      "license": "MIT",
+      "keywords": [
+        "汽车",
+        "car",
+        "car"
+      ],
+      "nameKey": "text_70025cb40a",
+      "categoryKey": "text_0e2d28afc2"
+    },
+    {
+      "id": "tabler-droplet",
+      "name": "水滴",
+      "category": "温度与气流",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/droplet.svg",
+      "upstream_sha256": "c9432a9be52d7375c760add5d405903b6b8b29e88f38abd0d192c87048df7a0f",
+      "asset": "svg/tabler-droplet.svg",
+      "sha256": "052bd9e1911bc9f5825a5666aa36da8b1471be88313d47c020f96030c0b4faf2",
+      "license": "MIT",
+      "keywords": [
+        "水滴",
+        "droplet",
+        "droplet"
+      ],
+      "nameKey": "text_2d26cd081d",
+      "categoryKey": "text_8a91556890"
+    },
+    {
+      "id": "tabler-perfume",
+      "name": "香水瓶",
+      "category": "设备与界面",
+      "origin": "Tabler Icons",
+      "source_url": "https://github.com/tabler/tabler-icons/blob/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/perfume.svg",
+      "upstream_sha256": "35e8cd398a375e3d0b44a10b030dcf49f4209a3575618666b37967497b673e18",
+      "asset": "svg/tabler-perfume.svg",
+      "sha256": "a7d563674fe534038182e5a2127e0e8e65caf527c40f38cdef03813cc5d37529",
+      "license": "MIT",
+      "keywords": [
+        "香水瓶",
+        "perfume",
+        "perfume"
+      ],
+      "nameKey": "text_21c1aa43b6",
+      "categoryKey": "text_ac6f1f8149"
+    },
+    {
+      "id": "vehicle-car-seat",
+      "name": "座椅",
+      "category": "车辆与部件",
+      "origin": "SkyInfo original",
+      "asset": "svg/vehicle-car-seat.svg",
+      "sha256": "a5c2a6503a3bb4ceaa5e1ee18d58fb80548b81dce0549a12b21be3c29f8165a9",
+      "license": "project original",
+      "keywords": [
+        "座椅",
+        "car-seat",
+        "car seat"
+      ],
+      "nameKey": "text_88c48ae75b",
+      "categoryKey": "text_0e2d28afc2"
+    },
+    {
+      "id": "vehicle-seat-heat",
+      "name": "座椅与热波",
+      "category": "温度与气流",
+      "origin": "SkyInfo original",
+      "asset": "svg/vehicle-seat-heat.svg",
+      "sha256": "4fc58ce408a919cc20b3cee85713e913abe619fc558f99182c974c115e72444d",
+      "license": "project original",
+      "keywords": [
+        "座椅与热波",
+        "seat-heat",
+        "seat heat"
+      ],
+      "nameKey": "text_1cc086ea0d",
+      "categoryKey": "text_8a91556890"
+    },
+    {
+      "id": "vehicle-seat-airflow",
+      "name": "座椅与气流",
+      "category": "温度与气流",
+      "origin": "SkyInfo original",
+      "asset": "svg/vehicle-seat-airflow.svg",
+      "sha256": "14374c585c0ae5dc43ba0e4a9e4fbc40311a4c2ecddcde420a465929e1a843db",
+      "license": "project original",
+      "keywords": [
+        "座椅与气流",
+        "seat-airflow",
+        "seat airflow"
+      ],
+      "nameKey": "text_5448ea83a7",
+      "categoryKey": "text_8a91556890"
+    },
+    {
+      "id": "vehicle-seat-massage",
+      "name": "座椅与圆点",
+      "category": "车辆与部件",
+      "origin": "SkyInfo original",
+      "asset": "svg/vehicle-seat-massage.svg",
+      "sha256": "4a310d3078964b051814ceb440396f361272b58b55082c2f80aa58fd142c334f",
+      "license": "project original",
+      "keywords": [
+        "座椅与圆点",
+        "seat-massage",
+        "seat massage"
+      ],
+      "nameKey": "text_894f678bc2",
+      "categoryKey": "text_0e2d28afc2"
+    },
+    {
+      "id": "vehicle-windshield-heat",
+      "name": "挡风玻璃与热波",
+      "category": "温度与气流",
+      "origin": "SkyInfo original",
+      "asset": "svg/vehicle-windshield-heat.svg",
+      "sha256": "6b33e2d16eb97c062c0a192cfffb4aafc02fa70439baf7c5d63000e030977bbf",
+      "license": "project original",
+      "keywords": [
+        "挡风玻璃与热波",
+        "windshield-heat",
+        "windshield heat"
+      ],
+      "nameKey": "text_224f4a2e88",
+      "categoryKey": "text_8a91556890"
+    },
+    {
+      "id": "vehicle-rear-glass-heat",
+      "name": "矩形玻璃与热波",
+      "category": "温度与气流",
+      "origin": "SkyInfo original",
+      "asset": "svg/vehicle-rear-glass-heat.svg",
+      "sha256": "25b92a243a95f2949caba946b8d6aefa7007cc69274ff9c622628c8fc9d250a9",
+      "license": "project original",
+      "keywords": [
+        "矩形玻璃与热波",
+        "rear-glass-heat",
+        "rear glass heat"
+      ],
+      "nameKey": "text_eb6b8a5e96",
+      "categoryKey": "text_8a91556890"
+    },
+    {
+      "id": "vehicle-car-mirror",
+      "name": "后视镜",
+      "category": "车辆与部件",
+      "origin": "SkyInfo original",
+      "asset": "svg/vehicle-car-mirror.svg",
+      "sha256": "1668780e3e1fd85fde0616237c00c96ded57ea7aa7e612489a9c3fb4f36c63a3",
+      "license": "project original",
+      "keywords": [
+        "后视镜",
+        "car-mirror",
+        "car mirror"
+      ],
+      "nameKey": "text_08d5eab575",
+      "categoryKey": "text_0e2d28afc2"
+    },
+    {
+      "id": "vehicle-headlamp",
+      "name": "车灯与光束",
+      "category": "光线与声音",
+      "origin": "SkyInfo original",
+      "asset": "svg/vehicle-headlamp.svg",
+      "sha256": "5cf7d2a993484f06ec1f910dadd154e315e2f997743c1d85d9c2bb48f1ee0726",
+      "license": "project original",
+      "keywords": [
+        "车灯与光束",
+        "headlamp",
+        "headlamp"
+      ],
+      "nameKey": "text_4d3e98ebc8",
+      "categoryKey": "text_a8446a7bd7"
+    },
+    {
+      "id": "vehicle-foglamp",
+      "name": "车灯与波线",
+      "category": "光线与声音",
+      "origin": "SkyInfo original",
+      "asset": "svg/vehicle-foglamp.svg",
+      "sha256": "e0e96b2173ccc4a4ee5fff0acd89a80821d93cc84c05d2445a95b4a0f7f3bde1",
+      "license": "project original",
+      "keywords": [
+        "车灯与波线",
+        "foglamp",
+        "foglamp"
+      ],
+      "nameKey": "text_4a697c39c9",
+      "categoryKey": "text_a8446a7bd7"
+    },
+    {
+      "id": "vehicle-suspension",
+      "name": "弹簧与支架",
+      "category": "车辆与部件",
+      "origin": "SkyInfo original",
+      "asset": "svg/vehicle-suspension.svg",
+      "sha256": "834710bd3fdc072229f2ac8da3d5c83ab2147ede7a2b461328b5616ac865959c",
+      "license": "project original",
+      "keywords": [
+        "弹簧与支架",
+        "suspension",
+        "suspension"
+      ],
+      "nameKey": "text_696b986a35",
+      "categoryKey": "text_0e2d28afc2"
+    },
+    {
+      "id": "vehicle-roof-window",
+      "name": "车顶开口",
+      "category": "车辆与部件",
+      "origin": "SkyInfo original",
+      "asset": "svg/vehicle-roof-window.svg",
+      "sha256": "5ef60978a1904f14188df009453991a41e8c4dba4df5e23ff07a4d28614eb02e",
+      "license": "project original",
+      "keywords": [
+        "车顶开口",
+        "roof-window",
+        "roof window"
+      ],
+      "nameKey": "text_58c8f2d36d",
+      "categoryKey": "text_0e2d28afc2"
+    },
+    {
+      "id": "vehicle-window-shade",
+      "name": "卷帘",
+      "category": "车辆与部件",
+      "origin": "SkyInfo original",
+      "asset": "svg/vehicle-window-shade.svg",
+      "sha256": "4dca18cf00a2c25df46a1353180bca5701cf2f2659e107b8619abc1a685017e0",
+      "license": "project original",
+      "keywords": [
+        "卷帘",
+        "window-shade",
+        "window shade"
+      ],
+      "nameKey": "text_3c1092e4bb",
+      "categoryKey": "text_0e2d28afc2"
+    },
+    {
+      "id": "vehicle-car-spoiler",
+      "name": "尾翼",
+      "category": "车辆与部件",
+      "origin": "SkyInfo original",
+      "asset": "svg/vehicle-car-spoiler.svg",
+      "sha256": "2de5d652d5fe5fa68b9ff0ba8d83b7770d5b90862c8713a5071c12a701e7307e",
+      "license": "project original",
+      "keywords": [
+        "尾翼",
+        "car-spoiler",
+        "car spoiler"
+      ],
+      "nameKey": "text_97b9175da8",
+      "categoryKey": "text_0e2d28afc2"
+    },
+    {
+      "id": "vehicle-car-step",
+      "name": "侧踏板",
+      "category": "车辆与部件",
+      "origin": "SkyInfo original",
+      "asset": "svg/vehicle-car-step.svg",
+      "sha256": "3033cd5206ee347b1059a9cdf2c986c6cd4894242c43f267d383a95e219fd401",
+      "license": "project original",
+      "keywords": [
+        "侧踏板",
+        "car-step",
+        "car step"
+      ],
+      "nameKey": "text_7a2412b9c8",
+      "categoryKey": "text_0e2d28afc2"
+    },
+    {
+      "id": "vehicle-windshield-wiper",
+      "name": "挡风玻璃与雨刮",
+      "category": "车辆与部件",
+      "origin": "SkyInfo original",
+      "asset": "svg/vehicle-windshield-wiper.svg",
+      "sha256": "0b733b4ac3bf6c7fa9a2c7b7ff429bc20c5ba278673d739d140b910400e55ea6",
+      "license": "project original",
+      "keywords": [
+        "雨刮",
+        "windshield wiper"
+      ],
+      "nameKey": "text_fbf9f77b6b",
+      "categoryKey": "text_0e2d28afc2"
+    }
+  ],
+  "fields": [
+    {
+      "name": "电池最高温度",
+      "source": "1014/5/1148190752",
+      "category": "动力电池",
+      "icon_id": "tabler-temperature-plus",
+      "field_id": "1014/5/1148190752"
+    },
+    {
+      "name": "电池最低温度",
+      "source": "1014/5/1148190736",
+      "category": "动力电池",
+      "icon_id": "tabler-temperature-minus",
+      "field_id": "1014/5/1148190736"
+    },
+    {
+      "name": "电池平均温度",
+      "source": "1014/5/1148190776",
+      "category": "动力电池",
+      "icon_id": "tabler-temperature",
+      "field_id": "1014/5/1148190776"
+    },
+    {
+      "name": "单体最高电压",
+      "source": "1014/5/1147142192",
+      "category": "动力电池",
+      "icon_id": "tabler-circuit-voltmeter",
+      "field_id": "1014/5/1147142192"
+    },
+    {
+      "name": "单体最低电压",
+      "source": "1014/5/1147142160",
+      "category": "动力电池",
+      "icon_id": "tabler-circuit-voltmeter",
+      "field_id": "1014/5/1147142160"
+    },
+    {
+      "name": "电池包电压",
+      "source": "1009/5/1145045000",
+      "category": "动力电池",
+      "icon_id": "tabler-battery-vertical",
+      "field_id": "1009/5/1145045000"
+    },
+    {
+      "name": "电池电流 · GB",
+      "source": "1039/5/677380120",
+      "category": "动力电池",
+      "icon_id": "tabler-circuit-ammeter",
+      "field_id": "1039/5/677380120"
+    },
+    {
+      "name": "电池电流 · 旧通道",
+      "source": "1009/7/1145045016",
+      "category": "动力电池",
+      "icon_id": "tabler-circuit-ammeter",
+      "field_id": "1009/7/1145045016"
+    },
+    {
+      "name": "电池健康度",
+      "source": "1014/5/1145045032",
+      "category": "动力电池",
+      "icon_id": "tabler-battery-eco",
+      "field_id": "1014/5/1145045032"
+    },
+    {
+      "name": "SOC · 浮点入口",
+      "source": "1014/7/1246777400",
+      "category": "动力电池",
+      "icon_id": "tabler-battery-3",
+      "field_id": "1014/7/1246777400"
+    },
+    {
+      "name": "SOC · 整数入口",
+      "source": "1014/5/1145045040",
+      "category": "动力电池",
+      "icon_id": "tabler-battery-3",
+      "field_id": "1014/5/1145045040"
+    },
+    {
+      "name": "BMS允许充电功率",
+      "source": "1014/5/877658136",
+      "category": "动力电池",
+      "icon_id": "tabler-battery-charging",
+      "field_id": "1014/5/877658136"
+    },
+    {
+      "name": "BMS允许放电功率",
+      "source": "1014/5/877658120",
+      "category": "动力电池",
+      "icon_id": "tabler-battery-spark",
+      "field_id": "1014/5/877658120"
+    },
+    {
+      "name": "充电枪连接状态",
+      "source": "1009/5/876609586",
+      "category": "充电与补能",
+      "icon_id": "tabler-plug-connected",
+      "field_id": "1009/5/876609586"
+    },
+    {
+      "name": "BMS充电状态",
+      "source": "1009/5/876609560",
+      "category": "充电与补能",
+      "icon_id": "tabler-battery-charging",
+      "field_id": "1009/5/876609560"
+    },
+    {
+      "name": "充电器连接状态",
+      "source": "1009/5/89128973",
+      "category": "充电与补能",
+      "icon_id": "tabler-charging-pile",
+      "field_id": "1009/5/89128973"
+    },
+    {
+      "name": "充电类型",
+      "source": "1009/5/876609592",
+      "category": "充电与补能",
+      "icon_id": "tabler-plug",
+      "field_id": "1009/5/876609592"
+    },
+    {
+      "name": "充电温控状态",
+      "source": "1009/5/1132462112",
+      "category": "充电与补能",
+      "icon_id": "tabler-temperature",
+      "field_id": "1009/5/1132462112"
+    },
+    {
+      "name": "充电预约使能",
+      "source": "1009/5/89128974",
+      "category": "充电与补能",
+      "icon_id": "tabler-calendar-time",
+      "field_id": "1009/5/89128974"
+    },
+    {
+      "name": "充电功率 · DD",
+      "source": "1009/7/842006552",
+      "category": "充电与补能",
+      "icon_id": "tabler-bolt",
+      "field_id": "1009/7/842006552"
+    },
+    {
+      "name": "充电功率 · DM",
+      "source": "1009/7/785383452",
+      "category": "充电与补能",
+      "icon_id": "tabler-bolt",
+      "field_id": "1009/7/785383452"
+    },
+    {
+      "name": "充电量候选",
+      "source": "1009/7/666894360",
+      "category": "充电与补能",
+      "icon_id": "tabler-battery-vertical",
+      "field_id": "1009/7/666894360"
+    },
+    {
+      "name": "充电口锁状态",
+      "source": "1009/5/1196425233",
+      "category": "充电与补能",
+      "icon_id": "tabler-lock",
+      "field_id": "1009/5/1196425233"
+    },
+    {
+      "name": "所需电流候选",
+      "source": "1009/7/1249050652",
+      "category": "充电与补能",
+      "icon_id": "tabler-circuit-ammeter",
+      "field_id": "1009/7/1249050652"
+    },
+    {
+      "name": "发动机转速",
+      "source": "1012/5/339738642",
+      "category": "发动机与传动",
+      "icon_id": "tabler-gauge",
+      "field_id": "1012/5/339738642"
+    },
+    {
+      "name": "发动机备用转速",
+      "source": "1012/5/550502408",
+      "category": "发动机与传动",
+      "icon_id": "tabler-gauge",
+      "field_id": "1012/5/550502408"
+    },
+    {
+      "name": "动力功率",
+      "source": "1012/5/339738656",
+      "category": "发动机与传动",
+      "icon_id": "tabler-engine",
+      "field_id": "1012/5/339738656"
+    },
+    {
+      "name": "瞬时油耗",
+      "source": "1014/7/1246760996",
+      "category": "发动机与传动",
+      "icon_id": "tabler-gas-station",
+      "field_id": "1014/7/1246760996"
+    },
+    {
+      "name": "瞬时油耗单位",
+      "source": "1007/5/1246761027",
+      "category": "发动机与传动",
+      "icon_id": "tabler-ruler-measure",
+      "field_id": "1007/5/1246761027"
+    },
+    {
+      "name": "加速踏板深度",
+      "source": "1013/5/874512392",
+      "category": "发动机与传动",
+      "icon_id": "vehicle-accelerator-pedal",
+      "field_id": "1013/5/874512392"
+    },
+    {
+      "name": "制动踏板深度",
+      "source": "1013/5/874512400",
+      "category": "发动机与传动",
+      "icon_id": "vehicle-brake-pedal",
+      "field_id": "1013/5/874512400"
+    },
+    {
+      "name": "自动挡位原始状态",
+      "source": "1011/5/555745336",
+      "category": "发动机与传动",
+      "icon_id": "tabler-automatic-gearbox",
+      "field_id": "1011/5/555745336"
+    },
+    {
+      "name": "发电状态",
+      "source": "1006/5/888143882",
+      "category": "发动机与传动",
+      "icon_id": "tabler-circuit-motor",
+      "field_id": "1006/5/888143882"
+    },
+    {
+      "name": "节温器温度 · 1",
+      "source": "1006/5/843055176",
+      "category": "发动机与传动",
+      "icon_id": "tabler-temperature",
+      "field_id": "1006/5/843055176"
+    },
+    {
+      "name": "节温器温度 · 2",
+      "source": "1006/5/818937864",
+      "category": "发动机与传动",
+      "icon_id": "tabler-temperature",
+      "field_id": "1006/5/818937864"
+    },
+    {
+      "name": "发动机水泵转速",
+      "source": "1006/5/1186988096",
+      "category": "发动机与传动",
+      "icon_id": "vehicle-coolant-pump",
+      "field_id": "1006/5/1186988096"
+    },
+    {
+      "name": "前电机转速",
+      "source": "1012/5/1141899272",
+      "category": "电机与电控",
+      "icon_id": "tabler-circuit-motor",
+      "field_id": "1012/5/1141899272"
+    },
+    {
+      "name": "后电机转速",
+      "source": "1012/5/621805576",
+      "category": "电机与电控",
+      "icon_id": "tabler-circuit-motor",
+      "field_id": "1012/5/621805576"
+    },
+    {
+      "name": "前电机侧电流",
+      "source": "1009/7/1186988040",
+      "category": "电机与电控",
+      "icon_id": "tabler-circuit-ammeter",
+      "field_id": "1009/7/1186988040"
+    },
+    {
+      "name": "后电机侧电流",
+      "source": "1009/7/1186988056",
+      "category": "电机与电控",
+      "icon_id": "tabler-circuit-ammeter",
+      "field_id": "1009/7/1186988056"
+    },
+    {
+      "name": "前电机温度 · DM40",
+      "source": "1039/5/1302331672",
+      "category": "电机与电控",
+      "icon_id": "tabler-circuit-motor",
+      "field_id": "1039/5/1302331672"
+    },
+    {
+      "name": "前电机温度 · 464",
+      "source": "1039/5/1178624024",
+      "category": "电机与电控",
+      "icon_id": "tabler-circuit-motor",
+      "field_id": "1039/5/1178624024"
+    },
+    {
+      "name": "后电机温度 · DM40",
+      "source": "1039/5/1302331756",
+      "category": "电机与电控",
+      "icon_id": "tabler-circuit-motor",
+      "field_id": "1039/5/1302331756"
+    },
+    {
+      "name": "后电机温度 · 464",
+      "source": "1039/5/1178624040",
+      "category": "电机与电控",
+      "icon_id": "tabler-circuit-motor",
+      "field_id": "1039/5/1178624040"
+    },
+    {
+      "name": "前IPM温度 · DM40",
+      "source": "1039/5/1302331648",
+      "category": "电机与电控",
+      "icon_id": "vehicle-power-module",
+      "field_id": "1039/5/1302331648"
+    },
+    {
+      "name": "前IPM温度 · 464",
+      "source": "1039/5/1178624016",
+      "category": "电机与电控",
+      "icon_id": "vehicle-power-module",
+      "field_id": "1039/5/1178624016"
+    },
+    {
+      "name": "后IPM温度 · DM40",
+      "source": "1039/5/1302331748",
+      "category": "电机与电控",
+      "icon_id": "vehicle-power-module",
+      "field_id": "1039/5/1302331748"
+    },
+    {
+      "name": "后IPM温度 · 464",
+      "source": "1039/5/1178624032",
+      "category": "电机与电控",
+      "icon_id": "vehicle-power-module",
+      "field_id": "1039/5/1178624032"
+    },
+    {
+      "name": "压缩机功耗",
+      "source": "1005/5/1031798840",
+      "category": "空调与热管理",
+      "icon_id": "vehicle-compressor",
+      "field_id": "1005/5/1031798840"
+    },
+    {
+      "name": "PTC功耗",
+      "source": "1005/5/1320169504",
+      "category": "空调与热管理",
+      "icon_id": "vehicle-ptc-heater",
+      "field_id": "1005/5/1320169504"
+    },
+    {
+      "name": "车内温度",
+      "source": "1000/5/1031798832",
+      "category": "空调与热管理",
+      "icon_id": "tabler-temperature",
+      "field_id": "1000/5/1031798832"
+    },
+    {
+      "name": "车内滤波温度",
+      "source": "1000/5/1320181776",
+      "category": "空调与热管理",
+      "icon_id": "tabler-filter",
+      "field_id": "1000/5/1320181776"
+    },
+    {
+      "name": "空调电源状态",
+      "source": "1000/5/1077936144",
+      "category": "空调与热管理",
+      "icon_id": "tabler-power",
+      "field_id": "1000/5/1077936144"
+    },
+    {
+      "name": "压缩机座舱开关",
+      "source": "1000/5/1077936137",
+      "category": "空调与热管理",
+      "icon_id": "vehicle-compressor",
+      "field_id": "1000/5/1077936137"
+    },
+    {
+      "name": "PTC状态",
+      "source": "1000/5/766509068",
+      "category": "空调与热管理",
+      "icon_id": "vehicle-ptc-heater",
+      "field_id": "1000/5/766509068"
+    },
+    {
+      "name": "主驾设定温度",
+      "source": "1000/5/1077936168",
+      "category": "空调与热管理",
+      "icon_id": "tabler-temperature",
+      "field_id": "1000/5/1077936168"
+    },
+    {
+      "name": "副驾设定温度",
+      "source": "1000/5/1077936176",
+      "category": "空调与热管理",
+      "icon_id": "tabler-temperature",
+      "field_id": "1000/5/1077936176"
+    },
+    {
+      "name": "低压电压 · OTA",
+      "source": "1032/7/1128267816",
+      "category": "低压与供电",
+      "icon_id": "tabler-battery-automotive",
+      "field_id": "1032/7/1128267816"
+    },
+    {
+      "name": "另一电压入口 · OTA",
+      "source": "1032/7/1150289944",
+      "category": "低压与供电",
+      "icon_id": "tabler-circuit-voltmeter",
+      "field_id": "1032/7/1150289944"
+    },
+    {
+      "name": "DC/DC温度",
+      "source": "1039/5/919601208",
+      "category": "低压与供电",
+      "icon_id": "vehicle-dc-converter",
+      "field_id": "1039/5/919601208"
+    },
+    {
+      "name": "左前胎压",
+      "source": "1016/5/-1728052956",
+      "category": "底盘与轮胎",
+      "icon_id": "vehicle-tyre-pressure",
+      "field_id": "1016/5/-1728052956"
+    },
+    {
+      "name": "右前胎压",
+      "source": "1016/5/-1728052952",
+      "category": "底盘与轮胎",
+      "icon_id": "vehicle-tyre-pressure",
+      "field_id": "1016/5/-1728052952"
+    },
+    {
+      "name": "左后胎压",
+      "source": "1016/5/-1728052948",
+      "category": "底盘与轮胎",
+      "icon_id": "vehicle-tyre-pressure",
+      "field_id": "1016/5/-1728052948"
+    },
+    {
+      "name": "右后胎压",
+      "source": "1016/5/-1728052944",
+      "category": "底盘与轮胎",
+      "icon_id": "vehicle-tyre-pressure",
+      "field_id": "1016/5/-1728052944"
+    },
+    {
+      "name": "左前轮胎温度",
+      "source": "1007/5/1246797848",
+      "category": "底盘与轮胎",
+      "icon_id": "tabler-temperature",
+      "field_id": "1007/5/1246797848"
+    },
+    {
+      "name": "右前轮胎温度",
+      "source": "1007/5/1246797860",
+      "category": "底盘与轮胎",
+      "icon_id": "tabler-temperature",
+      "field_id": "1007/5/1246797860"
+    },
+    {
+      "name": "左后轮胎温度",
+      "source": "1007/5/1246797872",
+      "category": "底盘与轮胎",
+      "icon_id": "tabler-temperature",
+      "field_id": "1007/5/1246797872"
+    },
+    {
+      "name": "右后轮胎温度",
+      "source": "1007/5/1246797884",
+      "category": "底盘与轮胎",
+      "icon_id": "tabler-temperature",
+      "field_id": "1007/5/1246797884"
+    },
+    {
+      "name": "左前门开闭",
+      "source": "1001/5/692060168",
+      "category": "车身与环境",
+      "icon_id": "tabler-car-door",
+      "field_id": "1001/5/692060168"
+    },
+    {
+      "name": "右前门开闭",
+      "source": "1001/5/692060170",
+      "category": "车身与环境",
+      "icon_id": "tabler-car-door",
+      "field_id": "1001/5/692060170"
+    },
+    {
+      "name": "左后门开闭",
+      "source": "1001/5/692060172",
+      "category": "车身与环境",
+      "icon_id": "tabler-car-door",
+      "field_id": "1001/5/692060172"
+    },
+    {
+      "name": "右后门开闭",
+      "source": "1001/5/692060174",
+      "category": "车身与环境",
+      "icon_id": "tabler-car-door",
+      "field_id": "1001/5/692060174"
+    },
+    {
+      "name": "发动机盖开闭",
+      "source": "1001/5/692060188",
+      "category": "车身与环境",
+      "icon_id": "vehicle-hood",
+      "field_id": "1001/5/692060188"
+    },
+    {
+      "name": "尾门开闭",
+      "source": "1001/5/692060186",
+      "category": "车身与环境",
+      "icon_id": "vehicle-car-tailgate",
+      "field_id": "1001/5/692060186"
+    },
+    {
+      "name": "左前门锁",
+      "source": "1032/5/1081081864",
+      "category": "车身与环境",
+      "icon_id": "tabler-lock",
+      "field_id": "1032/5/1081081864"
+    },
+    {
+      "name": "左前窗开度",
+      "source": "1001/5/947912728",
+      "category": "车身与环境",
+      "icon_id": "vehicle-car-window",
+      "field_id": "1001/5/947912728"
+    },
+    {
+      "name": "右前窗开度",
+      "source": "1001/5/1267728400",
+      "category": "车身与环境",
+      "icon_id": "vehicle-car-window",
+      "field_id": "1001/5/1267728400"
+    },
+    {
+      "name": "左后窗开度",
+      "source": "1001/5/947912736",
+      "category": "车身与环境",
+      "icon_id": "vehicle-car-window",
+      "field_id": "1001/5/947912736"
+    },
+    {
+      "name": "右后窗开度",
+      "source": "1001/5/947912752",
+      "category": "车身与环境",
+      "icon_id": "vehicle-car-window",
+      "field_id": "1001/5/947912752"
+    },
+    {
+      "name": "车外温度",
+      "source": "1000/5/1077936184",
+      "category": "车身与环境",
+      "icon_id": "tabler-temperature-sun",
+      "field_id": "1000/5/1077936184"
+    },
+    {
+      "name": "ACC模式原值",
+      "source": "1038/5/852492340",
+      "category": "辅助驾驶",
+      "icon_id": "vehicle-cruise-control",
+      "field_id": "1038/5/852492340"
+    },
+    {
+      "name": "TJA底层状态",
+      "source": "1038/5/-1319108564",
+      "category": "辅助驾驶",
+      "icon_id": "vehicle-lane-assist",
+      "field_id": "1038/5/-1319108564"
+    },
+    {
+      "name": "TJA/ICA状态",
+      "source": "1038/5/828375084",
+      "category": "辅助驾驶",
+      "icon_id": "vehicle-lane-assist",
+      "field_id": "1038/5/828375084"
+    },
+    {
+      "name": "DNP状态",
+      "source": "1038/5/700448800",
+      "category": "辅助驾驶",
+      "icon_id": "tabler-road",
+      "field_id": "1038/5/700448800"
+    },
+    {
+      "name": "DNP接管提示",
+      "source": "1038/5/700448816",
+      "category": "辅助驾驶",
+      "icon_id": "tabler-hand-stop",
+      "field_id": "1038/5/700448816"
+    },
+    {
+      "name": "方向盘握持状态",
+      "source": "1038/5/401604619",
+      "category": "辅助驾驶",
+      "icon_id": "tabler-steering-wheel",
+      "field_id": "1038/5/401604619"
+    },
+    {
+      "name": "AEB激活",
+      "source": "1038/5/303038502",
+      "category": "辅助驾驶",
+      "icon_id": "vehicle-emergency-brake",
+      "field_id": "1038/5/303038502"
+    },
+    {
+      "name": "ESP设置",
+      "source": "1038/5/305135676",
+      "category": "辅助驾驶",
+      "icon_id": "vehicle-stability-control",
+      "field_id": "1038/5/305135676"
+    },
+    {
+      "name": "Android版本",
+      "source": "系统版本信息",
+      "category": "车机与系统",
+      "icon_id": "tabler-brand-android",
+      "field_id": "system.android_version"
+    },
+    {
+      "name": "车机固件版本",
+      "source": "系统版本信息",
+      "category": "车机与系统",
+      "icon_id": "tabler-device-desktop-cog",
+      "field_id": "system.firmware_version"
+    },
+    {
+      "name": "动力电池功率",
+      "source": "derived.battery_power",
+      "category": "动力电池",
+      "icon_id": "tabler-battery-spark",
+      "field_id": "derived.battery_power"
+    }
+  ],
+  "fallback_icon": "tabler-help-hexagon",
+  "figma": {
+    "file_key": "T7jZP95JDLgkNKUI5NeEqy",
+    "page_id": "140:896",
+    "boards": {
+      "Light": "147:64560",
+      "Dark": "147:64956"
+    },
+    "sources": {
+      "Light": {
+        "tabler-battery-automotive": "140:1100",
+        "tabler-battery-vertical": "147:64581",
+        "tabler-battery-eco": "147:64586",
+        "tabler-battery-3": "147:64593",
+        "tabler-battery-charging": "147:64601",
+        "tabler-battery-spark": "147:64608",
+        "tabler-circuit-ammeter": "147:64614",
+        "tabler-circuit-voltmeter": "147:64623",
+        "tabler-circuit-motor": "147:64631",
+        "tabler-engine": "147:64639",
+        "tabler-gauge": "147:64648",
+        "tabler-gas-station": "147:64656",
+        "tabler-ruler-measure": "147:64665",
+        "tabler-automatic-gearbox": "147:64678",
+        "tabler-temperature": "140:1110",
+        "tabler-temperature-plus": "147:64696",
+        "tabler-temperature-minus": "147:64704",
+        "tabler-temperature-sun": "147:64711",
+        "tabler-plug-connected": "147:64723",
+        "tabler-charging-pile": "147:64733",
+        "tabler-plug": "147:64743",
+        "tabler-calendar-time": "147:64751",
+        "tabler-lock": "147:64761",
+        "tabler-power": "147:64768",
+        "tabler-filter": "147:64774",
+        "tabler-air-conditioning": "147:64779",
+        "tabler-car-door": "147:64788",
+        "tabler-steering-wheel": "147:64795",
+        "tabler-hand-stop": "147:64804",
+        "tabler-road": "147:64812",
+        "tabler-brand-android": "147:64821",
+        "tabler-device-desktop-cog": "147:64832",
+        "tabler-help-hexagon": "147:64846",
+        "tabler-bolt": "147:64853",
+        "vehicle-compressor": "140:1104",
+        "vehicle-ptc-heater": "140:1107",
+        "vehicle-coolant-pump": "140:1114",
+        "vehicle-dc-converter": "147:64889",
+        "vehicle-power-module": "147:64895",
+        "vehicle-accelerator-pedal": "147:64901",
+        "vehicle-brake-pedal": "147:64908",
+        "vehicle-car-window": "147:64915",
+        "vehicle-hood": "147:64920",
+        "vehicle-car-tailgate": "147:64925",
+        "vehicle-tyre-pressure": "147:64930",
+        "vehicle-cruise-control": "147:64936",
+        "vehicle-lane-assist": "147:64942",
+        "vehicle-emergency-brake": "147:64947",
+        "vehicle-stability-control": "147:64952",
+        "tabler-car-fan": "159:131322",
+        "tabler-wind": "159:131329",
+        "tabler-arrows-left-right": "159:131337",
+        "tabler-arrows-up-down": "159:131345",
+        "tabler-rotate-clockwise": "159:131350",
+        "tabler-arrows-exchange": "159:131356",
+        "tabler-snowflake": "159:131372",
+        "tabler-sun": "159:131378",
+        "tabler-bulb": "159:131385",
+        "tabler-brightness-up": "159:131398",
+        "tabler-volume": "159:131405",
+        "tabler-camera": "159:131411",
+        "tabler-device-tv": "159:131417",
+        "tabler-fridge": "159:131425",
+        "tabler-shield": "159:131430",
+        "tabler-lock-open": "159:131437",
+        "tabler-settings": "159:131443",
+        "tabler-adjustments-horizontal": "159:131456",
+        "tabler-player-stop": "159:131461",
+        "tabler-refresh": "159:131467",
+        "tabler-device-floppy": "159:131474",
+        "tabler-restore": "159:131481",
+        "tabler-moon": "159:131486",
+        "tabler-car": "159:131493",
+        "tabler-droplet": "159:131498",
+        "tabler-perfume": "159:131507",
+        "vehicle-car-seat": "159:131513",
+        "vehicle-seat-heat": "159:131520",
+        "vehicle-seat-airflow": "159:131527",
+        "vehicle-seat-massage": "159:131536",
+        "vehicle-windshield-heat": "159:131542",
+        "vehicle-rear-glass-heat": "159:131548",
+        "vehicle-car-mirror": "159:131553",
+        "vehicle-headlamp": "159:131558",
+        "vehicle-foglamp": "159:131563",
+        "vehicle-suspension": "159:131568",
+        "vehicle-roof-window": "159:131574",
+        "vehicle-window-shade": "159:131580",
+        "vehicle-car-spoiler": "159:131585",
+        "vehicle-car-step": "159:131590",
+        "vehicle-windshield-wiper": "159:131595"
+      },
+      "Dark": {
+        "tabler-battery-automotive": "140:1135",
+        "tabler-battery-vertical": "147:64977",
+        "tabler-battery-eco": "147:64982",
+        "tabler-battery-3": "147:64989",
+        "tabler-battery-charging": "147:64997",
+        "tabler-battery-spark": "147:65004",
+        "tabler-circuit-ammeter": "147:65010",
+        "tabler-circuit-voltmeter": "147:65019",
+        "tabler-circuit-motor": "147:65027",
+        "tabler-engine": "147:65035",
+        "tabler-gauge": "147:65044",
+        "tabler-gas-station": "147:65052",
+        "tabler-ruler-measure": "147:65061",
+        "tabler-automatic-gearbox": "147:65074",
+        "tabler-temperature": "140:1145",
+        "tabler-temperature-plus": "147:65092",
+        "tabler-temperature-minus": "147:65100",
+        "tabler-temperature-sun": "147:65107",
+        "tabler-plug-connected": "147:65119",
+        "tabler-charging-pile": "147:65129",
+        "tabler-plug": "147:65139",
+        "tabler-calendar-time": "147:65147",
+        "tabler-lock": "147:65157",
+        "tabler-power": "147:65164",
+        "tabler-filter": "147:65170",
+        "tabler-air-conditioning": "147:65175",
+        "tabler-car-door": "147:65184",
+        "tabler-steering-wheel": "147:65191",
+        "tabler-hand-stop": "147:65200",
+        "tabler-road": "147:65208",
+        "tabler-brand-android": "147:65217",
+        "tabler-device-desktop-cog": "147:65228",
+        "tabler-help-hexagon": "147:65242",
+        "tabler-bolt": "147:65249",
+        "vehicle-compressor": "140:1139",
+        "vehicle-ptc-heater": "140:1142",
+        "vehicle-coolant-pump": "140:1149",
+        "vehicle-dc-converter": "147:65285",
+        "vehicle-power-module": "147:65291",
+        "vehicle-accelerator-pedal": "147:65297",
+        "vehicle-brake-pedal": "147:65304",
+        "vehicle-car-window": "147:65311",
+        "vehicle-hood": "147:65316",
+        "vehicle-car-tailgate": "147:65321",
+        "vehicle-tyre-pressure": "147:65326",
+        "vehicle-cruise-control": "147:65332",
+        "vehicle-lane-assist": "147:65338",
+        "vehicle-emergency-brake": "147:65343",
+        "vehicle-stability-control": "147:65348",
+        "tabler-car-fan": "159:132021",
+        "tabler-wind": "159:132028",
+        "tabler-arrows-left-right": "159:132036",
+        "tabler-arrows-up-down": "159:132044",
+        "tabler-rotate-clockwise": "159:132049",
+        "tabler-arrows-exchange": "159:132055",
+        "tabler-snowflake": "159:132071",
+        "tabler-sun": "159:132077",
+        "tabler-bulb": "159:132084",
+        "tabler-brightness-up": "159:132097",
+        "tabler-volume": "159:132104",
+        "tabler-camera": "159:132110",
+        "tabler-device-tv": "159:132116",
+        "tabler-fridge": "159:132124",
+        "tabler-shield": "159:132129",
+        "tabler-lock-open": "159:132136",
+        "tabler-settings": "159:132142",
+        "tabler-adjustments-horizontal": "159:132155",
+        "tabler-player-stop": "159:132160",
+        "tabler-refresh": "159:132166",
+        "tabler-device-floppy": "159:132173",
+        "tabler-restore": "159:132180",
+        "tabler-moon": "159:132185",
+        "tabler-car": "159:132192",
+        "tabler-droplet": "159:132197",
+        "tabler-perfume": "159:132206",
+        "vehicle-car-seat": "159:132212",
+        "vehicle-seat-heat": "159:132219",
+        "vehicle-seat-airflow": "159:132226",
+        "vehicle-seat-massage": "159:132235",
+        "vehicle-windshield-heat": "159:132241",
+        "vehicle-rear-glass-heat": "159:132247",
+        "vehicle-car-mirror": "159:132252",
+        "vehicle-headlamp": "159:132257",
+        "vehicle-foglamp": "159:132262",
+        "vehicle-suspension": "159:132267",
+        "vehicle-roof-window": "159:132273",
+        "vehicle-window-shade": "159:132279",
+        "vehicle-car-spoiler": "159:132284",
+        "vehicle-car-step": "159:132289",
+        "vehicle-windshield-wiper": "159:132294"
+      }
+    },
+    "category_screens": {
+      "Light": {
+        "车辆与部件": "147:76115",
+        "电气与仪表": "159:138278",
+        "温度与气流": "159:139082",
+        "光线与声音": "159:139861",
+        "设备与界面": "159:140544",
+        "操作与方向": "159:141281",
+        "安全与提示": "159:142017",
+        "统计与时间": "159:142691"
+      },
+      "Dark": {
+        "车辆与部件": "147:78081",
+        "电气与仪表": "159:143369",
+        "温度与气流": "159:144173",
+        "光线与声音": "159:144952",
+        "设备与界面": "159:145635",
+        "操作与方向": "159:146372",
+        "安全与提示": "159:147108",
+        "统计与时间": "159:147782"
+      }
+    }
+  },
+  "display": {
+    "source_grid": 24,
+    "source_stroke": 2,
+    "widget_header": {
+      "compact": 20,
+      "normal": 28
+    },
+    "widget_item": {
+      "List": 32,
+      "Pair": {
+        "compact": 20,
+        "normal": 28
+      },
+      "Grid": 24,
+      "StateList": 24,
+      "HistoryCompare": 20
+    },
+    "gap": {
+      "header_compact": 6,
+      "header_normal": 10,
+      "list": 12,
+      "item_label": 8
+    },
+    "scaling": "uniform",
+    "default_widget_visible": false
+  },
+  "icon_categories": [
+    "电气与仪表",
+    "温度与气流",
+    "车辆与部件",
+    "光线与声音",
+    "设备与界面",
+    "操作与方向",
+    "安全与提示",
+    "统计与时间"
+  ],
+  "naming": "图形名称与图形用途分类；不得使用实体名称、测量量或验证状态作为图标显示名。既有ID/文件名保留兼容，实体推荐映射独立。",
+  "controls": [
+    {
+      "action_id": "ac_power",
+      "name": "空调电源",
+      "icon_id": "tabler-air-conditioning",
+      "validation": "existing"
+    },
+    {
+      "action_id": "ac_control_mode",
+      "name": "自动/手动",
+      "icon_id": "tabler-air-conditioning",
+      "validation": "existing"
+    },
+    {
+      "action_id": "ac_cycle",
+      "name": "循环",
+      "icon_id": "tabler-refresh",
+      "validation": "existing"
+    },
+    {
+      "action_id": "ac_wind_level",
+      "name": "风量",
+      "icon_id": "tabler-car-fan",
+      "validation": "existing"
+    },
+    {
+      "action_id": "ac_front_defrost",
+      "name": "前除霜",
+      "icon_id": "vehicle-windshield-heat",
+      "validation": "existing"
+    },
+    {
+      "action_id": "ac_rear_defrost",
+      "name": "后除霜",
+      "icon_id": "vehicle-rear-glass-heat",
+      "validation": "existing"
+    },
+    {
+      "action_id": "ac_temperature",
+      "name": "前排设定温度",
+      "icon_id": "tabler-temperature",
+      "validation": "existing"
+    },
+    {
+      "action_id": "steering_wheel_heat",
+      "name": "方向盘加热",
+      "icon_id": "tabler-steering-wheel",
+      "validation": "existing"
+    },
+    {
+      "action_id": "wireless_charging",
+      "name": "无线充电",
+      "icon_id": "tabler-bolt",
+      "validation": "existing"
+    },
+    {
+      "action_id": "seat_driver_heat",
+      "name": "主驾座椅加热",
+      "icon_id": "vehicle-seat-heat",
+      "validation": "existing"
+    },
+    {
+      "action_id": "seat_passenger_heat",
+      "name": "副驾座椅加热",
+      "icon_id": "vehicle-seat-heat",
+      "validation": "existing"
+    },
+    {
+      "action_id": "seat_driver_vent",
+      "name": "主驾座椅通风",
+      "icon_id": "vehicle-seat-airflow",
+      "validation": "existing"
+    },
+    {
+      "action_id": "seat_passenger_vent",
+      "name": "副驾座椅通风",
+      "icon_id": "vehicle-seat-airflow",
+      "validation": "existing"
+    },
+    {
+      "action_id": "ac_mode",
+      "name": "AC压缩机制冷开关",
+      "icon_id": "vehicle-compressor",
+      "validation": "verified"
+    },
+    {
+      "action_id": "air_purify",
+      "name": "空气净化",
+      "icon_id": "tabler-wind",
+      "validation": "verified"
+    },
+    {
+      "action_id": "blow_mode_cycle",
+      "name": "前区出风组合",
+      "icon_id": "tabler-refresh",
+      "validation": "verified"
+    },
+    {
+      "action_id": "cloud_mode",
+      "name": "云辇模式",
+      "icon_id": "tabler-car",
+      "validation": "verified"
+    },
+    {
+      "action_id": "deputy_temp",
+      "name": "副驾温度",
+      "icon_id": "tabler-temperature",
+      "validation": "verified"
+    },
+    {
+      "action_id": "door_lock",
+      "name": "四门锁",
+      "icon_id": "tabler-lock",
+      "validation": "verified"
+    },
+    {
+      "action_id": "dual_zone",
+      "name": "双区分控",
+      "icon_id": "tabler-arrows-exchange",
+      "validation": "verified"
+    },
+    {
+      "action_id": "fragrance_level",
+      "name": "香氛浓度",
+      "icon_id": "tabler-perfume",
+      "validation": "verified"
+    },
+    {
+      "action_id": "fragrance_type",
+      "name": "香氛种类",
+      "icon_id": "tabler-perfume",
+      "validation": "verified"
+    },
+    {
+      "action_id": "headlight_height",
+      "name": "车灯高度",
+      "icon_id": "vehicle-headlamp",
+      "validation": "verified"
+    },
+    {
+      "action_id": "hud_control",
+      "name": "HUD",
+      "icon_id": "tabler-device-tv",
+      "validation": "verified"
+    },
+    {
+      "action_id": "interior_light",
+      "name": "车内照明",
+      "icon_id": "tabler-bulb",
+      "validation": "verified"
+    },
+    {
+      "action_id": "main_temp",
+      "name": "主驾温度",
+      "icon_id": "tabler-temperature",
+      "validation": "verified"
+    },
+    {
+      "action_id": "parking_vent",
+      "name": "驻车通风",
+      "icon_id": "tabler-car-fan",
+      "validation": "verified"
+    },
+    {
+      "action_id": "pm25",
+      "name": "PM2.5过滤",
+      "icon_id": "tabler-wind",
+      "validation": "verified"
+    },
+    {
+      "action_id": "road_preview",
+      "name": "路面预瞄",
+      "icon_id": "tabler-road",
+      "validation": "verified"
+    },
+    {
+      "action_id": "seat_leg_rest_passenger",
+      "name": "副驾腿托上下",
+      "icon_id": "vehicle-car-seat",
+      "validation": "verified"
+    },
+    {
+      "action_id": "seat_massage_cycle_driver",
+      "name": "主驾按摩模式",
+      "icon_id": "vehicle-seat-massage",
+      "validation": "verified"
+    },
+    {
+      "action_id": "seat_massage_intensity_driver",
+      "name": "主驾按摩强度",
+      "icon_id": "vehicle-seat-massage",
+      "validation": "verified"
+    },
+    {
+      "action_id": "seat_move_up_down_driver",
+      "name": "主驾上下移动",
+      "icon_id": "vehicle-car-seat",
+      "validation": "verified"
+    },
+    {
+      "action_id": "soc_keep_set",
+      "name": "SOC保电目标",
+      "icon_id": "tabler-battery-3",
+      "validation": "verified"
+    },
+    {
+      "action_id": "sunroof_control",
+      "name": "天窗",
+      "icon_id": "vehicle-roof-window",
+      "validation": "verified"
+    },
+    {
+      "action_id": "sunroof_sunshade",
+      "name": "前遮阳帘",
+      "icon_id": "vehicle-window-shade",
+      "validation": "verified"
+    },
+    {
+      "action_id": "suspension_adjust",
+      "name": "悬架调节",
+      "icon_id": "vehicle-suspension",
+      "validation": "verified"
+    },
+    {
+      "action_id": "turn_signal_left",
+      "name": "左转向灯",
+      "icon_id": "tabler-bulb",
+      "validation": "verified"
+    },
+    {
+      "action_id": "window_left_front",
+      "name": "左前窗离散动作",
+      "icon_id": "vehicle-car-window",
+      "validation": "verified"
+    },
+    {
+      "action_id": "rear_auto",
+      "name": "后区自动模式",
+      "icon_id": "tabler-air-conditioning",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "sync_zone",
+      "name": "多温区整车同步",
+      "icon_id": "tabler-arrows-exchange",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "rear_wind_mode",
+      "name": "后区出风组合",
+      "icon_id": "tabler-wind",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "rear_temp",
+      "name": "后区温度",
+      "icon_id": "tabler-temperature",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "rear_left_temp",
+      "name": "左后温度",
+      "icon_id": "tabler-temperature",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "rear_right_temp",
+      "name": "右后温度",
+      "icon_id": "tabler-temperature",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "deputy_wind",
+      "name": "副驾风量",
+      "icon_id": "tabler-car-fan",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "driver_wind_multi",
+      "name": "多区主驾风量",
+      "icon_id": "tabler-car-fan",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "deputy_wind_multi",
+      "name": "多区副驾风量",
+      "icon_id": "tabler-car-fan",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "rear_wind",
+      "name": "后区风量",
+      "icon_id": "tabler-car-fan",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "rear_left_wind",
+      "name": "左后风量",
+      "icon_id": "tabler-car-fan",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "rear_right_wind",
+      "name": "右后风量",
+      "icon_id": "tabler-car-fan",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "ac_blow_mode_driver",
+      "name": "主驾对人吹/避人吹/扫风",
+      "icon_id": "tabler-air-conditioning",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "ac_blow_mode_passenger",
+      "name": "副驾对人吹/避人吹/扫风",
+      "icon_id": "tabler-air-conditioning",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "ac_blow_mode_rear_left",
+      "name": "左后对人吹/避人吹/扫风",
+      "icon_id": "tabler-air-conditioning",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "ac_blow_mode_rear_right",
+      "name": "右后对人吹/避人吹/扫风",
+      "icon_id": "tabler-air-conditioning",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "driver_seat_heating_5_level",
+      "name": "主驾加热5档",
+      "icon_id": "vehicle-seat-heat",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "driver_seat_ventilation_5_level",
+      "name": "主驾通风5档",
+      "icon_id": "vehicle-seat-airflow",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "passenger_seat_heating_5_level",
+      "name": "副驾加热5档",
+      "icon_id": "vehicle-seat-heat",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "passenger_seat_ventilation_5_level",
+      "name": "副驾通风5档",
+      "icon_id": "vehicle-seat-airflow",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "rear_left_seat_heating_2_level",
+      "name": "左后加热2档",
+      "icon_id": "vehicle-seat-heat",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "rear_left_seat_heating_3_level",
+      "name": "左后加热3档",
+      "icon_id": "vehicle-seat-heat",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "rear_left_seat_heating_5_level",
+      "name": "左后加热5档",
+      "icon_id": "vehicle-seat-heat",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "rear_left_seat_ventilation_2_level",
+      "name": "左后通风2档",
+      "icon_id": "vehicle-seat-airflow",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "rear_left_seat_ventilation_3_level",
+      "name": "左后通风3档",
+      "icon_id": "vehicle-seat-airflow",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "rear_left_seat_ventilation_5_level",
+      "name": "左后通风5档",
+      "icon_id": "vehicle-seat-airflow",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "rear_right_seat_heating_2_level",
+      "name": "右后加热2档",
+      "icon_id": "vehicle-seat-heat",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "rear_right_seat_heating_3_level",
+      "name": "右后加热3档",
+      "icon_id": "vehicle-seat-heat",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "rear_right_seat_heating_5_level",
+      "name": "右后加热5档",
+      "icon_id": "vehicle-seat-heat",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "rear_right_seat_ventilation_2_level",
+      "name": "右后通风2档",
+      "icon_id": "vehicle-seat-airflow",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "rear_right_seat_ventilation_3_level",
+      "name": "右后通风3档",
+      "icon_id": "vehicle-seat-airflow",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "rear_right_seat_ventilation_5_level",
+      "name": "右后通风5档",
+      "icon_id": "vehicle-seat-airflow",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "seat_massage_cycle_passenger",
+      "name": "副驾按摩模式",
+      "icon_id": "vehicle-seat-massage",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "seat_massage_intensity_passenger",
+      "name": "副驾按摩强度",
+      "icon_id": "vehicle-seat-massage",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "seat_massage_cycle_rear_left",
+      "name": "左后按摩模式",
+      "icon_id": "vehicle-seat-massage",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "seat_massage_intensity_rear_left",
+      "name": "左后按摩强度",
+      "icon_id": "vehicle-seat-massage",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "seat_massage_cycle_rear_right",
+      "name": "右后按摩模式",
+      "icon_id": "vehicle-seat-massage",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "seat_massage_intensity_rear_right",
+      "name": "右后按摩强度",
+      "icon_id": "vehicle-seat-massage",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "seat_move_front_driver",
+      "name": "主驾前后移动",
+      "icon_id": "vehicle-car-seat",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "seat_move_front_passenger",
+      "name": "副驾前后移动",
+      "icon_id": "vehicle-car-seat",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "seat_move_rear_left",
+      "name": "左后前后移动",
+      "icon_id": "vehicle-car-seat",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "seat_move_rear_right",
+      "name": "右后前后移动",
+      "icon_id": "vehicle-car-seat",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "seat_move_up_down_passenger",
+      "name": "副驾上下移动",
+      "icon_id": "vehicle-car-seat",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "seat_move_up_down_rear_left",
+      "name": "左后上下移动",
+      "icon_id": "vehicle-car-seat",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "seat_move_up_down_rear_right",
+      "name": "右后上下移动",
+      "icon_id": "vehicle-car-seat",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "seat_backrest_driver",
+      "name": "主驾靠背前后",
+      "icon_id": "vehicle-car-seat",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "seat_backrest_passenger",
+      "name": "副驾靠背前后",
+      "icon_id": "vehicle-car-seat",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "seat_backrest_rear_left",
+      "name": "左后靠背前后",
+      "icon_id": "vehicle-car-seat",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "seat_backrest_rear_right",
+      "name": "右后靠背前后",
+      "icon_id": "vehicle-car-seat",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "seat_leg_rest_driver",
+      "name": "主驾腿托上下",
+      "icon_id": "vehicle-car-seat",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "seat_leg_rest_rear_left",
+      "name": "左后腿托上下",
+      "icon_id": "vehicle-car-seat",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "seat_leg_rest_rear_right",
+      "name": "右后腿托上下",
+      "icon_id": "vehicle-car-seat",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "seat_memory_set_driver",
+      "name": "主驾保存记忆",
+      "icon_id": "tabler-device-floppy",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "seat_memory_restore_driver",
+      "name": "主驾恢复记忆",
+      "icon_id": "tabler-restore",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "seat_memory_set_passenger",
+      "name": "副驾保存记忆",
+      "icon_id": "tabler-device-floppy",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "seat_memory_restore_passenger",
+      "name": "副驾恢复记忆",
+      "icon_id": "tabler-restore",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "seat_memory_set_rear_left",
+      "name": "左后保存记忆",
+      "icon_id": "tabler-device-floppy",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "seat_memory_restore_rear_left",
+      "name": "左后恢复记忆",
+      "icon_id": "tabler-restore",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "seat_memory_set_rear_right",
+      "name": "右后保存记忆",
+      "icon_id": "tabler-device-floppy",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "seat_memory_restore_rear_right",
+      "name": "右后恢复记忆",
+      "icon_id": "tabler-restore",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "steering_wheel_heating_level",
+      "name": "方向盘加热档位",
+      "icon_id": "tabler-steering-wheel",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "window_right_front",
+      "name": "右前窗离散动作",
+      "icon_id": "vehicle-car-window",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "window_left_rear",
+      "name": "左后窗离散动作",
+      "icon_id": "vehicle-car-window",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "window_right_rear",
+      "name": "右后窗离散动作",
+      "icon_id": "vehicle-car-window",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "rear_window_sunshade",
+      "name": "后遮阳帘",
+      "icon_id": "vehicle-window-shade",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "rear_left_window_sunshade",
+      "name": "左后遮阳帘",
+      "icon_id": "vehicle-window-shade",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "rear_right_window_sunshade",
+      "name": "右后遮阳帘",
+      "icon_id": "vehicle-window-shade",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "child_lock",
+      "name": "左后童锁",
+      "icon_id": "tabler-lock",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "child_lock_right",
+      "name": "右后童锁",
+      "icon_id": "tabler-lock",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "trunk_control",
+      "name": "电动尾门",
+      "icon_id": "vehicle-car-tailgate",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "headlight_control",
+      "name": "怀挡灯光模式",
+      "icon_id": "vehicle-headlamp",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "daytime_running_light",
+      "name": "日行灯",
+      "icon_id": "vehicle-headlamp",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "smart_high_beam",
+      "name": "智能远近光设置",
+      "icon_id": "vehicle-headlamp",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "front_fog_light",
+      "name": "前雾灯",
+      "icon_id": "vehicle-foglamp",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "rear_fog_light_column",
+      "name": "后雾灯怀挡",
+      "icon_id": "vehicle-foglamp",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "rear_fog_light_non_column",
+      "name": "后雾灯非怀挡",
+      "icon_id": "vehicle-foglamp",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "driving_indicator_light",
+      "name": "智驾指示灯",
+      "icon_id": "tabler-bulb",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "door_open_light",
+      "name": "开门亮灯设置",
+      "icon_id": "tabler-bulb",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "ambient_light",
+      "name": "氛围灯总开关",
+      "icon_id": "tabler-bulb",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "turn_signal_right",
+      "name": "右转向灯",
+      "icon_id": "tabler-bulb",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "hazard_light",
+      "name": "双闪",
+      "icon_id": "vehicle-emergency-brake",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "ambient_light_brightness",
+      "name": "氛围灯亮度",
+      "icon_id": "tabler-brightness-up",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "auto_hold",
+      "name": "自动驻车设置",
+      "icon_id": "vehicle-brake-pedal",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "aeb_control",
+      "name": "AEB设置",
+      "icon_id": "vehicle-emergency-brake",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "hdc_control",
+      "name": "陡坡缓降设置",
+      "icon_id": "tabler-road",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "fcta_switch",
+      "name": "穿行预警",
+      "icon_id": "vehicle-emergency-brake",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "itac_control",
+      "name": "iTAC",
+      "icon_id": "vehicle-stability-control",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "super_itac_control",
+      "name": "超级iTAC",
+      "icon_id": "vehicle-stability-control",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "sand_abs",
+      "name": "沙地ABS",
+      "icon_id": "vehicle-brake-pedal",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "brake_assist",
+      "name": "制动助力模式",
+      "icon_id": "vehicle-brake-pedal",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "lane_departure_low",
+      "name": "车道偏离低配",
+      "icon_id": "vehicle-lane-assist",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "lane_departure_high",
+      "name": "车道偏离高配",
+      "icon_id": "vehicle-lane-assist",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "fcw_level",
+      "name": "前方横向碰撞等级",
+      "icon_id": "vehicle-emergency-brake",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "vector_control",
+      "name": "矢量控制模式",
+      "icon_id": "vehicle-stability-control",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "super_itac_mode",
+      "name": "超级iTAC模式",
+      "icon_id": "vehicle-stability-control",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "suspension_height_lock",
+      "name": "悬架高度锁定",
+      "icon_id": "vehicle-suspension",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "suspension_ultra_low",
+      "name": "悬架超低",
+      "icon_id": "vehicle-suspension",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "suspension_ultra_high",
+      "name": "悬架超高",
+      "icon_id": "vehicle-suspension",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "steering_assist",
+      "name": "转向助力模式",
+      "icon_id": "tabler-steering-wheel",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "right_charge_port",
+      "name": "右充电口盖",
+      "icon_id": "tabler-plug",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "force_power_keep",
+      "name": "保电模式",
+      "icon_id": "tabler-battery-3",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "energy_feedback",
+      "name": "能量反馈",
+      "icon_id": "tabler-refresh",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "overseas_feedback",
+      "name": "海外能量反馈",
+      "icon_id": "tabler-refresh",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "fridge_mode",
+      "name": "冰箱模式",
+      "icon_id": "tabler-fridge",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "fridge_lock",
+      "name": "冰箱童锁",
+      "icon_id": "tabler-fridge",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "front_trunk",
+      "name": "前舱盖",
+      "icon_id": "vehicle-hood",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "elec_spoiler",
+      "name": "电动尾翼",
+      "icon_id": "vehicle-car-spoiler",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "electric_pedal",
+      "name": "电动踏板",
+      "icon_id": "vehicle-car-step",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "etc_switch",
+      "name": "ETC",
+      "icon_id": "tabler-car",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "wiper_service",
+      "name": "雨刮检修",
+      "icon_id": "vehicle-windshield-wiper",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "hud_brightness",
+      "name": "HUD亮度",
+      "icon_id": "tabler-brightness-up",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "elec_mirror_brightness",
+      "name": "电子后视镜亮度",
+      "icon_id": "vehicle-car-mirror",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "elec_mirror_auto_height",
+      "name": "电子后视镜自动高度",
+      "icon_id": "vehicle-car-mirror",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "rear_view_mirror_tilt",
+      "name": "后视镜翻转",
+      "icon_id": "vehicle-car-mirror",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "entertainment_screen",
+      "name": "后排娱乐屏",
+      "icon_id": "tabler-device-tv",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "panorama_camera",
+      "name": "360全景显示",
+      "icon_id": "tabler-camera",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "camera_view_mode",
+      "name": "全景2D/3D",
+      "icon_id": "tabler-camera",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "max_cool",
+      "name": "最大制冷",
+      "icon_id": "tabler-snowflake",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "engine_sound_sim",
+      "name": "引擎模拟音",
+      "icon_id": "tabler-volume",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "sound_effect_sim",
+      "name": "音效模拟声浪",
+      "icon_id": "tabler-volume",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "comfort_mode_2_level",
+      "name": "舒适控制强度",
+      "icon_id": "tabler-car",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "drive_mode_high",
+      "name": "高配驾驶模式",
+      "icon_id": "tabler-car",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "seat_standard_driver",
+      "name": "主驾座椅常规",
+      "icon_id": "vehicle-car-seat",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "seat_standard_passenger",
+      "name": "副驾座椅常规",
+      "icon_id": "vehicle-car-seat",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "seat_standard_rear_left",
+      "name": "左后座椅常规",
+      "icon_id": "vehicle-car-seat",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "seat_standard_rear_right",
+      "name": "右后座椅常规",
+      "icon_id": "vehicle-car-seat",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "seat_relax_driver",
+      "name": "主驾座椅舒躺",
+      "icon_id": "vehicle-car-seat",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "seat_relax_passenger",
+      "name": "副驾座椅舒躺",
+      "icon_id": "vehicle-car-seat",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "seat_relax_rear_left",
+      "name": "左后座椅舒躺",
+      "icon_id": "vehicle-car-seat",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "seat_relax_rear_right",
+      "name": "右后座椅舒躺",
+      "icon_id": "vehicle-car-seat",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "seat_flat_driver",
+      "name": "主驾座椅平躺",
+      "icon_id": "vehicle-car-seat",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "seat_flat_passenger",
+      "name": "副驾座椅平躺",
+      "icon_id": "vehicle-car-seat",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "seat_flat_rear_left",
+      "name": "左后座椅平躺",
+      "icon_id": "vehicle-car-seat",
+      "validation": "inferred"
+    },
+    {
+      "action_id": "seat_flat_rear_right",
+      "name": "右后座椅平躺",
+      "icon_id": "vehicle-car-seat",
+      "validation": "inferred"
+    }
+  ],
+  "app_controls": [
+    {
+      "action_id": "app_overlay",
+      "icon_id": "tabler-device-tv"
+    },
+    {
+      "action_id": "app_collect",
+      "icon_id": "tabler-refresh"
+    },
+    {
+      "action_id": "app_publish",
+      "icon_id": "tabler-plug-connected"
+    },
+    {
+      "action_id": "app_refresh",
+      "icon_id": "tabler-refresh"
+    },
+    {
+      "action_id": "app_allow_inferred",
+      "icon_id": "tabler-shield"
+    }
+  ],
+  "delivery": {
+    "date": "2026-10-10",
+    "scope": "设计源资源及Figma；APP运行时接入待开发",
+    "total": 90,
+    "control_mappings": 173
+  }
+}

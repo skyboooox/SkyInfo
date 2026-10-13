@@ -1,0 +1,1045 @@
+{
+  "method": "Anonymized regression sequence: intervals and voltage shape retained; capture identity and wall-clock time removed.",
+  "points": [
+    {
+      "at": "2020-01-01T00:00:00+00:00",
+      "value": 503,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:00:22.806338+00:00",
+      "value": 502,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:00:26.934839+00:00",
+      "value": 503,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:00:34.473325+00:00",
+      "value": 502,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:00:37.323263+00:00",
+      "value": 503,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:00:39.921917+00:00",
+      "value": 502,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:00:43.552146+00:00",
+      "value": 500,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:00:47.463589+00:00",
+      "value": 502,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:00:52.124269+00:00",
+      "value": 501,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:00:55.439805+00:00",
+      "value": 502,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:01:06.649184+00:00",
+      "value": 496,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:01:07.826678+00:00",
+      "value": 495,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:01:15.767786+00:00",
+      "value": 494,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:01:17.670692+00:00",
+      "value": 495,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:01:19.555573+00:00",
+      "value": 496,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:01:21.993933+00:00",
+      "value": 500,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:01:23.552868+00:00",
+      "value": 501,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:01:27.793809+00:00",
+      "value": 507,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:01:35.125297+00:00",
+      "value": 502,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:02:05.764287+00:00",
+      "value": 497,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:02:07.976997+00:00",
+      "value": 500,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:02:13.621924+00:00",
+      "value": 502,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:02:17.062931+00:00",
+      "value": 501,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:02:25.248939+00:00",
+      "value": 502,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:03:42.212908+00:00",
+      "value": 501,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:03:43.872165+00:00",
+      "value": 500,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:03:45.240570+00:00",
+      "value": 498,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:03:47.344583+00:00",
+      "value": 495,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:03:49.356564+00:00",
+      "value": 493,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:03:51.926827+00:00",
+      "value": 494,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:03:52.874546+00:00",
+      "value": 495,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:03:54.893260+00:00",
+      "value": 497,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:04:03.855806+00:00",
+      "value": 498,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:04:04.888715+00:00",
+      "value": 500,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:04:09.539175+00:00",
+      "value": 498,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:04:11.852266+00:00",
+      "value": 493,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:04:12.899566+00:00",
+      "value": 492,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:04:14.755799+00:00",
+      "value": 495,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:04:16.814580+00:00",
+      "value": 499,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:04:18.570309+00:00",
+      "value": 509,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:04:21.830243+00:00",
+      "value": 502,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:04:22.755399+00:00",
+      "value": 499,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:04:26.672439+00:00",
+      "value": 496,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:04:33.692014+00:00",
+      "value": 499,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:04:36.741469+00:00",
+      "value": 500,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:04:38.592266+00:00",
+      "value": 501,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:04:42.579538+00:00",
+      "value": 500,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:04:48.584354+00:00",
+      "value": 499,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:04:51.587262+00:00",
+      "value": 500,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:04:52.510455+00:00",
+      "value": 502,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:04:54.846367+00:00",
+      "value": 500,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:04:56.565889+00:00",
+      "value": 497,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:04:58.760753+00:00",
+      "value": 498,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:05:05.331607+00:00",
+      "value": 501,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:05:06.377600+00:00",
+      "value": 500,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:05:26.827134+00:00",
+      "value": 499,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:05:28.581501+00:00",
+      "value": 500,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:05:59.121584+00:00",
+      "value": 501,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:06:20.018297+00:00",
+      "value": 500,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:06:21.749517+00:00",
+      "value": 501,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:07:22.015449+00:00",
+      "value": 517,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:07:24.092852+00:00",
+      "value": 538,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:07:25.884444+00:00",
+      "value": 544,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:07:28.123602+00:00",
+      "value": 561,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:07:30.034413+00:00",
+      "value": 563,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:07:33.182607+00:00",
+      "value": 564,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:07:33.964957+00:00",
+      "value": 565,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:07:36.065419+00:00",
+      "value": 566,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:07:37.898519+00:00",
+      "value": 567,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:07:43.816743+00:00",
+      "value": 568,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:07:52.071412+00:00",
+      "value": 569,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:07:54.154896+00:00",
+      "value": 568,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:07:58.345726+00:00",
+      "value": 569,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:08:03.065008+00:00",
+      "value": 568,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:08:24.047651+00:00",
+      "value": 567,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:08:27.846864+00:00",
+      "value": 566,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:08:29.806501+00:00",
+      "value": 567,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:08:33.248655+00:00",
+      "value": 566,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:08:40.086031+00:00",
+      "value": 565,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:08:42.052297+00:00",
+      "value": 566,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:08:44.011598+00:00",
+      "value": 565,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:08:53.804260+00:00",
+      "value": 564,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:09:02.836641+00:00",
+      "value": 563,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:09:13.479392+00:00",
+      "value": 560,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:09:15.713535+00:00",
+      "value": 562,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:09:17.674638+00:00",
+      "value": 563,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:09:19.670451+00:00",
+      "value": 562,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:10:03.158704+00:00",
+      "value": 561,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:10:33.535905+00:00",
+      "value": 560,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:10:34.298891+00:00",
+      "value": 561,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:10:38.135969+00:00",
+      "value": 560,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:11:07.801983+00:00",
+      "value": 559,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:11:13.432495+00:00",
+      "value": 560,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:11:17.989527+00:00",
+      "value": 559,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:11:19.710002+00:00",
+      "value": 560,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:11:21.773168+00:00",
+      "value": 559,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:12:05.708797+00:00",
+      "value": 558,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:12:09.511734+00:00",
+      "value": 559,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:12:13.694049+00:00",
+      "value": 558,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:13:19.964938+00:00",
+      "value": 557,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:13:23.800881+00:00",
+      "value": 558,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:13:27.779076+00:00",
+      "value": 557,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:13:33.090918+00:00",
+      "value": 558,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:13:33.896753+00:00",
+      "value": 557,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:13:52.134283+00:00",
+      "value": 556,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:13:54.012710+00:00",
+      "value": 557,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:14:11.015400+00:00",
+      "value": 556,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:14:43.623497+00:00",
+      "value": 555,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:14:45.464414+00:00",
+      "value": 556,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:14:49.636584+00:00",
+      "value": 555,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:14:55.464997+00:00",
+      "value": 556,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:14:57.592272+00:00",
+      "value": 555,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:15:19.802838+00:00",
+      "value": 556,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:15:21.775917+00:00",
+      "value": 555,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:15:37.833196+00:00",
+      "value": 556,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:15:49.561674+00:00",
+      "value": 557,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:15:55.666516+00:00",
+      "value": 558,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:16:03.965067+00:00",
+      "value": 559,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:16:04.900571+00:00",
+      "value": 560,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:16:07.051763+00:00",
+      "value": 561,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:16:08.759894+00:00",
+      "value": 562,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:16:11.564329+00:00",
+      "value": 563,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:16:12.846553+00:00",
+      "value": 561,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:16:14.854008+00:00",
+      "value": 548,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:16:17.116600+00:00",
+      "value": 545,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:16:18.631172+00:00",
+      "value": 550,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:16:21.433702+00:00",
+      "value": 545,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:16:22.964692+00:00",
+      "value": 541,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:16:24.601233+00:00",
+      "value": 538,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:16:27.059728+00:00",
+      "value": 536,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:16:28.752311+00:00",
+      "value": 535,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:16:33.421650+00:00",
+      "value": 532,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:16:36.350379+00:00",
+      "value": 531,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:16:38.444742+00:00",
+      "value": 530,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:16:41.241159+00:00",
+      "value": 529,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:16:46.015627+00:00",
+      "value": 528,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:16:50.070693+00:00",
+      "value": 527,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:16:58.369350+00:00",
+      "value": 526,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:17:06.882883+00:00",
+      "value": 525,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:17:18.816824+00:00",
+      "value": 524,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:17:39.968148+00:00",
+      "value": 523,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:18:06.704574+00:00",
+      "value": 522,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:18:51.612889+00:00",
+      "value": 521,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:19:54.067862+00:00",
+      "value": 520,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:22:46.182394+00:00",
+      "value": 524,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:22:48.232449+00:00",
+      "value": 529,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:22:50.170688+00:00",
+      "value": 530,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:22:52.311454+00:00",
+      "value": 531,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:22:54.362100+00:00",
+      "value": 532,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:22:56.322404+00:00",
+      "value": 533,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:22:58.032943+00:00",
+      "value": 534,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:23:03.275954+00:00",
+      "value": 538,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:23:04.334002+00:00",
+      "value": 539,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:23:06.216180+00:00",
+      "value": 540,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:23:08.181875+00:00",
+      "value": 543,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:23:10.089802+00:00",
+      "value": 545,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:23:12.385531+00:00",
+      "value": 548,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:23:14.128701+00:00",
+      "value": 550,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:23:15.985012+00:00",
+      "value": 553,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:23:18.065725+00:00",
+      "value": 557,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:23:20.138821+00:00",
+      "value": 553,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:23:22.172068+00:00",
+      "value": 554,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:23:25.892368+00:00",
+      "value": 555,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:23:27.917291+00:00",
+      "value": 556,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:23:30.100033+00:00",
+      "value": 557,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:23:33.813660+00:00",
+      "value": 560,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:23:36.645918+00:00",
+      "value": 551,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:23:38.824681+00:00",
+      "value": 547,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:23:41.547445+00:00",
+      "value": 545,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:23:42.796133+00:00",
+      "value": 544,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:23:44.448980+00:00",
+      "value": 543,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:23:46.420236+00:00",
+      "value": 542,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:23:48.465548+00:00",
+      "value": 541,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:23:51.159579+00:00",
+      "value": 539,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:23:54.658967+00:00",
+      "value": 538,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:23:58.442153+00:00",
+      "value": 537,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:24:03.570369+00:00",
+      "value": 536,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:24:06.337654+00:00",
+      "value": 535,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:24:11.279501+00:00",
+      "value": 534,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:24:14.200962+00:00",
+      "value": 535,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:24:16.442262+00:00",
+      "value": 540,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:24:18.413324+00:00",
+      "value": 543,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:24:21.190386+00:00",
+      "value": 546,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:24:23.521644+00:00",
+      "value": 548,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:24:24.365037+00:00",
+      "value": 552,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:24:26.223077+00:00",
+      "value": 555,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:24:28.311535+00:00",
+      "value": 560,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:24:33.630454+00:00",
+      "value": 561,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:24:46.322590+00:00",
+      "value": 562,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:24:51.456197+00:00",
+      "value": 563,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:24:52.417641+00:00",
+      "value": 564,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:24:54.471783+00:00",
+      "value": 565,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:24:56.523735+00:00",
+      "value": 566,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:24:58.639221+00:00",
+      "value": 561,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:25:03.130657+00:00",
+      "value": 556,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:25:05.959284+00:00",
+      "value": 555,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:25:07.947995+00:00",
+      "value": 554,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:25:09.811861+00:00",
+      "value": 553,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:25:11.978471+00:00",
+      "value": 552,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:25:13.943904+00:00",
+      "value": 551,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:25:18.017810+00:00",
+      "value": 550,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:25:19.845639+00:00",
+      "value": 549,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:25:23.931500+00:00",
+      "value": 548,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:25:28.147574+00:00",
+      "value": 547,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:25:35.142842+00:00",
+      "value": 546,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:25:38.023186+00:00",
+      "value": 545,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:25:42.383675+00:00",
+      "value": 544,
+      "segment": "voltage-regression"
+    },
+    {
+      "at": "2020-01-01T00:25:50.031452+00:00",
+      "value": 543,
+      "segment": "voltage-regression"
+    }
+  ]
+}

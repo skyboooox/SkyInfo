@@ -1,0 +1,3 @@
+[submodule "docs/design/fluorite-design"]
+	path = docs/design/fluorite-design
+	url = https://github.com/skyboooox/fluorite-design.git

@@ -1,0 +1,33 @@
+{
+  "name": "SkyInfo",
+  "package": "app.skyinfo.vehicle",
+  "currentDesign": "skyinfo-launcher.svg",
+  "origin": "user reference redrawn as editable vectors via Figma Desktop Bridge",
+  "figma": {
+    "fileKey": "T7jZP95JDLgkNKUI5NeEqy",
+    "pageId": "140:896",
+    "nodeId": "254:34454"
+  },
+  "files": [
+    {
+      "path": "skyinfo-launcher.svg",
+      "bytes": 495,
+      "sha256": "2627c958eafab2b3ec8c76d3a916655225ee8f5d89e74d9b617f60c4e9eb0183"
+    },
+    {
+      "path": "skyinfo-foreground.svg",
+      "bytes": 334,
+      "sha256": "c0cf79974ea776a28d369b92def7eb3698afbe1a58fb4054ed369876f38d2484"
+    },
+    {
+      "path": "skyinfo-monochrome.svg",
+      "bytes": 330,
+      "sha256": "ffae1725b4f2107a9dc893d66114a0802382a1e403b2b359d17fae7ac5cee025"
+    },
+    {
+      "path": "skyinfo-launcher.png",
+      "bytes": 6627,
+      "sha256": "6f0a99d7450c76c35e652d1090f73672219da42b47a3744f9f3c925734086d8b"
+    }
+  ]
+}

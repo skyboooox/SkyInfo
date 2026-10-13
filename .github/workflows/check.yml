@@ -1,0 +1,42 @@
+name: Checks
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: checks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  source-and-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          submodules: recursive
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Secret scan
+        run: |
+          docker run --rm -v "$PWD:/source:ro" \
+            -e GIT_CONFIG_COUNT=1 -e GIT_CONFIG_KEY_0=safe.directory -e GIT_CONFIG_VALUE_0=/source \
+            ghcr.io/gitleaks/gitleaks:v8.30.1@sha256:c00b6bd0aeb3071cbcb79009cb16a60dd9e0a7c60e2be9ab65d25e6bc8abbb7f \
+            git /source --config /source/.gitleaks.toml --redact --no-banner
+      - name: Public content and resources
+        run: |
+          python3 tools/check_public.py
+          python3 tools/check_project.py
+      - name: Flutter analysis and tests
+        run: |
+          ./tools/docker.sh flutter analyze
+          ./tools/docker.sh flutter test
+      - name: Android tests with temporary local MQTT
+        run: ./tools/test-mqtt.sh
+      - name: Debug APK smoke build
+        run: ./tools/docker.sh flutter build apk --debug --target-platform android-arm64

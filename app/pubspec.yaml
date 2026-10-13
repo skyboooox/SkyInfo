@@ -1,0 +1,34 @@
+name: skyinfo
+description: Vehicle information dashboard.
+publish_to: none
+version: 0.8.2+45
+environment:
+  sdk: '>=3.12.0 <4.0.0'
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_svg: ^2.2.0
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/catalog.json
+    - assets/entities.json
+    - assets/i18n/
+    - assets/licenses/
+    - assets/icons/
+    - assets/icon-manifest.json
+    - assets/fonts/LICENSE-ChillDIN.txt
+    - assets/fonts/LICENSE-IBM.txt
+  fonts:
+    - family: ChillDIN
+      fonts:
+        - asset: assets/fonts/ChillDINGothic_Std.otf
+          weight: 500
+    - family: IBMPlexMono
+      fonts:
+        - asset: assets/fonts/IBMPlexMono-Medium.ttf
+          weight: 500

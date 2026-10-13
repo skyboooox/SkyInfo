@@ -1,0 +1,7 @@
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Public Figma document IDs used for design provenance; these do not authorize access"
+regexTarget = "secret"
+regexes = ['^T7jZP95JDLgkNKUI5NeEqy$', '^zRND6JG1dfnxrT4djl7qY8$']

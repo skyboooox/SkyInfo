@@ -1,0 +1,10 @@
+name: 功能建议
+description: 描述要解决的问题和使用场景
+body:
+  - type: textarea
+    id: request
+    attributes:
+      label: 场景与建议
+      description: 说明现有流程的困难与希望达到的结果。
+    validations:
+      required: true

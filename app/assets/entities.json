@@ -1,0 +1,6702 @@
+[
+  {
+    "id": "ac_power",
+    "name": "空调电源",
+    "category": "空调",
+    "validation": "verified",
+    "readField": "1000/5/1077936144",
+    "options": [
+      {
+        "value": 0,
+        "label": "关闭",
+        "expected": 0,
+        "labelKey": "close"
+      },
+      {
+        "value": 1,
+        "label": "开启",
+        "expected": 1,
+        "labelKey": "on"
+      }
+    ],
+    "states": {
+      "0": "关闭",
+      "1": "开启"
+    },
+    "feedbackFields": [
+      "1000/5/1077936144"
+    ],
+    "icon": "tabler-air-conditioning",
+    "unit": "",
+    "capability": "toggle",
+    "nameKey": "text_8f9011f3d3",
+    "categoryKey": "text_0f48e53559",
+    "stateKeys": {
+      "0": "close",
+      "1": "on"
+    }
+  },
+  {
+    "id": "ac_control_mode",
+    "name": "空调自动/手动",
+    "category": "空调",
+    "validation": "verified",
+    "readField": "1000/5/1077936146",
+    "options": [
+      {
+        "value": 0,
+        "label": "自动",
+        "expected": 0,
+        "labelKey": "text_4afad87755"
+      },
+      {
+        "value": 1,
+        "label": "手动",
+        "expected": 1,
+        "labelKey": "text_2a4a4de806"
+      }
+    ],
+    "states": {
+      "0": "自动",
+      "1": "手动"
+    },
+    "feedbackFields": [
+      "1000/5/1077936146"
+    ],
+    "icon": "tabler-air-conditioning",
+    "unit": "",
+    "capability": "select",
+    "nameKey": "text_a8f4df87fd",
+    "categoryKey": "text_0f48e53559",
+    "stateKeys": {
+      "0": "text_4afad87755",
+      "1": "text_2a4a4de806"
+    }
+  },
+  {
+    "id": "ac_cycle",
+    "name": "空调循环",
+    "category": "空调",
+    "validation": "verified",
+    "readField": "1000/5/1077936148",
+    "options": [
+      {
+        "value": 0,
+        "label": "外循环",
+        "expected": 0,
+        "labelKey": "text_5708518ee3"
+      },
+      {
+        "value": 1,
+        "label": "内循环",
+        "expected": 1,
+        "labelKey": "text_f587f15868"
+      }
+    ],
+    "states": {
+      "0": "外循环",
+      "1": "内循环"
+    },
+    "feedbackFields": [
+      "1000/5/1077936148"
+    ],
+    "icon": "tabler-refresh",
+    "unit": "",
+    "capability": "select",
+    "nameKey": "text_aa6df49460",
+    "categoryKey": "text_0f48e53559",
+    "stateKeys": {
+      "0": "text_5708518ee3",
+      "1": "text_f587f15868"
+    }
+  },
+  {
+    "id": "ac_wind_level",
+    "name": "空调风量",
+    "category": "空调",
+    "validation": "verified",
+    "readField": "1000/5/1077936156",
+    "options": [
+      {
+        "value": 1,
+        "label": "1档",
+        "expected": 1,
+        "labelKey": "text_80d4a176aa"
+      },
+      {
+        "value": 2,
+        "label": "2档",
+        "expected": 2,
+        "labelKey": "text_9586fe63cd"
+      },
+      {
+        "value": 3,
+        "label": "3档",
+        "expected": 3,
+        "labelKey": "text_1cd6d50e52"
+      },
+      {
+        "value": 4,
+        "label": "4档",
+        "expected": 4,
+        "labelKey": "text_c7c0f766eb"
+      },
+      {
+        "value": 5,
+        "label": "5档",
+        "expected": 5,
+        "labelKey": "text_6c3bf61469"
+      },
+      {
+        "value": 6,
+        "label": "6档",
+        "expected": 6,
+        "labelKey": "text_f31d04418c"
+      },
+      {
+        "value": 7,
+        "label": "7档",
+        "expected": 7,
+        "labelKey": "text_2d0e036c5a"
+      }
+    ],
+    "states": {
+      "1": "1档",
+      "2": "2档",
+      "3": "3档",
+      "4": "4档",
+      "5": "5档",
+      "6": "6档",
+      "7": "7档"
+    },
+    "feedbackFields": [
+      "1000/5/1077936156"
+    ],
+    "icon": "tabler-car-fan",
+    "unit": "档",
+    "capability": "number",
+    "nameKey": "text_e16e4c3b56",
+    "categoryKey": "text_0f48e53559",
+    "stateKeys": {
+      "1": "text_80d4a176aa",
+      "2": "text_9586fe63cd",
+      "3": "text_1cd6d50e52",
+      "4": "text_c7c0f766eb",
+      "5": "text_6c3bf61469",
+      "6": "text_f31d04418c",
+      "7": "text_2d0e036c5a"
+    }
+  },
+  {
+    "id": "ac_front_defrost",
+    "name": "前除霜",
+    "category": "空调",
+    "validation": "verified",
+    "readField": "1000/5/1077936150",
+    "options": [
+      {
+        "value": 0,
+        "label": "关闭",
+        "expected": 0,
+        "labelKey": "close"
+      },
+      {
+        "value": 1,
+        "label": "开启",
+        "expected": 1,
+        "labelKey": "on"
+      }
+    ],
+    "states": {
+      "0": "关闭",
+      "1": "开启"
+    },
+    "feedbackFields": [
+      "1000/5/1077936150"
+    ],
+    "icon": "vehicle-windshield-heat",
+    "unit": "",
+    "capability": "toggle",
+    "nameKey": "text_6f3c1d5845",
+    "categoryKey": "text_0f48e53559",
+    "stateKeys": {
+      "0": "close",
+      "1": "on"
+    }
+  },
+  {
+    "id": "ac_temperature",
+    "name": "前排设定温度",
+    "category": "空调",
+    "validation": "verified",
+    "readField": "1000/5/1077936168",
+    "options": [
+      {
+        "value": 17,
+        "label": "17°C",
+        "expected": 17,
+        "labelKey": "text_0083ffe669"
+      },
+      {
+        "value": 18,
+        "label": "18°C",
+        "expected": 18,
+        "labelKey": "text_5a4814d4c1"
+      },
+      {
+        "value": 19,
+        "label": "19°C",
+        "expected": 19,
+        "labelKey": "text_f6c4cfd1df"
+      },
+      {
+        "value": 20,
+        "label": "20°C",
+        "expected": 20,
+        "labelKey": "text_4e3f2b8c9e"
+      },
+      {
+        "value": 21,
+        "label": "21°C",
+        "expected": 21,
+        "labelKey": "text_4dde861981"
+      },
+      {
+        "value": 22,
+        "label": "22°C",
+        "expected": 22,
+        "labelKey": "text_1093d897bf"
+      },
+      {
+        "value": 23,
+        "label": "23°C",
+        "expected": 23,
+        "labelKey": "text_f2f0af7581"
+      },
+      {
+        "value": 24,
+        "label": "24°C",
+        "expected": 24,
+        "labelKey": "text_2e96a25c18"
+      },
+      {
+        "value": 25,
+        "label": "25°C",
+        "expected": 25,
+        "labelKey": "text_4457f5091e"
+      },
+      {
+        "value": 26,
+        "label": "26°C",
+        "expected": 26,
+        "labelKey": "text_534ab2792e"
+      },
+      {
+        "value": 27,
+        "label": "27°C",
+        "expected": 27,
+        "labelKey": "text_7343ec35d6"
+      },
+      {
+        "value": 28,
+        "label": "28°C",
+        "expected": 28,
+        "labelKey": "text_c79acd8f68"
+      },
+      {
+        "value": 29,
+        "label": "29°C",
+        "expected": 29,
+        "labelKey": "text_6355d6ada6"
+      },
+      {
+        "value": 30,
+        "label": "30°C",
+        "expected": 30,
+        "labelKey": "text_830ad271c1"
+      },
+      {
+        "value": 31,
+        "label": "31°C",
+        "expected": 31,
+        "labelKey": "text_2e06da481a"
+      },
+      {
+        "value": 32,
+        "label": "32°C",
+        "expected": 32,
+        "labelKey": "text_a93a5e36e2"
+      },
+      {
+        "value": 33,
+        "label": "33°C",
+        "expected": 33,
+        "labelKey": "text_0834b43185"
+      }
+    ],
+    "states": {
+      "17": "17°C",
+      "18": "18°C",
+      "19": "19°C",
+      "20": "20°C",
+      "21": "21°C",
+      "22": "22°C",
+      "23": "23°C",
+      "24": "24°C",
+      "25": "25°C",
+      "26": "26°C",
+      "27": "27°C",
+      "28": "28°C",
+      "29": "29°C",
+      "30": "30°C",
+      "31": "31°C",
+      "32": "32°C",
+      "33": "33°C"
+    },
+    "feedbackFields": [
+      "1000/5/1077936168",
+      "1000/5/1077936176"
+    ],
+    "icon": "tabler-temperature",
+    "unit": "°C",
+    "capability": "number",
+    "nameKey": "text_acb1e6af4e",
+    "categoryKey": "text_0f48e53559",
+    "stateKeys": {
+      "17": "text_0083ffe669",
+      "18": "text_5a4814d4c1",
+      "19": "text_f6c4cfd1df",
+      "20": "text_4e3f2b8c9e",
+      "21": "text_4dde861981",
+      "22": "text_1093d897bf",
+      "23": "text_f2f0af7581",
+      "24": "text_2e96a25c18",
+      "25": "text_4457f5091e",
+      "26": "text_534ab2792e",
+      "27": "text_7343ec35d6",
+      "28": "text_c79acd8f68",
+      "29": "text_6355d6ada6",
+      "30": "text_830ad271c1",
+      "31": "text_2e06da481a",
+      "32": "text_a93a5e36e2",
+      "33": "text_0834b43185"
+    }
+  },
+  {
+    "id": "ac_rear_defrost",
+    "name": "后除霜",
+    "category": "空调",
+    "validation": "verified",
+    "readField": "1000/5/1128267825",
+    "options": [
+      {
+        "value": 0,
+        "label": "关闭",
+        "expected": 0,
+        "labelKey": "close"
+      },
+      {
+        "value": 1,
+        "label": "开启",
+        "expected": 1,
+        "labelKey": "on"
+      }
+    ],
+    "states": {
+      "0": "关闭",
+      "1": "开启"
+    },
+    "feedbackFields": [
+      "1000/5/1128267825"
+    ],
+    "icon": "vehicle-rear-glass-heat",
+    "unit": "",
+    "capability": "toggle",
+    "nameKey": "text_01059924f6",
+    "categoryKey": "text_0f48e53559",
+    "stateKeys": {
+      "0": "close",
+      "1": "on"
+    }
+  },
+  {
+    "id": "steering_wheel_heat",
+    "name": "方向盘加热",
+    "category": "座椅",
+    "validation": "verified",
+    "readField": "1023/5/1116733454",
+    "options": [
+      {
+        "value": 1,
+        "label": "关闭",
+        "expected": 1,
+        "labelKey": "close"
+      },
+      {
+        "value": 2,
+        "label": "开启",
+        "expected": 2,
+        "labelKey": "on"
+      }
+    ],
+    "states": {
+      "1": "关闭",
+      "2": "开启"
+    },
+    "feedbackFields": [
+      "1023/5/1116733454"
+    ],
+    "icon": "tabler-steering-wheel",
+    "unit": "",
+    "capability": "toggle",
+    "nameKey": "text_e11376096a",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {
+      "1": "close",
+      "2": "on"
+    }
+  },
+  {
+    "id": "wireless_charging",
+    "name": "无线充电",
+    "category": "充电及其他设备",
+    "validation": "verified",
+    "readField": "1009/5/1105199120",
+    "options": [
+      {
+        "value": 1,
+        "label": "开启",
+        "expected": 1,
+        "labelKey": "on"
+      },
+      {
+        "value": 2,
+        "label": "关闭",
+        "expected": 2,
+        "labelKey": "close"
+      }
+    ],
+    "states": {
+      "1": "开启",
+      "2": "关闭"
+    },
+    "feedbackFields": [
+      "1009/5/1105199120"
+    ],
+    "icon": "tabler-bolt",
+    "unit": "",
+    "capability": "toggle",
+    "nameKey": "text_64461dc36b",
+    "categoryKey": "text_72129c7bbb",
+    "stateKeys": {
+      "1": "on",
+      "2": "close"
+    }
+  },
+  {
+    "id": "seat_driver_heat",
+    "name": "主驾加热",
+    "category": "座椅",
+    "validation": "verified",
+    "readField": "1023/5/1335885835",
+    "options": [
+      {
+        "value": 1,
+        "label": "关闭",
+        "expected": 1,
+        "labelKey": "close"
+      },
+      {
+        "value": 2,
+        "label": "1档",
+        "expected": 2,
+        "labelKey": "text_80d4a176aa"
+      },
+      {
+        "value": 3,
+        "label": "2档",
+        "expected": 3,
+        "labelKey": "text_9586fe63cd"
+      }
+    ],
+    "states": {
+      "1": "关闭",
+      "2": "1档",
+      "3": "2档"
+    },
+    "feedbackFields": [
+      "1023/5/1335885835"
+    ],
+    "icon": "vehicle-seat-heat",
+    "unit": "",
+    "capability": "select",
+    "nameKey": "text_7c5724a6d3",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {
+      "1": "close",
+      "2": "text_80d4a176aa",
+      "3": "text_9586fe63cd"
+    }
+  },
+  {
+    "id": "seat_passenger_heat",
+    "name": "副驾加热",
+    "category": "座椅",
+    "validation": "verified",
+    "readField": "1023/5/1335885843",
+    "options": [
+      {
+        "value": 1,
+        "label": "关闭",
+        "expected": 1,
+        "labelKey": "close"
+      },
+      {
+        "value": 2,
+        "label": "1档",
+        "expected": 2,
+        "labelKey": "text_80d4a176aa"
+      },
+      {
+        "value": 3,
+        "label": "2档",
+        "expected": 3,
+        "labelKey": "text_9586fe63cd"
+      },
+      {
+        "value": 4,
+        "label": "3档",
+        "expected": 4,
+        "labelKey": "text_1cd6d50e52"
+      }
+    ],
+    "states": {
+      "1": "关闭",
+      "2": "1档",
+      "3": "2档",
+      "4": "3档"
+    },
+    "feedbackFields": [
+      "1023/5/1335885843"
+    ],
+    "icon": "vehicle-seat-heat",
+    "unit": "",
+    "capability": "select",
+    "nameKey": "text_7465cedd30",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {
+      "1": "close",
+      "2": "text_80d4a176aa",
+      "3": "text_9586fe63cd",
+      "4": "text_1cd6d50e52"
+    }
+  },
+  {
+    "id": "seat_driver_vent",
+    "name": "主驾通风",
+    "category": "座椅",
+    "validation": "verified",
+    "readField": "1023/5/1335885832",
+    "options": [
+      {
+        "value": 1,
+        "label": "关闭",
+        "expected": 1,
+        "labelKey": "close"
+      },
+      {
+        "value": 2,
+        "label": "1档",
+        "expected": 2,
+        "labelKey": "text_80d4a176aa"
+      },
+      {
+        "value": 3,
+        "label": "2档",
+        "expected": 3,
+        "labelKey": "text_9586fe63cd"
+      },
+      {
+        "value": 4,
+        "label": "3档",
+        "expected": 4,
+        "labelKey": "text_1cd6d50e52"
+      }
+    ],
+    "states": {
+      "1": "关闭",
+      "2": "1档",
+      "3": "2档",
+      "4": "3档"
+    },
+    "feedbackFields": [
+      "1023/5/1335885832"
+    ],
+    "icon": "vehicle-seat-airflow",
+    "unit": "",
+    "capability": "select",
+    "nameKey": "text_4e3c45d556",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {
+      "1": "close",
+      "2": "text_80d4a176aa",
+      "3": "text_9586fe63cd",
+      "4": "text_1cd6d50e52"
+    }
+  },
+  {
+    "id": "seat_passenger_vent",
+    "name": "副驾通风",
+    "category": "座椅",
+    "validation": "verified",
+    "readField": "1023/5/1335885840",
+    "options": [
+      {
+        "value": 1,
+        "label": "关闭",
+        "expected": 1,
+        "labelKey": "close"
+      },
+      {
+        "value": 2,
+        "label": "1档",
+        "expected": 2,
+        "labelKey": "text_80d4a176aa"
+      },
+      {
+        "value": 3,
+        "label": "2档",
+        "expected": 3,
+        "labelKey": "text_9586fe63cd"
+      },
+      {
+        "value": 4,
+        "label": "3档",
+        "expected": 4,
+        "labelKey": "text_1cd6d50e52"
+      }
+    ],
+    "states": {
+      "1": "关闭",
+      "2": "1档",
+      "3": "2档",
+      "4": "3档"
+    },
+    "feedbackFields": [
+      "1023/5/1335885840"
+    ],
+    "icon": "vehicle-seat-airflow",
+    "unit": "",
+    "capability": "select",
+    "nameKey": "text_23afd6a7fa",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {
+      "1": "close",
+      "2": "text_80d4a176aa",
+      "3": "text_9586fe63cd",
+      "4": "text_1cd6d50e52"
+    }
+  },
+  {
+    "id": "ac_mode",
+    "name": "AC压缩机制冷开关",
+    "category": "空调",
+    "validation": "verified",
+    "readField": "1000/5/1077936137",
+    "feedbackFields": [
+      "1000/5/1077936137"
+    ],
+    "options": [
+      {
+        "value": 0,
+        "label": "关闭",
+        "expected": 0,
+        "labelKey": "close"
+      },
+      {
+        "value": 1,
+        "label": "开启",
+        "expected": 1,
+        "labelKey": "on"
+      }
+    ],
+    "states": {
+      "0": "关闭",
+      "1": "开启"
+    },
+    "icon": "vehicle-compressor",
+    "unit": "",
+    "capability": "toggle",
+    "nameKey": "text_1ec86ae62d",
+    "categoryKey": "text_0f48e53559",
+    "stateKeys": {
+      "0": "close",
+      "1": "on"
+    }
+  },
+  {
+    "id": "air_purify",
+    "name": "空气净化",
+    "category": "空调",
+    "validation": "verified",
+    "readField": "1000/5/1033895944",
+    "feedbackFields": [
+      "1000/5/1033895944"
+    ],
+    "options": [
+      {
+        "value": 1,
+        "label": "开启",
+        "expected": null,
+        "labelKey": "on"
+      },
+      {
+        "value": 2,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-wind",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_26a0919c05",
+    "categoryKey": "text_0f48e53559",
+    "stateKeys": {}
+  },
+  {
+    "id": "blow_mode_cycle",
+    "name": "前区出风组合",
+    "category": "空调",
+    "validation": "verified",
+    "readField": "1000/5/1077936152",
+    "feedbackFields": [
+      "1000/5/1077936152"
+    ],
+    "options": [
+      {
+        "value": 1,
+        "label": "吹面",
+        "expected": 1,
+        "labelKey": "text_5579192a1b"
+      },
+      {
+        "value": 2,
+        "label": "吹面+吹脚",
+        "expected": 2,
+        "labelKey": "text_0633e43407"
+      },
+      {
+        "value": 3,
+        "label": "吹脚",
+        "expected": 3,
+        "labelKey": "text_56de08cc72"
+      },
+      {
+        "value": 4,
+        "label": "吹脚+除霜",
+        "expected": 4,
+        "labelKey": "text_68e305acca"
+      },
+      {
+        "value": 5,
+        "label": "除霜",
+        "expected": 5,
+        "labelKey": "text_aa98bb35df"
+      },
+      {
+        "value": 6,
+        "label": "吹面+吹脚+除霜",
+        "expected": 6,
+        "labelKey": "text_797dd48466"
+      },
+      {
+        "value": 7,
+        "label": "吹面+除霜",
+        "expected": 7,
+        "labelKey": "text_74f4c20a4d"
+      }
+    ],
+    "states": {
+      "1": "吹面",
+      "2": "吹面+吹脚",
+      "3": "吹脚",
+      "4": "吹脚+除霜",
+      "5": "除霜",
+      "6": "吹面+吹脚+除霜",
+      "7": "吹面+除霜"
+    },
+    "icon": "tabler-refresh",
+    "unit": "",
+    "capability": "select",
+    "nameKey": "text_c730fb93a1",
+    "categoryKey": "text_0f48e53559",
+    "stateKeys": {
+      "1": "text_5579192a1b",
+      "2": "text_0633e43407",
+      "3": "text_56de08cc72",
+      "4": "text_68e305acca",
+      "5": "text_aa98bb35df",
+      "6": "text_797dd48466",
+      "7": "text_74f4c20a4d"
+    }
+  },
+  {
+    "id": "cloud_mode",
+    "name": "云辇模式",
+    "category": "底盘辅助驾驶",
+    "validation": "verified",
+    "readField": "1023/5/938475528",
+    "feedbackFields": [
+      "1023/5/938475528"
+    ],
+    "options": [
+      {
+        "value": 1,
+        "label": "舒适",
+        "expected": 1,
+        "labelKey": "text_b97c3bc09e"
+      },
+      {
+        "value": 2,
+        "label": "运动",
+        "expected": 2,
+        "labelKey": "text_9d99dac5fb"
+      }
+    ],
+    "states": {
+      "1": "舒适",
+      "2": "运动"
+    },
+    "icon": "tabler-car",
+    "unit": "",
+    "capability": "select",
+    "nameKey": "text_6c5122b4d4",
+    "categoryKey": "text_bd676cda2f",
+    "stateKeys": {
+      "1": "text_b97c3bc09e",
+      "2": "text_9d99dac5fb"
+    }
+  },
+  {
+    "id": "deputy_temp",
+    "name": "副驾温度",
+    "category": "空调",
+    "validation": "verified",
+    "readField": "1000/5/1077936176",
+    "feedbackFields": [
+      "1000/5/1077936176"
+    ],
+    "options": [
+      {
+        "value": 24,
+        "label": "24°C",
+        "expected": 24,
+        "labelKey": "text_2e96a25c18"
+      }
+    ],
+    "states": {
+      "24": "24°C"
+    },
+    "icon": "tabler-temperature",
+    "unit": "°C",
+    "capability": "button",
+    "nameKey": "text_d9491db229",
+    "categoryKey": "text_0f48e53559",
+    "stateKeys": {
+      "24": "text_2e96a25c18"
+    }
+  },
+  {
+    "id": "door_lock",
+    "name": "四门锁",
+    "category": "车窗门锁",
+    "validation": "verified",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "解锁",
+        "expected": null,
+        "labelKey": "text_eb7cf7b71a"
+      },
+      {
+        "value": 2,
+        "label": "锁定",
+        "expected": null,
+        "labelKey": "text_0b707d6dcc"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-lock",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_a074f20ee7",
+    "categoryKey": "text_1cb3e00582",
+    "stateKeys": {}
+  },
+  {
+    "id": "dual_zone",
+    "name": "双区分控",
+    "category": "空调",
+    "validation": "verified",
+    "readField": "1000/5/1077936164",
+    "feedbackFields": [
+      "1000/5/1077936164"
+    ],
+    "options": [
+      {
+        "value": 0,
+        "label": "关闭",
+        "expected": 0,
+        "labelKey": "close"
+      },
+      {
+        "value": 1,
+        "label": "开启",
+        "expected": 1,
+        "labelKey": "on"
+      }
+    ],
+    "states": {
+      "0": "关闭",
+      "1": "开启"
+    },
+    "icon": "tabler-arrows-exchange",
+    "unit": "",
+    "capability": "toggle",
+    "nameKey": "text_83b0b66dd6",
+    "categoryKey": "text_0f48e53559",
+    "stateKeys": {
+      "0": "close",
+      "1": "on"
+    }
+  },
+  {
+    "id": "fragrance_level",
+    "name": "香氛浓度",
+    "category": "空调",
+    "validation": "verified",
+    "readField": "1023/5/1242562568",
+    "feedbackFields": [
+      "1023/5/1242562568"
+    ],
+    "options": [
+      {
+        "value": 1,
+        "label": "淡雅",
+        "expected": 1,
+        "labelKey": "text_6209846391"
+      },
+      {
+        "value": 2,
+        "label": "适中",
+        "expected": 2,
+        "labelKey": "text_ff08d13e6a"
+      },
+      {
+        "value": 3,
+        "label": "浓郁",
+        "expected": 3,
+        "labelKey": "text_64dd8277c9"
+      },
+      {
+        "value": 4,
+        "label": "关闭",
+        "expected": 4,
+        "labelKey": "close"
+      }
+    ],
+    "states": {
+      "1": "淡雅",
+      "2": "适中",
+      "3": "浓郁",
+      "4": "关闭"
+    },
+    "icon": "tabler-perfume",
+    "unit": "",
+    "capability": "select",
+    "nameKey": "text_e570d53db1",
+    "categoryKey": "text_0f48e53559",
+    "stateKeys": {
+      "1": "text_6209846391",
+      "2": "text_ff08d13e6a",
+      "3": "text_64dd8277c9",
+      "4": "close"
+    }
+  },
+  {
+    "id": "fragrance_type",
+    "name": "香氛种类",
+    "category": "空调",
+    "validation": "verified",
+    "readField": "1023/5/1242562571",
+    "feedbackFields": [
+      "1023/5/1242562571"
+    ],
+    "options": [
+      {
+        "value": 1,
+        "label": "2号香氛",
+        "expected": 1,
+        "labelKey": "text_e971c3e994"
+      },
+      {
+        "value": 2,
+        "label": "3号香氛",
+        "expected": 2,
+        "labelKey": "text_6a1570f1c1"
+      },
+      {
+        "value": 3,
+        "label": "1号香氛",
+        "expected": 3,
+        "labelKey": "text_c24241c927"
+      }
+    ],
+    "states": {
+      "1": "2号香氛",
+      "2": "3号香氛",
+      "3": "1号香氛"
+    },
+    "icon": "tabler-perfume",
+    "unit": "",
+    "capability": "select",
+    "nameKey": "text_ded71b8e59",
+    "categoryKey": "text_0f48e53559",
+    "stateKeys": {
+      "1": "text_e971c3e994",
+      "2": "text_6a1570f1c1",
+      "3": "text_c24241c927"
+    }
+  },
+  {
+    "id": "headlight_height",
+    "name": "车灯高度",
+    "category": "灯光",
+    "validation": "verified",
+    "readField": "1023/5/985661459",
+    "feedbackFields": [
+      "1023/5/985661459"
+    ],
+    "options": [
+      {
+        "value": 5,
+        "label": "5",
+        "expected": 5,
+        "labelKey": "text_ac3478d69a"
+      }
+    ],
+    "states": {
+      "5": "5"
+    },
+    "icon": "vehicle-headlamp",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_090e1c0fbe",
+    "categoryKey": "text_6865ac875d",
+    "stateKeys": {
+      "5": "text_ac3478d69a"
+    }
+  },
+  {
+    "id": "hud_control",
+    "name": "HUD",
+    "category": "显示镜屏",
+    "validation": "verified",
+    "readField": "1023/5/951058460",
+    "feedbackFields": [
+      "1023/5/951058460"
+    ],
+    "options": [
+      {
+        "value": 1,
+        "label": "开启",
+        "expected": 1,
+        "labelKey": "on"
+      },
+      {
+        "value": 2,
+        "label": "关闭",
+        "expected": 2,
+        "labelKey": "close"
+      }
+    ],
+    "states": {
+      "1": "开启",
+      "2": "关闭"
+    },
+    "icon": "tabler-device-tv",
+    "unit": "",
+    "capability": "toggle",
+    "nameKey": "text_79d4c6ad2e",
+    "categoryKey": "text_2da87e87d1",
+    "stateKeys": {
+      "1": "on",
+      "2": "close"
+    }
+  },
+  {
+    "id": "interior_light",
+    "name": "车内照明",
+    "category": "灯光",
+    "validation": "verified",
+    "readField": "1023/5/1121976365",
+    "feedbackFields": [
+      "1023/5/1121976365"
+    ],
+    "options": [
+      {
+        "value": 1,
+        "label": "关闭",
+        "expected": 1,
+        "labelKey": "close"
+      }
+    ],
+    "states": {
+      "1": "关闭"
+    },
+    "icon": "tabler-bulb",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_7411a99211",
+    "categoryKey": "text_6865ac875d",
+    "stateKeys": {
+      "1": "close"
+    }
+  },
+  {
+    "id": "main_temp",
+    "name": "主驾温度",
+    "category": "空调",
+    "validation": "verified",
+    "readField": "1000/5/1077936168",
+    "feedbackFields": [
+      "1000/5/1077936168"
+    ],
+    "options": [
+      {
+        "value": 25,
+        "label": "25°C",
+        "expected": 25,
+        "labelKey": "text_4457f5091e"
+      }
+    ],
+    "states": {
+      "25": "25°C"
+    },
+    "icon": "tabler-temperature",
+    "unit": "°C",
+    "capability": "button",
+    "nameKey": "text_4cb7bda742",
+    "categoryKey": "text_0f48e53559",
+    "stateKeys": {
+      "25": "text_4457f5091e"
+    }
+  },
+  {
+    "id": "parking_vent",
+    "name": "驻车通风",
+    "category": "空调",
+    "validation": "verified",
+    "readField": "1000/5/1314914314",
+    "feedbackFields": [
+      "1000/5/1314914314"
+    ],
+    "options": [
+      {
+        "value": 0,
+        "label": "关闭",
+        "expected": 0,
+        "labelKey": "close"
+      },
+      {
+        "value": 1,
+        "label": "开启",
+        "expected": 1,
+        "labelKey": "on"
+      }
+    ],
+    "states": {
+      "0": "关闭",
+      "1": "开启"
+    },
+    "icon": "tabler-car-fan",
+    "unit": "",
+    "capability": "toggle",
+    "nameKey": "text_f49e6ad473",
+    "categoryKey": "text_0f48e53559",
+    "stateKeys": {
+      "0": "close",
+      "1": "on"
+    }
+  },
+  {
+    "id": "pm25",
+    "name": "PM2.5过滤",
+    "category": "空调",
+    "validation": "verified",
+    "readField": "1008/5/1331691577",
+    "feedbackFields": [
+      "1008/5/1331691577"
+    ],
+    "options": [
+      {
+        "value": 1,
+        "label": "开启",
+        "expected": 1,
+        "labelKey": "on"
+      },
+      {
+        "value": 2,
+        "label": "关闭",
+        "expected": 2,
+        "labelKey": "close"
+      }
+    ],
+    "states": {
+      "1": "开启",
+      "2": "关闭"
+    },
+    "icon": "tabler-wind",
+    "unit": "",
+    "capability": "toggle",
+    "nameKey": "text_51aaad2f06",
+    "categoryKey": "text_0f48e53559",
+    "stateKeys": {
+      "1": "on",
+      "2": "close"
+    }
+  },
+  {
+    "id": "road_preview",
+    "name": "路面预瞄",
+    "category": "底盘辅助驾驶",
+    "validation": "verified",
+    "readField": "1023/5/629145674",
+    "feedbackFields": [
+      "1023/5/629145674"
+    ],
+    "options": [
+      {
+        "value": 1,
+        "label": "关闭",
+        "expected": 0,
+        "labelKey": "close"
+      },
+      {
+        "value": 2,
+        "label": "开启",
+        "expected": 1,
+        "labelKey": "on"
+      }
+    ],
+    "states": {
+      "0": "关闭",
+      "1": "开启"
+    },
+    "icon": "tabler-road",
+    "unit": "",
+    "capability": "toggle",
+    "nameKey": "text_5ee21662bc",
+    "categoryKey": "text_bd676cda2f",
+    "stateKeys": {
+      "0": "close",
+      "1": "on"
+    }
+  },
+  {
+    "id": "seat_leg_rest_passenger",
+    "name": "副驾腿托上下",
+    "category": "座椅",
+    "validation": "verified",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "停止",
+        "expected": null,
+        "labelKey": "text_a17f70a8d3"
+      },
+      {
+        "value": 1,
+        "label": "上移（点动）",
+        "expected": null,
+        "labelKey": "text_94d8190d86"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-car-seat",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_5378680e54",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "seat_massage_cycle_driver",
+    "name": "主驾按摩模式",
+    "category": "座椅",
+    "validation": "verified",
+    "readField": "1023/5/1335885872",
+    "feedbackFields": [
+      "1023/5/1335885872"
+    ],
+    "options": [
+      {
+        "value": 2,
+        "label": "波浪",
+        "expected": 2,
+        "labelKey": "text_6b8475c7f9"
+      },
+      {
+        "value": 5,
+        "label": "松弛",
+        "expected": 5,
+        "labelKey": "text_6044e4d03a"
+      }
+    ],
+    "states": {
+      "2": "波浪",
+      "5": "松弛"
+    },
+    "icon": "vehicle-seat-massage",
+    "unit": "",
+    "capability": "select",
+    "nameKey": "text_63d1306e83",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {
+      "2": "text_6b8475c7f9",
+      "5": "text_6044e4d03a"
+    }
+  },
+  {
+    "id": "seat_massage_intensity_driver",
+    "name": "主驾按摩强度",
+    "category": "座椅",
+    "validation": "verified",
+    "readField": "1023/5/1335885876",
+    "feedbackFields": [
+      "1023/5/1335885876"
+    ],
+    "options": [
+      {
+        "value": 1,
+        "label": "一级",
+        "expected": 1,
+        "labelKey": "text_31dd5e28f7"
+      }
+    ],
+    "states": {
+      "1": "一级"
+    },
+    "icon": "vehicle-seat-massage",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_2f4dda3192",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {
+      "1": "text_31dd5e28f7"
+    }
+  },
+  {
+    "id": "seat_move_up_down_driver",
+    "name": "主驾上下移动",
+    "category": "座椅",
+    "validation": "verified",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "停止",
+        "expected": null,
+        "labelKey": "text_a17f70a8d3"
+      },
+      {
+        "value": 1,
+        "label": "上移（点动）",
+        "expected": null,
+        "labelKey": "text_94d8190d86"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-car-seat",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_5cc02a3c25",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "soc_keep_set",
+    "name": "SOC保电目标",
+    "category": "充电及其他设备",
+    "validation": "verified",
+    "readField": "1023/5/873463848",
+    "feedbackFields": [
+      "1023/5/873463848"
+    ],
+    "options": [
+      {
+        "value": 20,
+        "label": "20%",
+        "expected": 20,
+        "labelKey": "text_ea7ba4661a"
+      }
+    ],
+    "states": {
+      "20": "20%"
+    },
+    "icon": "tabler-battery-3",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_c85f2972f7",
+    "categoryKey": "text_72129c7bbb",
+    "stateKeys": {
+      "20": "text_ea7ba4661a"
+    }
+  },
+  {
+    "id": "sunroof_control",
+    "name": "天窗",
+    "category": "车窗门锁",
+    "validation": "verified",
+    "readField": "1001/5/1101004808",
+    "feedbackFields": [
+      "1001/5/1101004808"
+    ],
+    "options": [
+      {
+        "value": 0,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      },
+      {
+        "value": 25,
+        "label": "25%",
+        "expected": null,
+        "labelKey": "text_5e1164e36f"
+      },
+      {
+        "value": 253,
+        "label": "透气",
+        "expected": null,
+        "labelKey": "text_7ac8380fcf"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-roof-window",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_56967873ce",
+    "categoryKey": "text_1cb3e00582",
+    "stateKeys": {}
+  },
+  {
+    "id": "sunroof_sunshade",
+    "name": "前遮阳帘",
+    "category": "车窗门锁",
+    "validation": "verified",
+    "readField": "1001/5/1101004816",
+    "feedbackFields": [
+      "1001/5/1101004816"
+    ],
+    "options": [
+      {
+        "value": 0,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      },
+      {
+        "value": 254,
+        "label": "停止",
+        "expected": null,
+        "labelKey": "text_a17f70a8d3"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-window-shade",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_f7afe49192",
+    "categoryKey": "text_1cb3e00582",
+    "stateKeys": {}
+  },
+  {
+    "id": "suspension_adjust",
+    "name": "悬架调节",
+    "category": "底盘辅助驾驶",
+    "validation": "verified",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "调高",
+        "expected": null,
+        "labelKey": "text_b0817db475"
+      },
+      {
+        "value": 2,
+        "label": "调低",
+        "expected": null,
+        "labelKey": "text_10975bf4ae"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-suspension",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_62e75cb95b",
+    "categoryKey": "text_bd676cda2f",
+    "stateKeys": {}
+  },
+  {
+    "id": "turn_signal_left",
+    "name": "左转向灯",
+    "category": "灯光",
+    "validation": "verified",
+    "readField": "1004/5/950009900",
+    "feedbackFields": [
+      "1004/5/950009900"
+    ],
+    "options": [
+      {
+        "value": 0,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      },
+      {
+        "value": 2,
+        "label": "开启",
+        "expected": null,
+        "labelKey": "on"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-bulb",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_479af4950d",
+    "categoryKey": "text_6865ac875d",
+    "stateKeys": {}
+  },
+  {
+    "id": "window_left_front",
+    "name": "左前窗离散动作",
+    "category": "车窗门锁",
+    "validation": "verified",
+    "readField": "1001/5/947912728",
+    "feedbackFields": [
+      "1001/5/947912728"
+    ],
+    "options": [
+      {
+        "value": 1,
+        "label": "全开",
+        "expected": null,
+        "labelKey": "text_d5179c4192"
+      },
+      {
+        "value": 2,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      },
+      {
+        "value": 4,
+        "label": "半开",
+        "expected": null,
+        "labelKey": "text_2299c6fcdc"
+      },
+      {
+        "value": 5,
+        "label": "透气",
+        "expected": null,
+        "labelKey": "text_7ac8380fcf"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-car-window",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_b5403973bb",
+    "categoryKey": "text_1cb3e00582",
+    "stateKeys": {}
+  },
+  {
+    "id": "rear_auto",
+    "name": "后区自动模式",
+    "category": "空调",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "自动开启",
+        "expected": null,
+        "labelKey": "text_568fabb7b9"
+      },
+      {
+        "value": 1,
+        "label": "自动关闭",
+        "expected": null,
+        "labelKey": "text_949c237d19"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-air-conditioning",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_55292955d7",
+    "categoryKey": "text_0f48e53559",
+    "stateKeys": {}
+  },
+  {
+    "id": "sync_zone",
+    "name": "多温区整车同步",
+    "category": "空调",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      },
+      {
+        "value": 1,
+        "label": "开启",
+        "expected": null,
+        "labelKey": "on"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-arrows-exchange",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_3aa6fc2f75",
+    "categoryKey": "text_0f48e53559",
+    "stateKeys": {}
+  },
+  {
+    "id": "rear_wind_mode",
+    "name": "后区出风组合",
+    "category": "空调",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "吹面",
+        "expected": null,
+        "labelKey": "text_5579192a1b"
+      },
+      {
+        "value": 2,
+        "label": "吹面+吹脚",
+        "expected": null,
+        "labelKey": "text_0633e43407"
+      },
+      {
+        "value": 3,
+        "label": "吹脚",
+        "expected": null,
+        "labelKey": "text_56de08cc72"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-wind",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_627dff09ee",
+    "categoryKey": "text_0f48e53559",
+    "stateKeys": {}
+  },
+  {
+    "id": "rear_temp",
+    "name": "后区温度",
+    "category": "空调",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 17,
+        "label": "17°C",
+        "expected": null,
+        "labelKey": "text_0083ffe669"
+      },
+      {
+        "value": 18,
+        "label": "18°C",
+        "expected": null,
+        "labelKey": "text_5a4814d4c1"
+      },
+      {
+        "value": 19,
+        "label": "19°C",
+        "expected": null,
+        "labelKey": "text_f6c4cfd1df"
+      },
+      {
+        "value": 20,
+        "label": "20°C",
+        "expected": null,
+        "labelKey": "text_4e3f2b8c9e"
+      },
+      {
+        "value": 21,
+        "label": "21°C",
+        "expected": null,
+        "labelKey": "text_4dde861981"
+      },
+      {
+        "value": 22,
+        "label": "22°C",
+        "expected": null,
+        "labelKey": "text_1093d897bf"
+      },
+      {
+        "value": 23,
+        "label": "23°C",
+        "expected": null,
+        "labelKey": "text_f2f0af7581"
+      },
+      {
+        "value": 24,
+        "label": "24°C",
+        "expected": null,
+        "labelKey": "text_2e96a25c18"
+      },
+      {
+        "value": 25,
+        "label": "25°C",
+        "expected": null,
+        "labelKey": "text_4457f5091e"
+      },
+      {
+        "value": 26,
+        "label": "26°C",
+        "expected": null,
+        "labelKey": "text_534ab2792e"
+      },
+      {
+        "value": 27,
+        "label": "27°C",
+        "expected": null,
+        "labelKey": "text_7343ec35d6"
+      },
+      {
+        "value": 28,
+        "label": "28°C",
+        "expected": null,
+        "labelKey": "text_c79acd8f68"
+      },
+      {
+        "value": 29,
+        "label": "29°C",
+        "expected": null,
+        "labelKey": "text_6355d6ada6"
+      },
+      {
+        "value": 30,
+        "label": "30°C",
+        "expected": null,
+        "labelKey": "text_830ad271c1"
+      },
+      {
+        "value": 31,
+        "label": "31°C",
+        "expected": null,
+        "labelKey": "text_2e06da481a"
+      },
+      {
+        "value": 32,
+        "label": "32°C",
+        "expected": null,
+        "labelKey": "text_a93a5e36e2"
+      },
+      {
+        "value": 33,
+        "label": "33°C",
+        "expected": null,
+        "labelKey": "text_0834b43185"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-temperature",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_ff781be303",
+    "categoryKey": "text_0f48e53559",
+    "stateKeys": {}
+  },
+  {
+    "id": "rear_left_temp",
+    "name": "左后温度",
+    "category": "空调",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 17,
+        "label": "17°C",
+        "expected": null,
+        "labelKey": "text_0083ffe669"
+      },
+      {
+        "value": 18,
+        "label": "18°C",
+        "expected": null,
+        "labelKey": "text_5a4814d4c1"
+      },
+      {
+        "value": 19,
+        "label": "19°C",
+        "expected": null,
+        "labelKey": "text_f6c4cfd1df"
+      },
+      {
+        "value": 20,
+        "label": "20°C",
+        "expected": null,
+        "labelKey": "text_4e3f2b8c9e"
+      },
+      {
+        "value": 21,
+        "label": "21°C",
+        "expected": null,
+        "labelKey": "text_4dde861981"
+      },
+      {
+        "value": 22,
+        "label": "22°C",
+        "expected": null,
+        "labelKey": "text_1093d897bf"
+      },
+      {
+        "value": 23,
+        "label": "23°C",
+        "expected": null,
+        "labelKey": "text_f2f0af7581"
+      },
+      {
+        "value": 24,
+        "label": "24°C",
+        "expected": null,
+        "labelKey": "text_2e96a25c18"
+      },
+      {
+        "value": 25,
+        "label": "25°C",
+        "expected": null,
+        "labelKey": "text_4457f5091e"
+      },
+      {
+        "value": 26,
+        "label": "26°C",
+        "expected": null,
+        "labelKey": "text_534ab2792e"
+      },
+      {
+        "value": 27,
+        "label": "27°C",
+        "expected": null,
+        "labelKey": "text_7343ec35d6"
+      },
+      {
+        "value": 28,
+        "label": "28°C",
+        "expected": null,
+        "labelKey": "text_c79acd8f68"
+      },
+      {
+        "value": 29,
+        "label": "29°C",
+        "expected": null,
+        "labelKey": "text_6355d6ada6"
+      },
+      {
+        "value": 30,
+        "label": "30°C",
+        "expected": null,
+        "labelKey": "text_830ad271c1"
+      },
+      {
+        "value": 31,
+        "label": "31°C",
+        "expected": null,
+        "labelKey": "text_2e06da481a"
+      },
+      {
+        "value": 32,
+        "label": "32°C",
+        "expected": null,
+        "labelKey": "text_a93a5e36e2"
+      },
+      {
+        "value": 33,
+        "label": "33°C",
+        "expected": null,
+        "labelKey": "text_0834b43185"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-temperature",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_c891b49a16",
+    "categoryKey": "text_0f48e53559",
+    "stateKeys": {}
+  },
+  {
+    "id": "rear_right_temp",
+    "name": "右后温度",
+    "category": "空调",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 17,
+        "label": "17°C",
+        "expected": null,
+        "labelKey": "text_0083ffe669"
+      },
+      {
+        "value": 18,
+        "label": "18°C",
+        "expected": null,
+        "labelKey": "text_5a4814d4c1"
+      },
+      {
+        "value": 19,
+        "label": "19°C",
+        "expected": null,
+        "labelKey": "text_f6c4cfd1df"
+      },
+      {
+        "value": 20,
+        "label": "20°C",
+        "expected": null,
+        "labelKey": "text_4e3f2b8c9e"
+      },
+      {
+        "value": 21,
+        "label": "21°C",
+        "expected": null,
+        "labelKey": "text_4dde861981"
+      },
+      {
+        "value": 22,
+        "label": "22°C",
+        "expected": null,
+        "labelKey": "text_1093d897bf"
+      },
+      {
+        "value": 23,
+        "label": "23°C",
+        "expected": null,
+        "labelKey": "text_f2f0af7581"
+      },
+      {
+        "value": 24,
+        "label": "24°C",
+        "expected": null,
+        "labelKey": "text_2e96a25c18"
+      },
+      {
+        "value": 25,
+        "label": "25°C",
+        "expected": null,
+        "labelKey": "text_4457f5091e"
+      },
+      {
+        "value": 26,
+        "label": "26°C",
+        "expected": null,
+        "labelKey": "text_534ab2792e"
+      },
+      {
+        "value": 27,
+        "label": "27°C",
+        "expected": null,
+        "labelKey": "text_7343ec35d6"
+      },
+      {
+        "value": 28,
+        "label": "28°C",
+        "expected": null,
+        "labelKey": "text_c79acd8f68"
+      },
+      {
+        "value": 29,
+        "label": "29°C",
+        "expected": null,
+        "labelKey": "text_6355d6ada6"
+      },
+      {
+        "value": 30,
+        "label": "30°C",
+        "expected": null,
+        "labelKey": "text_830ad271c1"
+      },
+      {
+        "value": 31,
+        "label": "31°C",
+        "expected": null,
+        "labelKey": "text_2e06da481a"
+      },
+      {
+        "value": 32,
+        "label": "32°C",
+        "expected": null,
+        "labelKey": "text_a93a5e36e2"
+      },
+      {
+        "value": 33,
+        "label": "33°C",
+        "expected": null,
+        "labelKey": "text_0834b43185"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-temperature",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_a28256ba96",
+    "categoryKey": "text_0f48e53559",
+    "stateKeys": {}
+  },
+  {
+    "id": "deputy_wind",
+    "name": "副驾风量",
+    "category": "空调",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "1档",
+        "expected": null,
+        "labelKey": "text_80d4a176aa"
+      },
+      {
+        "value": 2,
+        "label": "2档",
+        "expected": null,
+        "labelKey": "text_9586fe63cd"
+      },
+      {
+        "value": 3,
+        "label": "3档",
+        "expected": null,
+        "labelKey": "text_1cd6d50e52"
+      },
+      {
+        "value": 4,
+        "label": "4档",
+        "expected": null,
+        "labelKey": "text_c7c0f766eb"
+      },
+      {
+        "value": 5,
+        "label": "5档",
+        "expected": null,
+        "labelKey": "text_6c3bf61469"
+      },
+      {
+        "value": 6,
+        "label": "6档",
+        "expected": null,
+        "labelKey": "text_f31d04418c"
+      },
+      {
+        "value": 7,
+        "label": "7档",
+        "expected": null,
+        "labelKey": "text_2d0e036c5a"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-car-fan",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_76c2d14c4e",
+    "categoryKey": "text_0f48e53559",
+    "stateKeys": {}
+  },
+  {
+    "id": "driver_wind_multi",
+    "name": "多区主驾风量",
+    "category": "空调",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "1档",
+        "expected": null,
+        "labelKey": "text_80d4a176aa"
+      },
+      {
+        "value": 2,
+        "label": "2档",
+        "expected": null,
+        "labelKey": "text_9586fe63cd"
+      },
+      {
+        "value": 3,
+        "label": "3档",
+        "expected": null,
+        "labelKey": "text_1cd6d50e52"
+      },
+      {
+        "value": 4,
+        "label": "4档",
+        "expected": null,
+        "labelKey": "text_c7c0f766eb"
+      },
+      {
+        "value": 5,
+        "label": "5档",
+        "expected": null,
+        "labelKey": "text_6c3bf61469"
+      },
+      {
+        "value": 6,
+        "label": "6档",
+        "expected": null,
+        "labelKey": "text_f31d04418c"
+      },
+      {
+        "value": 7,
+        "label": "7档",
+        "expected": null,
+        "labelKey": "text_2d0e036c5a"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-car-fan",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_903a32c80e",
+    "categoryKey": "text_0f48e53559",
+    "stateKeys": {}
+  },
+  {
+    "id": "deputy_wind_multi",
+    "name": "多区副驾风量",
+    "category": "空调",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "1档",
+        "expected": null,
+        "labelKey": "text_80d4a176aa"
+      },
+      {
+        "value": 2,
+        "label": "2档",
+        "expected": null,
+        "labelKey": "text_9586fe63cd"
+      },
+      {
+        "value": 3,
+        "label": "3档",
+        "expected": null,
+        "labelKey": "text_1cd6d50e52"
+      },
+      {
+        "value": 4,
+        "label": "4档",
+        "expected": null,
+        "labelKey": "text_c7c0f766eb"
+      },
+      {
+        "value": 5,
+        "label": "5档",
+        "expected": null,
+        "labelKey": "text_6c3bf61469"
+      },
+      {
+        "value": 6,
+        "label": "6档",
+        "expected": null,
+        "labelKey": "text_f31d04418c"
+      },
+      {
+        "value": 7,
+        "label": "7档",
+        "expected": null,
+        "labelKey": "text_2d0e036c5a"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-car-fan",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_47c15c1938",
+    "categoryKey": "text_0f48e53559",
+    "stateKeys": {}
+  },
+  {
+    "id": "rear_wind",
+    "name": "后区风量",
+    "category": "空调",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "1档",
+        "expected": null,
+        "labelKey": "text_80d4a176aa"
+      },
+      {
+        "value": 2,
+        "label": "2档",
+        "expected": null,
+        "labelKey": "text_9586fe63cd"
+      },
+      {
+        "value": 3,
+        "label": "3档",
+        "expected": null,
+        "labelKey": "text_1cd6d50e52"
+      },
+      {
+        "value": 4,
+        "label": "4档",
+        "expected": null,
+        "labelKey": "text_c7c0f766eb"
+      },
+      {
+        "value": 5,
+        "label": "5档",
+        "expected": null,
+        "labelKey": "text_6c3bf61469"
+      },
+      {
+        "value": 6,
+        "label": "6档",
+        "expected": null,
+        "labelKey": "text_f31d04418c"
+      },
+      {
+        "value": 7,
+        "label": "7档",
+        "expected": null,
+        "labelKey": "text_2d0e036c5a"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-car-fan",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_0a394aecbd",
+    "categoryKey": "text_0f48e53559",
+    "stateKeys": {}
+  },
+  {
+    "id": "rear_left_wind",
+    "name": "左后风量",
+    "category": "空调",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "1档",
+        "expected": null,
+        "labelKey": "text_80d4a176aa"
+      },
+      {
+        "value": 2,
+        "label": "2档",
+        "expected": null,
+        "labelKey": "text_9586fe63cd"
+      },
+      {
+        "value": 3,
+        "label": "3档",
+        "expected": null,
+        "labelKey": "text_1cd6d50e52"
+      },
+      {
+        "value": 4,
+        "label": "4档",
+        "expected": null,
+        "labelKey": "text_c7c0f766eb"
+      },
+      {
+        "value": 5,
+        "label": "5档",
+        "expected": null,
+        "labelKey": "text_6c3bf61469"
+      },
+      {
+        "value": 6,
+        "label": "6档",
+        "expected": null,
+        "labelKey": "text_f31d04418c"
+      },
+      {
+        "value": 7,
+        "label": "7档",
+        "expected": null,
+        "labelKey": "text_2d0e036c5a"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-car-fan",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_0bb5d6a231",
+    "categoryKey": "text_0f48e53559",
+    "stateKeys": {}
+  },
+  {
+    "id": "rear_right_wind",
+    "name": "右后风量",
+    "category": "空调",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "1档",
+        "expected": null,
+        "labelKey": "text_80d4a176aa"
+      },
+      {
+        "value": 2,
+        "label": "2档",
+        "expected": null,
+        "labelKey": "text_9586fe63cd"
+      },
+      {
+        "value": 3,
+        "label": "3档",
+        "expected": null,
+        "labelKey": "text_1cd6d50e52"
+      },
+      {
+        "value": 4,
+        "label": "4档",
+        "expected": null,
+        "labelKey": "text_c7c0f766eb"
+      },
+      {
+        "value": 5,
+        "label": "5档",
+        "expected": null,
+        "labelKey": "text_6c3bf61469"
+      },
+      {
+        "value": 6,
+        "label": "6档",
+        "expected": null,
+        "labelKey": "text_f31d04418c"
+      },
+      {
+        "value": 7,
+        "label": "7档",
+        "expected": null,
+        "labelKey": "text_2d0e036c5a"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-car-fan",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_939bba4acd",
+    "categoryKey": "text_0f48e53559",
+    "stateKeys": {}
+  },
+  {
+    "id": "ac_blow_mode_driver",
+    "name": "主驾对人吹/避人吹/扫风",
+    "category": "空调",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "对人吹",
+        "expected": null,
+        "labelKey": "text_f9c2c448bc"
+      },
+      {
+        "value": 2,
+        "label": "避人吹",
+        "expected": null,
+        "labelKey": "text_7c5db325cb"
+      },
+      {
+        "value": 3,
+        "label": "扫风",
+        "expected": null,
+        "labelKey": "text_2940e1d62f"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-air-conditioning",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_ac7dfb006a",
+    "categoryKey": "text_0f48e53559",
+    "stateKeys": {}
+  },
+  {
+    "id": "ac_blow_mode_passenger",
+    "name": "副驾对人吹/避人吹/扫风",
+    "category": "空调",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "对人吹",
+        "expected": null,
+        "labelKey": "text_f9c2c448bc"
+      },
+      {
+        "value": 2,
+        "label": "避人吹",
+        "expected": null,
+        "labelKey": "text_7c5db325cb"
+      },
+      {
+        "value": 3,
+        "label": "扫风",
+        "expected": null,
+        "labelKey": "text_2940e1d62f"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-air-conditioning",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_ec9fa0c819",
+    "categoryKey": "text_0f48e53559",
+    "stateKeys": {}
+  },
+  {
+    "id": "ac_blow_mode_rear_left",
+    "name": "左后对人吹/避人吹/扫风",
+    "category": "空调",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "对人吹",
+        "expected": null,
+        "labelKey": "text_f9c2c448bc"
+      },
+      {
+        "value": 2,
+        "label": "避人吹",
+        "expected": null,
+        "labelKey": "text_7c5db325cb"
+      },
+      {
+        "value": 3,
+        "label": "扫风",
+        "expected": null,
+        "labelKey": "text_2940e1d62f"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-air-conditioning",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_02597a1084",
+    "categoryKey": "text_0f48e53559",
+    "stateKeys": {}
+  },
+  {
+    "id": "ac_blow_mode_rear_right",
+    "name": "右后对人吹/避人吹/扫风",
+    "category": "空调",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "对人吹",
+        "expected": null,
+        "labelKey": "text_f9c2c448bc"
+      },
+      {
+        "value": 2,
+        "label": "避人吹",
+        "expected": null,
+        "labelKey": "text_7c5db325cb"
+      },
+      {
+        "value": 3,
+        "label": "扫风",
+        "expected": null,
+        "labelKey": "text_2940e1d62f"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-air-conditioning",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_63ff252c67",
+    "categoryKey": "text_0f48e53559",
+    "stateKeys": {}
+  },
+  {
+    "id": "driver_seat_heating_5_level",
+    "name": "主驾加热5档",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      },
+      {
+        "value": 1,
+        "label": "1档",
+        "expected": null,
+        "labelKey": "text_80d4a176aa"
+      },
+      {
+        "value": 2,
+        "label": "2档",
+        "expected": null,
+        "labelKey": "text_9586fe63cd"
+      },
+      {
+        "value": 3,
+        "label": "3档",
+        "expected": null,
+        "labelKey": "text_1cd6d50e52"
+      },
+      {
+        "value": 4,
+        "label": "4档",
+        "expected": null,
+        "labelKey": "text_c7c0f766eb"
+      },
+      {
+        "value": 5,
+        "label": "5档",
+        "expected": null,
+        "labelKey": "text_6c3bf61469"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-seat-heat",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_dc15db8ef4",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "driver_seat_ventilation_5_level",
+    "name": "主驾通风5档",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      },
+      {
+        "value": 1,
+        "label": "1档",
+        "expected": null,
+        "labelKey": "text_80d4a176aa"
+      },
+      {
+        "value": 2,
+        "label": "2档",
+        "expected": null,
+        "labelKey": "text_9586fe63cd"
+      },
+      {
+        "value": 3,
+        "label": "3档",
+        "expected": null,
+        "labelKey": "text_1cd6d50e52"
+      },
+      {
+        "value": 4,
+        "label": "4档",
+        "expected": null,
+        "labelKey": "text_c7c0f766eb"
+      },
+      {
+        "value": 5,
+        "label": "5档",
+        "expected": null,
+        "labelKey": "text_6c3bf61469"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-seat-airflow",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_697b67245c",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "passenger_seat_heating_5_level",
+    "name": "副驾加热5档",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      },
+      {
+        "value": 1,
+        "label": "1档",
+        "expected": null,
+        "labelKey": "text_80d4a176aa"
+      },
+      {
+        "value": 2,
+        "label": "2档",
+        "expected": null,
+        "labelKey": "text_9586fe63cd"
+      },
+      {
+        "value": 3,
+        "label": "3档",
+        "expected": null,
+        "labelKey": "text_1cd6d50e52"
+      },
+      {
+        "value": 4,
+        "label": "4档",
+        "expected": null,
+        "labelKey": "text_c7c0f766eb"
+      },
+      {
+        "value": 5,
+        "label": "5档",
+        "expected": null,
+        "labelKey": "text_6c3bf61469"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-seat-heat",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_88a25eddc1",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "passenger_seat_ventilation_5_level",
+    "name": "副驾通风5档",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      },
+      {
+        "value": 1,
+        "label": "1档",
+        "expected": null,
+        "labelKey": "text_80d4a176aa"
+      },
+      {
+        "value": 2,
+        "label": "2档",
+        "expected": null,
+        "labelKey": "text_9586fe63cd"
+      },
+      {
+        "value": 3,
+        "label": "3档",
+        "expected": null,
+        "labelKey": "text_1cd6d50e52"
+      },
+      {
+        "value": 4,
+        "label": "4档",
+        "expected": null,
+        "labelKey": "text_c7c0f766eb"
+      },
+      {
+        "value": 5,
+        "label": "5档",
+        "expected": null,
+        "labelKey": "text_6c3bf61469"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-seat-airflow",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_11a88bab4c",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "rear_left_seat_heating_2_level",
+    "name": "左后加热2档",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      },
+      {
+        "value": 1,
+        "label": "1档",
+        "expected": null,
+        "labelKey": "text_80d4a176aa"
+      },
+      {
+        "value": 2,
+        "label": "2档",
+        "expected": null,
+        "labelKey": "text_9586fe63cd"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-seat-heat",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_255f46694d",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "rear_left_seat_heating_3_level",
+    "name": "左后加热3档",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      },
+      {
+        "value": 1,
+        "label": "1档",
+        "expected": null,
+        "labelKey": "text_80d4a176aa"
+      },
+      {
+        "value": 2,
+        "label": "2档",
+        "expected": null,
+        "labelKey": "text_9586fe63cd"
+      },
+      {
+        "value": 3,
+        "label": "3档",
+        "expected": null,
+        "labelKey": "text_1cd6d50e52"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-seat-heat",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_b7e2c56112",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "rear_left_seat_heating_5_level",
+    "name": "左后加热5档",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      },
+      {
+        "value": 1,
+        "label": "1档",
+        "expected": null,
+        "labelKey": "text_80d4a176aa"
+      },
+      {
+        "value": 2,
+        "label": "2档",
+        "expected": null,
+        "labelKey": "text_9586fe63cd"
+      },
+      {
+        "value": 3,
+        "label": "3档",
+        "expected": null,
+        "labelKey": "text_1cd6d50e52"
+      },
+      {
+        "value": 4,
+        "label": "4档",
+        "expected": null,
+        "labelKey": "text_c7c0f766eb"
+      },
+      {
+        "value": 5,
+        "label": "5档",
+        "expected": null,
+        "labelKey": "text_6c3bf61469"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-seat-heat",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_4b57ef5771",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "rear_left_seat_ventilation_2_level",
+    "name": "左后通风2档",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      },
+      {
+        "value": 1,
+        "label": "1档",
+        "expected": null,
+        "labelKey": "text_80d4a176aa"
+      },
+      {
+        "value": 2,
+        "label": "2档",
+        "expected": null,
+        "labelKey": "text_9586fe63cd"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-seat-airflow",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_18b20c8e01",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "rear_left_seat_ventilation_3_level",
+    "name": "左后通风3档",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      },
+      {
+        "value": 1,
+        "label": "1档",
+        "expected": null,
+        "labelKey": "text_80d4a176aa"
+      },
+      {
+        "value": 2,
+        "label": "2档",
+        "expected": null,
+        "labelKey": "text_9586fe63cd"
+      },
+      {
+        "value": 3,
+        "label": "3档",
+        "expected": null,
+        "labelKey": "text_1cd6d50e52"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-seat-airflow",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_465c1ba7e6",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "rear_left_seat_ventilation_5_level",
+    "name": "左后通风5档",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      },
+      {
+        "value": 1,
+        "label": "1档",
+        "expected": null,
+        "labelKey": "text_80d4a176aa"
+      },
+      {
+        "value": 2,
+        "label": "2档",
+        "expected": null,
+        "labelKey": "text_9586fe63cd"
+      },
+      {
+        "value": 3,
+        "label": "3档",
+        "expected": null,
+        "labelKey": "text_1cd6d50e52"
+      },
+      {
+        "value": 4,
+        "label": "4档",
+        "expected": null,
+        "labelKey": "text_c7c0f766eb"
+      },
+      {
+        "value": 5,
+        "label": "5档",
+        "expected": null,
+        "labelKey": "text_6c3bf61469"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-seat-airflow",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_6605083894",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "rear_right_seat_heating_2_level",
+    "name": "右后加热2档",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      },
+      {
+        "value": 1,
+        "label": "1档",
+        "expected": null,
+        "labelKey": "text_80d4a176aa"
+      },
+      {
+        "value": 2,
+        "label": "2档",
+        "expected": null,
+        "labelKey": "text_9586fe63cd"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-seat-heat",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_569f6d6b64",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "rear_right_seat_heating_3_level",
+    "name": "右后加热3档",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      },
+      {
+        "value": 1,
+        "label": "1档",
+        "expected": null,
+        "labelKey": "text_80d4a176aa"
+      },
+      {
+        "value": 2,
+        "label": "2档",
+        "expected": null,
+        "labelKey": "text_9586fe63cd"
+      },
+      {
+        "value": 3,
+        "label": "3档",
+        "expected": null,
+        "labelKey": "text_1cd6d50e52"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-seat-heat",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_e0daf9c1e8",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "rear_right_seat_heating_5_level",
+    "name": "右后加热5档",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      },
+      {
+        "value": 1,
+        "label": "1档",
+        "expected": null,
+        "labelKey": "text_80d4a176aa"
+      },
+      {
+        "value": 2,
+        "label": "2档",
+        "expected": null,
+        "labelKey": "text_9586fe63cd"
+      },
+      {
+        "value": 3,
+        "label": "3档",
+        "expected": null,
+        "labelKey": "text_1cd6d50e52"
+      },
+      {
+        "value": 4,
+        "label": "4档",
+        "expected": null,
+        "labelKey": "text_c7c0f766eb"
+      },
+      {
+        "value": 5,
+        "label": "5档",
+        "expected": null,
+        "labelKey": "text_6c3bf61469"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-seat-heat",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_44426324ba",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "rear_right_seat_ventilation_2_level",
+    "name": "右后通风2档",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      },
+      {
+        "value": 1,
+        "label": "1档",
+        "expected": null,
+        "labelKey": "text_80d4a176aa"
+      },
+      {
+        "value": 2,
+        "label": "2档",
+        "expected": null,
+        "labelKey": "text_9586fe63cd"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-seat-airflow",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_2d2bc1c413",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "rear_right_seat_ventilation_3_level",
+    "name": "右后通风3档",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      },
+      {
+        "value": 1,
+        "label": "1档",
+        "expected": null,
+        "labelKey": "text_80d4a176aa"
+      },
+      {
+        "value": 2,
+        "label": "2档",
+        "expected": null,
+        "labelKey": "text_9586fe63cd"
+      },
+      {
+        "value": 3,
+        "label": "3档",
+        "expected": null,
+        "labelKey": "text_1cd6d50e52"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-seat-airflow",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_ddfb373e8e",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "rear_right_seat_ventilation_5_level",
+    "name": "右后通风5档",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      },
+      {
+        "value": 1,
+        "label": "1档",
+        "expected": null,
+        "labelKey": "text_80d4a176aa"
+      },
+      {
+        "value": 2,
+        "label": "2档",
+        "expected": null,
+        "labelKey": "text_9586fe63cd"
+      },
+      {
+        "value": 3,
+        "label": "3档",
+        "expected": null,
+        "labelKey": "text_1cd6d50e52"
+      },
+      {
+        "value": 4,
+        "label": "4档",
+        "expected": null,
+        "labelKey": "text_c7c0f766eb"
+      },
+      {
+        "value": 5,
+        "label": "5档",
+        "expected": null,
+        "labelKey": "text_6c3bf61469"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-seat-airflow",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_6fc6f92ea7",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "seat_massage_cycle_passenger",
+    "name": "副驾按摩模式",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      },
+      {
+        "value": 2,
+        "label": "波浪",
+        "expected": null,
+        "labelKey": "text_6b8475c7f9"
+      },
+      {
+        "value": 3,
+        "label": "脉冲",
+        "expected": null,
+        "labelKey": "text_a3ececd8b8"
+      },
+      {
+        "value": 4,
+        "label": "伸展",
+        "expected": null,
+        "labelKey": "text_a495c4270a"
+      },
+      {
+        "value": 5,
+        "label": "松弛",
+        "expected": null,
+        "labelKey": "text_6044e4d03a"
+      },
+      {
+        "value": 6,
+        "label": "舒缓",
+        "expected": null,
+        "labelKey": "text_630e4d4f88"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-seat-massage",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_d2dcb3d3eb",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "seat_massage_intensity_passenger",
+    "name": "副驾按摩强度",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      },
+      {
+        "value": 1,
+        "label": "一级",
+        "expected": null,
+        "labelKey": "text_31dd5e28f7"
+      },
+      {
+        "value": 2,
+        "label": "二级",
+        "expected": null,
+        "labelKey": "text_5230d73ba4"
+      },
+      {
+        "value": 3,
+        "label": "三级",
+        "expected": null,
+        "labelKey": "text_fd723844ff"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-seat-massage",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_04742b1561",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "seat_massage_cycle_rear_left",
+    "name": "左后按摩模式",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      },
+      {
+        "value": 2,
+        "label": "波浪",
+        "expected": null,
+        "labelKey": "text_6b8475c7f9"
+      },
+      {
+        "value": 3,
+        "label": "脉冲",
+        "expected": null,
+        "labelKey": "text_a3ececd8b8"
+      },
+      {
+        "value": 4,
+        "label": "伸展",
+        "expected": null,
+        "labelKey": "text_a495c4270a"
+      },
+      {
+        "value": 5,
+        "label": "松弛",
+        "expected": null,
+        "labelKey": "text_6044e4d03a"
+      },
+      {
+        "value": 6,
+        "label": "舒缓",
+        "expected": null,
+        "labelKey": "text_630e4d4f88"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-seat-massage",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_abf520c059",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "seat_massage_intensity_rear_left",
+    "name": "左后按摩强度",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      },
+      {
+        "value": 1,
+        "label": "一级",
+        "expected": null,
+        "labelKey": "text_31dd5e28f7"
+      },
+      {
+        "value": 2,
+        "label": "二级",
+        "expected": null,
+        "labelKey": "text_5230d73ba4"
+      },
+      {
+        "value": 3,
+        "label": "三级",
+        "expected": null,
+        "labelKey": "text_fd723844ff"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-seat-massage",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_c9e8132dd3",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "seat_massage_cycle_rear_right",
+    "name": "右后按摩模式",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      },
+      {
+        "value": 2,
+        "label": "波浪",
+        "expected": null,
+        "labelKey": "text_6b8475c7f9"
+      },
+      {
+        "value": 3,
+        "label": "脉冲",
+        "expected": null,
+        "labelKey": "text_a3ececd8b8"
+      },
+      {
+        "value": 4,
+        "label": "伸展",
+        "expected": null,
+        "labelKey": "text_a495c4270a"
+      },
+      {
+        "value": 5,
+        "label": "松弛",
+        "expected": null,
+        "labelKey": "text_6044e4d03a"
+      },
+      {
+        "value": 6,
+        "label": "舒缓",
+        "expected": null,
+        "labelKey": "text_630e4d4f88"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-seat-massage",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_cd2443912a",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "seat_massage_intensity_rear_right",
+    "name": "右后按摩强度",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      },
+      {
+        "value": 1,
+        "label": "一级",
+        "expected": null,
+        "labelKey": "text_31dd5e28f7"
+      },
+      {
+        "value": 2,
+        "label": "二级",
+        "expected": null,
+        "labelKey": "text_5230d73ba4"
+      },
+      {
+        "value": 3,
+        "label": "三级",
+        "expected": null,
+        "labelKey": "text_fd723844ff"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-seat-massage",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_71f1530999",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "seat_move_front_driver",
+    "name": "主驾前后移动",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "停止",
+        "expected": null,
+        "labelKey": "text_a17f70a8d3"
+      },
+      {
+        "value": 1,
+        "label": "前/上（点动）",
+        "expected": null,
+        "labelKey": "text_e5b03eab2f"
+      },
+      {
+        "value": 2,
+        "label": "后/下（点动）",
+        "expected": null,
+        "labelKey": "text_dd8eedb67a"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-car-seat",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_e6d647984c",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "seat_move_front_passenger",
+    "name": "副驾前后移动",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "停止",
+        "expected": null,
+        "labelKey": "text_a17f70a8d3"
+      },
+      {
+        "value": 1,
+        "label": "前/上（点动）",
+        "expected": null,
+        "labelKey": "text_e5b03eab2f"
+      },
+      {
+        "value": 2,
+        "label": "后/下（点动）",
+        "expected": null,
+        "labelKey": "text_dd8eedb67a"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-car-seat",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_4d11a96b3f",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "seat_move_rear_left",
+    "name": "左后前后移动",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "停止",
+        "expected": null,
+        "labelKey": "text_a17f70a8d3"
+      },
+      {
+        "value": 1,
+        "label": "前/上（点动）",
+        "expected": null,
+        "labelKey": "text_e5b03eab2f"
+      },
+      {
+        "value": 2,
+        "label": "后/下（点动）",
+        "expected": null,
+        "labelKey": "text_dd8eedb67a"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-car-seat",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_125e6e092e",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "seat_move_rear_right",
+    "name": "右后前后移动",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "停止",
+        "expected": null,
+        "labelKey": "text_a17f70a8d3"
+      },
+      {
+        "value": 1,
+        "label": "前/上（点动）",
+        "expected": null,
+        "labelKey": "text_e5b03eab2f"
+      },
+      {
+        "value": 2,
+        "label": "后/下（点动）",
+        "expected": null,
+        "labelKey": "text_dd8eedb67a"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-car-seat",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_ae08dd329f",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "seat_move_up_down_passenger",
+    "name": "副驾上下移动",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "停止",
+        "expected": null,
+        "labelKey": "text_a17f70a8d3"
+      },
+      {
+        "value": 1,
+        "label": "前/上（点动）",
+        "expected": null,
+        "labelKey": "text_e5b03eab2f"
+      },
+      {
+        "value": 2,
+        "label": "后/下（点动）",
+        "expected": null,
+        "labelKey": "text_dd8eedb67a"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-car-seat",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_810783b00a",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "seat_move_up_down_rear_left",
+    "name": "左后上下移动",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "停止",
+        "expected": null,
+        "labelKey": "text_a17f70a8d3"
+      },
+      {
+        "value": 1,
+        "label": "前/上（点动）",
+        "expected": null,
+        "labelKey": "text_e5b03eab2f"
+      },
+      {
+        "value": 2,
+        "label": "后/下（点动）",
+        "expected": null,
+        "labelKey": "text_dd8eedb67a"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-car-seat",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_a844f45dcd",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "seat_move_up_down_rear_right",
+    "name": "右后上下移动",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "停止",
+        "expected": null,
+        "labelKey": "text_a17f70a8d3"
+      },
+      {
+        "value": 1,
+        "label": "前/上（点动）",
+        "expected": null,
+        "labelKey": "text_e5b03eab2f"
+      },
+      {
+        "value": 2,
+        "label": "后/下（点动）",
+        "expected": null,
+        "labelKey": "text_dd8eedb67a"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-car-seat",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_5f8e678c5d",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "seat_backrest_driver",
+    "name": "主驾靠背前后",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "停止",
+        "expected": null,
+        "labelKey": "text_a17f70a8d3"
+      },
+      {
+        "value": 1,
+        "label": "前/上（点动）",
+        "expected": null,
+        "labelKey": "text_e5b03eab2f"
+      },
+      {
+        "value": 2,
+        "label": "后/下（点动）",
+        "expected": null,
+        "labelKey": "text_dd8eedb67a"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-car-seat",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_1b0e83df95",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "seat_backrest_passenger",
+    "name": "副驾靠背前后",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "停止",
+        "expected": null,
+        "labelKey": "text_a17f70a8d3"
+      },
+      {
+        "value": 1,
+        "label": "前/上（点动）",
+        "expected": null,
+        "labelKey": "text_e5b03eab2f"
+      },
+      {
+        "value": 2,
+        "label": "后/下（点动）",
+        "expected": null,
+        "labelKey": "text_dd8eedb67a"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-car-seat",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_3744ce4774",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "seat_backrest_rear_left",
+    "name": "左后靠背前后",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "停止",
+        "expected": null,
+        "labelKey": "text_a17f70a8d3"
+      },
+      {
+        "value": 1,
+        "label": "前/上（点动）",
+        "expected": null,
+        "labelKey": "text_e5b03eab2f"
+      },
+      {
+        "value": 2,
+        "label": "后/下（点动）",
+        "expected": null,
+        "labelKey": "text_dd8eedb67a"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-car-seat",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_be942f500d",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "seat_backrest_rear_right",
+    "name": "右后靠背前后",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "停止",
+        "expected": null,
+        "labelKey": "text_a17f70a8d3"
+      },
+      {
+        "value": 1,
+        "label": "前/上（点动）",
+        "expected": null,
+        "labelKey": "text_e5b03eab2f"
+      },
+      {
+        "value": 2,
+        "label": "后/下（点动）",
+        "expected": null,
+        "labelKey": "text_dd8eedb67a"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-car-seat",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_f90f277cd9",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "seat_leg_rest_driver",
+    "name": "主驾腿托上下",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "停止",
+        "expected": null,
+        "labelKey": "text_a17f70a8d3"
+      },
+      {
+        "value": 1,
+        "label": "前/上（点动）",
+        "expected": null,
+        "labelKey": "text_e5b03eab2f"
+      },
+      {
+        "value": 2,
+        "label": "后/下（点动）",
+        "expected": null,
+        "labelKey": "text_dd8eedb67a"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-car-seat",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_b0079534eb",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "seat_leg_rest_rear_left",
+    "name": "左后腿托上下",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "停止",
+        "expected": null,
+        "labelKey": "text_a17f70a8d3"
+      },
+      {
+        "value": 1,
+        "label": "前/上（点动）",
+        "expected": null,
+        "labelKey": "text_e5b03eab2f"
+      },
+      {
+        "value": 2,
+        "label": "后/下（点动）",
+        "expected": null,
+        "labelKey": "text_dd8eedb67a"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-car-seat",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_001c14a71e",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "seat_leg_rest_rear_right",
+    "name": "右后腿托上下",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "停止",
+        "expected": null,
+        "labelKey": "text_a17f70a8d3"
+      },
+      {
+        "value": 1,
+        "label": "前/上（点动）",
+        "expected": null,
+        "labelKey": "text_e5b03eab2f"
+      },
+      {
+        "value": 2,
+        "label": "后/下（点动）",
+        "expected": null,
+        "labelKey": "text_dd8eedb67a"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-car-seat",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_f8e87efd80",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "seat_memory_set_driver",
+    "name": "主驾保存记忆",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "1号",
+        "expected": null,
+        "labelKey": "text_6ea191b7cf"
+      },
+      {
+        "value": 2,
+        "label": "2号",
+        "expected": null,
+        "labelKey": "text_56884d2d18"
+      },
+      {
+        "value": 3,
+        "label": "3号",
+        "expected": null,
+        "labelKey": "text_6c7230ce9f"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-device-floppy",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_8151b50ed8",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "seat_memory_restore_driver",
+    "name": "主驾恢复记忆",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "1号",
+        "expected": null,
+        "labelKey": "text_6ea191b7cf"
+      },
+      {
+        "value": 2,
+        "label": "2号",
+        "expected": null,
+        "labelKey": "text_56884d2d18"
+      },
+      {
+        "value": 3,
+        "label": "3号",
+        "expected": null,
+        "labelKey": "text_6c7230ce9f"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-restore",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_f6c8bb2d3e",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "seat_memory_set_passenger",
+    "name": "副驾保存记忆",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "1号",
+        "expected": null,
+        "labelKey": "text_6ea191b7cf"
+      },
+      {
+        "value": 2,
+        "label": "2号",
+        "expected": null,
+        "labelKey": "text_56884d2d18"
+      },
+      {
+        "value": 3,
+        "label": "3号",
+        "expected": null,
+        "labelKey": "text_6c7230ce9f"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-device-floppy",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_0b67a85852",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "seat_memory_restore_passenger",
+    "name": "副驾恢复记忆",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "1号",
+        "expected": null,
+        "labelKey": "text_6ea191b7cf"
+      },
+      {
+        "value": 2,
+        "label": "2号",
+        "expected": null,
+        "labelKey": "text_56884d2d18"
+      },
+      {
+        "value": 3,
+        "label": "3号",
+        "expected": null,
+        "labelKey": "text_6c7230ce9f"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-restore",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_8add1d0875",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "seat_memory_set_rear_left",
+    "name": "左后保存记忆",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "1号",
+        "expected": null,
+        "labelKey": "text_6ea191b7cf"
+      },
+      {
+        "value": 2,
+        "label": "2号",
+        "expected": null,
+        "labelKey": "text_56884d2d18"
+      },
+      {
+        "value": 3,
+        "label": "3号",
+        "expected": null,
+        "labelKey": "text_6c7230ce9f"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-device-floppy",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_88ab47d78b",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "seat_memory_restore_rear_left",
+    "name": "左后恢复记忆",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "1号",
+        "expected": null,
+        "labelKey": "text_6ea191b7cf"
+      },
+      {
+        "value": 2,
+        "label": "2号",
+        "expected": null,
+        "labelKey": "text_56884d2d18"
+      },
+      {
+        "value": 3,
+        "label": "3号",
+        "expected": null,
+        "labelKey": "text_6c7230ce9f"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-restore",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_f180a14665",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "seat_memory_set_rear_right",
+    "name": "右后保存记忆",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "1号",
+        "expected": null,
+        "labelKey": "text_6ea191b7cf"
+      },
+      {
+        "value": 2,
+        "label": "2号",
+        "expected": null,
+        "labelKey": "text_56884d2d18"
+      },
+      {
+        "value": 3,
+        "label": "3号",
+        "expected": null,
+        "labelKey": "text_6c7230ce9f"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-device-floppy",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_a49d350a2b",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "seat_memory_restore_rear_right",
+    "name": "右后恢复记忆",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "1号",
+        "expected": null,
+        "labelKey": "text_6ea191b7cf"
+      },
+      {
+        "value": 2,
+        "label": "2号",
+        "expected": null,
+        "labelKey": "text_56884d2d18"
+      },
+      {
+        "value": 3,
+        "label": "3号",
+        "expected": null,
+        "labelKey": "text_6c7230ce9f"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-restore",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_ce3fb9fef3",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "steering_wheel_heating_level",
+    "name": "方向盘加热档位",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "一级",
+        "expected": null,
+        "labelKey": "text_31dd5e28f7"
+      },
+      {
+        "value": 2,
+        "label": "二级",
+        "expected": null,
+        "labelKey": "text_5230d73ba4"
+      },
+      {
+        "value": 3,
+        "label": "三级",
+        "expected": null,
+        "labelKey": "text_fd723844ff"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-steering-wheel",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_fcbeaccce0",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "window_right_front",
+    "name": "右前窗离散动作",
+    "category": "车窗门锁",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "全开",
+        "expected": null,
+        "labelKey": "text_d5179c4192"
+      },
+      {
+        "value": 2,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      },
+      {
+        "value": 3,
+        "label": "停止（本车SDK补充）",
+        "expected": null,
+        "labelKey": "text_83a36f0e0f"
+      },
+      {
+        "value": 4,
+        "label": "半开",
+        "expected": null,
+        "labelKey": "text_2299c6fcdc"
+      },
+      {
+        "value": 5,
+        "label": "透气",
+        "expected": null,
+        "labelKey": "text_7ac8380fcf"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-car-window",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_b39bac6ae1",
+    "categoryKey": "text_1cb3e00582",
+    "stateKeys": {}
+  },
+  {
+    "id": "window_left_rear",
+    "name": "左后窗离散动作",
+    "category": "车窗门锁",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "全开",
+        "expected": null,
+        "labelKey": "text_d5179c4192"
+      },
+      {
+        "value": 2,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      },
+      {
+        "value": 3,
+        "label": "停止（本车SDK补充）",
+        "expected": null,
+        "labelKey": "text_83a36f0e0f"
+      },
+      {
+        "value": 4,
+        "label": "半开",
+        "expected": null,
+        "labelKey": "text_2299c6fcdc"
+      },
+      {
+        "value": 5,
+        "label": "透气",
+        "expected": null,
+        "labelKey": "text_7ac8380fcf"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-car-window",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_e49d36c6cc",
+    "categoryKey": "text_1cb3e00582",
+    "stateKeys": {}
+  },
+  {
+    "id": "window_right_rear",
+    "name": "右后窗离散动作",
+    "category": "车窗门锁",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "全开",
+        "expected": null,
+        "labelKey": "text_d5179c4192"
+      },
+      {
+        "value": 2,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      },
+      {
+        "value": 3,
+        "label": "停止（本车SDK补充）",
+        "expected": null,
+        "labelKey": "text_83a36f0e0f"
+      },
+      {
+        "value": 4,
+        "label": "半开",
+        "expected": null,
+        "labelKey": "text_2299c6fcdc"
+      },
+      {
+        "value": 5,
+        "label": "透气",
+        "expected": null,
+        "labelKey": "text_7ac8380fcf"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-car-window",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_a055cf9e90",
+    "categoryKey": "text_1cb3e00582",
+    "stateKeys": {}
+  },
+  {
+    "id": "rear_window_sunshade",
+    "name": "后遮阳帘",
+    "category": "车窗门锁",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      },
+      {
+        "value": 21,
+        "label": "透光",
+        "expected": null,
+        "labelKey": "text_6e52d03816"
+      },
+      {
+        "value": 100,
+        "label": "打开",
+        "expected": null,
+        "labelKey": "text_65fc81e161"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-window-shade",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_e24ecfc575",
+    "categoryKey": "text_1cb3e00582",
+    "stateKeys": {}
+  },
+  {
+    "id": "rear_left_window_sunshade",
+    "name": "左后遮阳帘",
+    "category": "车窗门锁",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "展开",
+        "expected": null,
+        "labelKey": "text_b0e24833f7"
+      },
+      {
+        "value": 2,
+        "label": "收起",
+        "expected": null,
+        "labelKey": "text_5d5815647c"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-window-shade",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_55957d1140",
+    "categoryKey": "text_1cb3e00582",
+    "stateKeys": {}
+  },
+  {
+    "id": "rear_right_window_sunshade",
+    "name": "右后遮阳帘",
+    "category": "车窗门锁",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "展开",
+        "expected": null,
+        "labelKey": "text_b0e24833f7"
+      },
+      {
+        "value": 2,
+        "label": "收起",
+        "expected": null,
+        "labelKey": "text_5d5815647c"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-window-shade",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_2313e26ff2",
+    "categoryKey": "text_1cb3e00582",
+    "stateKeys": {}
+  },
+  {
+    "id": "child_lock",
+    "name": "左后童锁",
+    "category": "车窗门锁",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      },
+      {
+        "value": 2,
+        "label": "开启",
+        "expected": null,
+        "labelKey": "on"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-lock",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_94715ad893",
+    "categoryKey": "text_1cb3e00582",
+    "stateKeys": {}
+  },
+  {
+    "id": "child_lock_right",
+    "name": "右后童锁",
+    "category": "车窗门锁",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      },
+      {
+        "value": 2,
+        "label": "开启",
+        "expected": null,
+        "labelKey": "on"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-lock",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_bd2c52c889",
+    "categoryKey": "text_1cb3e00582",
+    "stateKeys": {}
+  },
+  {
+    "id": "trunk_control",
+    "name": "电动尾门",
+    "category": "车窗门锁",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "打开",
+        "expected": null,
+        "labelKey": "text_65fc81e161"
+      },
+      {
+        "value": 3,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-car-tailgate",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_a2440ab910",
+    "categoryKey": "text_1cb3e00582",
+    "stateKeys": {}
+  },
+  {
+    "id": "headlight_control",
+    "name": "怀挡灯光模式",
+    "category": "灯光",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      },
+      {
+        "value": 2,
+        "label": "自动大灯",
+        "expected": null,
+        "labelKey": "text_ca55b16a70"
+      },
+      {
+        "value": 3,
+        "label": "小灯",
+        "expected": null,
+        "labelKey": "text_4c90685834"
+      },
+      {
+        "value": 4,
+        "label": "近光灯",
+        "expected": null,
+        "labelKey": "text_88ffcfa66b"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-headlamp",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_bf5397c88d",
+    "categoryKey": "text_6865ac875d",
+    "stateKeys": {}
+  },
+  {
+    "id": "daytime_running_light",
+    "name": "日行灯",
+    "category": "灯光",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "开启",
+        "expected": null,
+        "labelKey": "on"
+      },
+      {
+        "value": 2,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-headlamp",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_a02dbb83f2",
+    "categoryKey": "text_6865ac875d",
+    "stateKeys": {}
+  },
+  {
+    "id": "smart_high_beam",
+    "name": "智能远近光设置",
+    "category": "灯光",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      },
+      {
+        "value": 1,
+        "label": "开启",
+        "expected": null,
+        "labelKey": "on"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-headlamp",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_789148c146",
+    "categoryKey": "text_6865ac875d",
+    "stateKeys": {}
+  },
+  {
+    "id": "front_fog_light",
+    "name": "前雾灯",
+    "category": "灯光",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "开启",
+        "expected": null,
+        "labelKey": "on"
+      },
+      {
+        "value": 2,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-foglamp",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_b9578f8063",
+    "categoryKey": "text_6865ac875d",
+    "stateKeys": {}
+  },
+  {
+    "id": "rear_fog_light_column",
+    "name": "后雾灯怀挡",
+    "category": "灯光",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "开启",
+        "expected": null,
+        "labelKey": "on"
+      },
+      {
+        "value": 2,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-foglamp",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_1cddc4f1d9",
+    "categoryKey": "text_6865ac875d",
+    "stateKeys": {}
+  },
+  {
+    "id": "rear_fog_light_non_column",
+    "name": "后雾灯非怀挡",
+    "category": "灯光",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      },
+      {
+        "value": 1,
+        "label": "开启",
+        "expected": null,
+        "labelKey": "on"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-foglamp",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_bfa5cd3ad0",
+    "categoryKey": "text_6865ac875d",
+    "stateKeys": {}
+  },
+  {
+    "id": "driving_indicator_light",
+    "name": "智驾指示灯",
+    "category": "灯光",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "开启",
+        "expected": null,
+        "labelKey": "on"
+      },
+      {
+        "value": 2,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-bulb",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_5714180a37",
+    "categoryKey": "text_6865ac875d",
+    "stateKeys": {}
+  },
+  {
+    "id": "door_open_light",
+    "name": "开门亮灯设置",
+    "category": "灯光",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "开启",
+        "expected": null,
+        "labelKey": "on"
+      },
+      {
+        "value": 2,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-bulb",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_4b7e6fdb0c",
+    "categoryKey": "text_6865ac875d",
+    "stateKeys": {}
+  },
+  {
+    "id": "ambient_light",
+    "name": "氛围灯总开关",
+    "category": "灯光",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      },
+      {
+        "value": 2,
+        "label": "开启",
+        "expected": null,
+        "labelKey": "on"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-bulb",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_da91bfc77b",
+    "categoryKey": "text_6865ac875d",
+    "stateKeys": {}
+  },
+  {
+    "id": "turn_signal_right",
+    "name": "右转向灯",
+    "category": "灯光",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      },
+      {
+        "value": 3,
+        "label": "开启",
+        "expected": null,
+        "labelKey": "on"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-bulb",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_14b571553a",
+    "categoryKey": "text_6865ac875d",
+    "stateKeys": {}
+  },
+  {
+    "id": "hazard_light",
+    "name": "双闪",
+    "category": "灯光",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      },
+      {
+        "value": 1,
+        "label": "开启",
+        "expected": null,
+        "labelKey": "on"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-emergency-brake",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_6b734c5581",
+    "categoryKey": "text_6865ac875d",
+    "stateKeys": {}
+  },
+  {
+    "id": "ambient_light_brightness",
+    "name": "氛围灯亮度",
+    "category": "灯光",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      },
+      {
+        "value": 1,
+        "label": "1档",
+        "expected": null,
+        "labelKey": "text_80d4a176aa"
+      },
+      {
+        "value": 2,
+        "label": "2档",
+        "expected": null,
+        "labelKey": "text_9586fe63cd"
+      },
+      {
+        "value": 3,
+        "label": "3档",
+        "expected": null,
+        "labelKey": "text_1cd6d50e52"
+      },
+      {
+        "value": 4,
+        "label": "4档",
+        "expected": null,
+        "labelKey": "text_c7c0f766eb"
+      },
+      {
+        "value": 5,
+        "label": "5档",
+        "expected": null,
+        "labelKey": "text_6c3bf61469"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-brightness-up",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_844ff824c1",
+    "categoryKey": "text_6865ac875d",
+    "stateKeys": {}
+  },
+  {
+    "id": "auto_hold",
+    "name": "自动驻车设置",
+    "category": "底盘辅助驾驶",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      },
+      {
+        "value": 1,
+        "label": "开启",
+        "expected": null,
+        "labelKey": "on"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-brake-pedal",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_3ea6f84672",
+    "categoryKey": "text_bd676cda2f",
+    "stateKeys": {}
+  },
+  {
+    "id": "aeb_control",
+    "name": "AEB设置",
+    "category": "底盘辅助驾驶",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      },
+      {
+        "value": 1,
+        "label": "开启",
+        "expected": null,
+        "labelKey": "on"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-emergency-brake",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_dc5d422b05",
+    "categoryKey": "text_bd676cda2f",
+    "stateKeys": {}
+  },
+  {
+    "id": "hdc_control",
+    "name": "陡坡缓降设置",
+    "category": "底盘辅助驾驶",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "开启",
+        "expected": null,
+        "labelKey": "on"
+      },
+      {
+        "value": 2,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-road",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_78332c0db2",
+    "categoryKey": "text_bd676cda2f",
+    "stateKeys": {}
+  },
+  {
+    "id": "fcta_switch",
+    "name": "穿行预警",
+    "category": "底盘辅助驾驶",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      },
+      {
+        "value": 2,
+        "label": "开启",
+        "expected": null,
+        "labelKey": "on"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-emergency-brake",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_d5d21ed810",
+    "categoryKey": "text_bd676cda2f",
+    "stateKeys": {}
+  },
+  {
+    "id": "itac_control",
+    "name": "iTAC",
+    "category": "底盘辅助驾驶",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "开启",
+        "expected": null,
+        "labelKey": "on"
+      },
+      {
+        "value": 2,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-stability-control",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_f0787450d8",
+    "categoryKey": "text_bd676cda2f",
+    "stateKeys": {}
+  },
+  {
+    "id": "super_itac_control",
+    "name": "超级iTAC",
+    "category": "底盘辅助驾驶",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "开启",
+        "expected": null,
+        "labelKey": "on"
+      },
+      {
+        "value": 2,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-stability-control",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_1d3c78b173",
+    "categoryKey": "text_bd676cda2f",
+    "stateKeys": {}
+  },
+  {
+    "id": "sand_abs",
+    "name": "沙地ABS",
+    "category": "底盘辅助驾驶",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "开启",
+        "expected": null,
+        "labelKey": "on"
+      },
+      {
+        "value": 2,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-brake-pedal",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_65b1eae656",
+    "categoryKey": "text_bd676cda2f",
+    "stateKeys": {}
+  },
+  {
+    "id": "brake_assist",
+    "name": "制动助力模式",
+    "category": "底盘辅助驾驶",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "运动",
+        "expected": null,
+        "labelKey": "text_9d99dac5fb"
+      },
+      {
+        "value": 2,
+        "label": "舒适",
+        "expected": null,
+        "labelKey": "text_b97c3bc09e"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-brake-pedal",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_0b5491c0dc",
+    "categoryKey": "text_bd676cda2f",
+    "stateKeys": {}
+  },
+  {
+    "id": "lane_departure_low",
+    "name": "车道偏离低配",
+    "category": "底盘辅助驾驶",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      },
+      {
+        "value": 1,
+        "label": "偏离预警",
+        "expected": null,
+        "labelKey": "text_c080b3cb5c"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-lane-assist",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_a30f75dcc7",
+    "categoryKey": "text_bd676cda2f",
+    "stateKeys": {}
+  },
+  {
+    "id": "lane_departure_high",
+    "name": "车道偏离高配",
+    "category": "底盘辅助驾驶",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      },
+      {
+        "value": 1,
+        "label": "偏离预警",
+        "expected": null,
+        "labelKey": "text_c080b3cb5c"
+      },
+      {
+        "value": 2,
+        "label": "车道保持",
+        "expected": null,
+        "labelKey": "text_4d8c78e4e4"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-lane-assist",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_ba92eca14d",
+    "categoryKey": "text_bd676cda2f",
+    "stateKeys": {}
+  },
+  {
+    "id": "fcw_level",
+    "name": "前方横向碰撞等级",
+    "category": "底盘辅助驾驶",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      },
+      {
+        "value": 2,
+        "label": "较晚",
+        "expected": null,
+        "labelKey": "text_d41c1afc17"
+      },
+      {
+        "value": 3,
+        "label": "适中",
+        "expected": null,
+        "labelKey": "text_ff08d13e6a"
+      },
+      {
+        "value": 4,
+        "label": "较早",
+        "expected": null,
+        "labelKey": "text_84386a8169"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-emergency-brake",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_15e8bb6d90",
+    "categoryKey": "text_bd676cda2f",
+    "stateKeys": {}
+  },
+  {
+    "id": "vector_control",
+    "name": "矢量控制模式",
+    "category": "底盘辅助驾驶",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "舒适",
+        "expected": null,
+        "labelKey": "text_b97c3bc09e"
+      },
+      {
+        "value": 2,
+        "label": "运动",
+        "expected": null,
+        "labelKey": "text_9d99dac5fb"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-stability-control",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_d565c1ee3c",
+    "categoryKey": "text_bd676cda2f",
+    "stateKeys": {}
+  },
+  {
+    "id": "super_itac_mode",
+    "name": "超级iTAC模式",
+    "category": "底盘辅助驾驶",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "比赛",
+        "expected": null,
+        "labelKey": "text_95517a6370"
+      },
+      {
+        "value": 2,
+        "label": "漂移",
+        "expected": null,
+        "labelKey": "text_d8edae8ecd"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-stability-control",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_f41d9fbe53",
+    "categoryKey": "text_bd676cda2f",
+    "stateKeys": {}
+  },
+  {
+    "id": "suspension_height_lock",
+    "name": "悬架高度锁定",
+    "category": "底盘辅助驾驶",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "解锁",
+        "expected": null,
+        "labelKey": "text_eb7cf7b71a"
+      },
+      {
+        "value": 2,
+        "label": "锁定",
+        "expected": null,
+        "labelKey": "text_0b707d6dcc"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-suspension",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_d7858603ab",
+    "categoryKey": "text_bd676cda2f",
+    "stateKeys": {}
+  },
+  {
+    "id": "suspension_ultra_low",
+    "name": "悬架超低",
+    "category": "底盘辅助驾驶",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "激活",
+        "expected": null,
+        "labelKey": "text_4c25820818"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-suspension",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_797f97ae98",
+    "categoryKey": "text_bd676cda2f",
+    "stateKeys": {}
+  },
+  {
+    "id": "suspension_ultra_high",
+    "name": "悬架超高",
+    "category": "底盘辅助驾驶",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "激活",
+        "expected": null,
+        "labelKey": "text_4c25820818"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-suspension",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_3196f0700d",
+    "categoryKey": "text_bd676cda2f",
+    "stateKeys": {}
+  },
+  {
+    "id": "steering_assist",
+    "name": "转向助力模式",
+    "category": "底盘辅助驾驶",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "舒适",
+        "expected": null,
+        "labelKey": "text_b97c3bc09e"
+      },
+      {
+        "value": 2,
+        "label": "运动",
+        "expected": null,
+        "labelKey": "text_9d99dac5fb"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-steering-wheel",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_cdb81c388a",
+    "categoryKey": "text_bd676cda2f",
+    "stateKeys": {}
+  },
+  {
+    "id": "right_charge_port",
+    "name": "右充电口盖",
+    "category": "充电及其他设备",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "打开",
+        "expected": null,
+        "labelKey": "text_65fc81e161"
+      },
+      {
+        "value": 2,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-plug",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_704f5b62e5",
+    "categoryKey": "text_72129c7bbb",
+    "stateKeys": {}
+  },
+  {
+    "id": "force_power_keep",
+    "name": "保电模式",
+    "category": "充电及其他设备",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "智能保电",
+        "expected": null,
+        "labelKey": "text_ae82382e00"
+      },
+      {
+        "value": 2,
+        "label": "强制保电",
+        "expected": null,
+        "labelKey": "text_d508781f04"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-battery-3",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_ea2242bad5",
+    "categoryKey": "text_72129c7bbb",
+    "stateKeys": {}
+  },
+  {
+    "id": "energy_feedback",
+    "name": "能量反馈",
+    "category": "充电及其他设备",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "标准",
+        "expected": null,
+        "labelKey": "text_8beedd9bb9"
+      },
+      {
+        "value": 2,
+        "label": "较大",
+        "expected": null,
+        "labelKey": "text_3b41eee363"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-refresh",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_24e6dbc0d9",
+    "categoryKey": "text_72129c7bbb",
+    "stateKeys": {}
+  },
+  {
+    "id": "overseas_feedback",
+    "name": "海外能量反馈",
+    "category": "充电及其他设备",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 2,
+        "label": "标准",
+        "expected": null,
+        "labelKey": "text_8beedd9bb9"
+      },
+      {
+        "value": 3,
+        "label": "较大",
+        "expected": null,
+        "labelKey": "text_3b41eee363"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-refresh",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_4443903d1c",
+    "categoryKey": "text_72129c7bbb",
+    "stateKeys": {}
+  },
+  {
+    "id": "fridge_mode",
+    "name": "冰箱模式",
+    "category": "充电及其他设备",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "冷藏",
+        "expected": null,
+        "labelKey": "text_ef33db3ea8"
+      },
+      {
+        "value": 2,
+        "label": "加热",
+        "expected": null,
+        "labelKey": "text_6c1dd3e618"
+      },
+      {
+        "value": 3,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-fridge",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_6560917b7c",
+    "categoryKey": "text_72129c7bbb",
+    "stateKeys": {}
+  },
+  {
+    "id": "fridge_lock",
+    "name": "冰箱童锁",
+    "category": "充电及其他设备",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "开启",
+        "expected": null,
+        "labelKey": "on"
+      },
+      {
+        "value": 2,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-fridge",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_88eab78398",
+    "categoryKey": "text_72129c7bbb",
+    "stateKeys": {}
+  },
+  {
+    "id": "front_trunk",
+    "name": "前舱盖",
+    "category": "充电及其他设备",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "打开",
+        "expected": null,
+        "labelKey": "text_65fc81e161"
+      },
+      {
+        "value": 3,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-hood",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_5a2a5715fa",
+    "categoryKey": "text_72129c7bbb",
+    "stateKeys": {}
+  },
+  {
+    "id": "elec_spoiler",
+    "name": "电动尾翼",
+    "category": "充电及其他设备",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "打开",
+        "expected": null,
+        "labelKey": "text_65fc81e161"
+      },
+      {
+        "value": 2,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-car-spoiler",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_44c8b4e893",
+    "categoryKey": "text_72129c7bbb",
+    "stateKeys": {}
+  },
+  {
+    "id": "electric_pedal",
+    "name": "电动踏板",
+    "category": "充电及其他设备",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 2,
+        "label": "打开",
+        "expected": null,
+        "labelKey": "text_65fc81e161"
+      },
+      {
+        "value": 3,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-car-step",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_6084704745",
+    "categoryKey": "text_72129c7bbb",
+    "stateKeys": {}
+  },
+  {
+    "id": "etc_switch",
+    "name": "ETC",
+    "category": "充电及其他设备",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "开启",
+        "expected": null,
+        "labelKey": "on"
+      },
+      {
+        "value": 2,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-car",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_7268ba6984",
+    "categoryKey": "text_72129c7bbb",
+    "stateKeys": {}
+  },
+  {
+    "id": "wiper_service",
+    "name": "雨刮检修",
+    "category": "充电及其他设备",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "开启",
+        "expected": null,
+        "labelKey": "on"
+      },
+      {
+        "value": 2,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-windshield-wiper",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_0627d1b435",
+    "categoryKey": "text_72129c7bbb",
+    "stateKeys": {}
+  },
+  {
+    "id": "hud_brightness",
+    "name": "HUD亮度",
+    "category": "显示镜屏",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "0",
+        "expected": null,
+        "labelKey": "text_b6589fc6ab"
+      },
+      {
+        "value": 1,
+        "label": "1",
+        "expected": null,
+        "labelKey": "text_356a192b79"
+      },
+      {
+        "value": 2,
+        "label": "2",
+        "expected": null,
+        "labelKey": "text_da4b9237ba"
+      },
+      {
+        "value": 3,
+        "label": "3",
+        "expected": null,
+        "labelKey": "text_77de68daec"
+      },
+      {
+        "value": 4,
+        "label": "4",
+        "expected": null,
+        "labelKey": "text_1b64538924"
+      },
+      {
+        "value": 5,
+        "label": "5",
+        "expected": null,
+        "labelKey": "text_ac3478d69a"
+      },
+      {
+        "value": 6,
+        "label": "6",
+        "expected": null,
+        "labelKey": "text_c1dfd96eea"
+      },
+      {
+        "value": 7,
+        "label": "7",
+        "expected": null,
+        "labelKey": "text_902ba3cda1"
+      },
+      {
+        "value": 8,
+        "label": "8",
+        "expected": null,
+        "labelKey": "text_fe5dbbcea5"
+      },
+      {
+        "value": 9,
+        "label": "9",
+        "expected": null,
+        "labelKey": "text_0ade7c2cf9"
+      },
+      {
+        "value": 10,
+        "label": "10",
+        "expected": null,
+        "labelKey": "text_b1d5781111"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-brightness-up",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_9005d6a351",
+    "categoryKey": "text_2da87e87d1",
+    "stateKeys": {}
+  },
+  {
+    "id": "elec_mirror_brightness",
+    "name": "电子后视镜亮度",
+    "category": "显示镜屏",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 13,
+        "label": "13",
+        "expected": null,
+        "labelKey": "text_bd307a3ec3"
+      },
+      {
+        "value": 14,
+        "label": "14",
+        "expected": null,
+        "labelKey": "text_fa35e19212"
+      },
+      {
+        "value": 15,
+        "label": "15",
+        "expected": null,
+        "labelKey": "text_f1abd67035"
+      },
+      {
+        "value": 16,
+        "label": "16",
+        "expected": null,
+        "labelKey": "text_1574bddb75"
+      },
+      {
+        "value": 17,
+        "label": "17",
+        "expected": null,
+        "labelKey": "text_0716d9708d"
+      },
+      {
+        "value": 18,
+        "label": "18",
+        "expected": null,
+        "labelKey": "text_9e6a55b6b4"
+      },
+      {
+        "value": 19,
+        "label": "19",
+        "expected": null,
+        "labelKey": "text_b3f0c7f6bb"
+      },
+      {
+        "value": 20,
+        "label": "20",
+        "expected": null,
+        "labelKey": "text_91032ad7bb"
+      },
+      {
+        "value": 21,
+        "label": "21",
+        "expected": null,
+        "labelKey": "text_472b07b9fc"
+      },
+      {
+        "value": 22,
+        "label": "22",
+        "expected": null,
+        "labelKey": "text_12c6fc06c9"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-car-mirror",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_cc14e6b6a8",
+    "categoryKey": "text_2da87e87d1",
+    "stateKeys": {}
+  },
+  {
+    "id": "elec_mirror_auto_height",
+    "name": "电子后视镜自动高度",
+    "category": "显示镜屏",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "开启",
+        "expected": null,
+        "labelKey": "on"
+      },
+      {
+        "value": 2,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-car-mirror",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_3ae3ecacfb",
+    "categoryKey": "text_2da87e87d1",
+    "stateKeys": {}
+  },
+  {
+    "id": "rear_view_mirror_tilt",
+    "name": "后视镜翻转",
+    "category": "显示镜屏",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "开启",
+        "expected": null,
+        "labelKey": "on"
+      },
+      {
+        "value": 2,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-car-mirror",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_58e6bc2306",
+    "categoryKey": "text_2da87e87d1",
+    "stateKeys": {}
+  },
+  {
+    "id": "entertainment_screen",
+    "name": "后排娱乐屏",
+    "category": "显示镜屏",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 2,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      },
+      {
+        "value": 5,
+        "label": "打开",
+        "expected": null,
+        "labelKey": "text_65fc81e161"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-device-tv",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_262d4e3722",
+    "categoryKey": "text_2da87e87d1",
+    "stateKeys": {}
+  },
+  {
+    "id": "panorama_camera",
+    "name": "360全景显示",
+    "category": "显示镜屏",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "显示全景",
+        "expected": null,
+        "labelKey": "text_1ff83b0005"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-camera",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_668c02b075",
+    "categoryKey": "text_2da87e87d1",
+    "stateKeys": {}
+  },
+  {
+    "id": "camera_view_mode",
+    "name": "全景2D/3D",
+    "category": "显示镜屏",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "2D",
+        "expected": null,
+        "labelKey": "text_3698fe0420"
+      },
+      {
+        "value": 1,
+        "label": "3D",
+        "expected": null,
+        "labelKey": "text_64fe85d796"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-camera",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_f0d5513167",
+    "categoryKey": "text_2da87e87d1",
+    "stateKeys": {}
+  },
+  {
+    "id": "max_cool",
+    "name": "最大制冷",
+    "category": "空调",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      },
+      {
+        "value": 1,
+        "label": "开启",
+        "expected": null,
+        "labelKey": "on"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-snowflake",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_eb5e7f8411",
+    "categoryKey": "text_0f48e53559",
+    "stateKeys": {}
+  },
+  {
+    "id": "engine_sound_sim",
+    "name": "引擎模拟音",
+    "category": "充电及其他设备",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      },
+      {
+        "value": 1,
+        "label": "开启",
+        "expected": null,
+        "labelKey": "on"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-volume",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_061ff6b28c",
+    "categoryKey": "text_72129c7bbb",
+    "stateKeys": {}
+  },
+  {
+    "id": "sound_effect_sim",
+    "name": "音效模拟声浪",
+    "category": "充电及其他设备",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 0,
+        "label": "关闭",
+        "expected": null,
+        "labelKey": "close"
+      },
+      {
+        "value": 1,
+        "label": "开启",
+        "expected": null,
+        "labelKey": "on"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-volume",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_e20b22138d",
+    "categoryKey": "text_72129c7bbb",
+    "stateKeys": {}
+  },
+  {
+    "id": "comfort_mode_2_level",
+    "name": "舒适控制强度",
+    "category": "底盘辅助驾驶",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "较强",
+        "expected": null,
+        "labelKey": "text_b761b26732"
+      },
+      {
+        "value": 2,
+        "label": "适中",
+        "expected": null,
+        "labelKey": "text_ff08d13e6a"
+      },
+      {
+        "value": 3,
+        "label": "偏弱",
+        "expected": null,
+        "labelKey": "text_0bbb07965f"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-car",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_b60be2408e",
+    "categoryKey": "text_bd676cda2f",
+    "stateKeys": {}
+  },
+  {
+    "id": "drive_mode_high",
+    "name": "高配驾驶模式",
+    "category": "底盘辅助驾驶",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "正常",
+        "expected": null,
+        "labelKey": "text_f78d037abc"
+      },
+      {
+        "value": 2,
+        "label": "经济",
+        "expected": null,
+        "labelKey": "text_cd0bf6887d"
+      },
+      {
+        "value": 3,
+        "label": "运动",
+        "expected": null,
+        "labelKey": "text_9d99dac5fb"
+      },
+      {
+        "value": 4,
+        "label": "雪地",
+        "expected": null,
+        "labelKey": "text_c04c096443"
+      },
+      {
+        "value": 5,
+        "label": "沙地",
+        "expected": null,
+        "labelKey": "text_921c78de48"
+      },
+      {
+        "value": 6,
+        "label": "泥地",
+        "expected": null,
+        "labelKey": "text_9278322cb1"
+      },
+      {
+        "value": 7,
+        "label": "山地",
+        "expected": null,
+        "labelKey": "text_18d6c15a36"
+      },
+      {
+        "value": 8,
+        "label": "岩石",
+        "expected": null,
+        "labelKey": "text_30dbe6736f"
+      },
+      {
+        "value": 19,
+        "label": "自定义",
+        "expected": null,
+        "labelKey": "text_c493338e8c"
+      },
+      {
+        "value": 20,
+        "label": "竞速",
+        "expected": null,
+        "labelKey": "text_8a20ff8c8c"
+      },
+      {
+        "value": 23,
+        "label": "暴力",
+        "expected": null,
+        "labelKey": "text_cb038a4c80"
+      }
+    ],
+    "states": {},
+    "icon": "tabler-car",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_09ea2d1d7e",
+    "categoryKey": "text_bd676cda2f",
+    "stateKeys": {}
+  },
+  {
+    "id": "seat_standard_driver",
+    "name": "主驾座椅常规",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "执行该姿态/折叠动作",
+        "expected": null,
+        "labelKey": "text_089e3e4ec3"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-car-seat",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_486d6667e7",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "seat_standard_passenger",
+    "name": "副驾座椅常规",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "执行该姿态/折叠动作",
+        "expected": null,
+        "labelKey": "text_089e3e4ec3"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-car-seat",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_05ef0472cc",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "seat_standard_rear_left",
+    "name": "左后座椅常规",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "执行该姿态/折叠动作",
+        "expected": null,
+        "labelKey": "text_089e3e4ec3"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-car-seat",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_a13d2d8bd2",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "seat_standard_rear_right",
+    "name": "右后座椅常规",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "执行该姿态/折叠动作",
+        "expected": null,
+        "labelKey": "text_089e3e4ec3"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-car-seat",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_709f92870a",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "seat_relax_driver",
+    "name": "主驾座椅舒躺",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "执行该姿态/折叠动作",
+        "expected": null,
+        "labelKey": "text_089e3e4ec3"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-car-seat",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_f2e6164eb5",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "seat_relax_passenger",
+    "name": "副驾座椅舒躺",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "执行该姿态/折叠动作",
+        "expected": null,
+        "labelKey": "text_089e3e4ec3"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-car-seat",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_541f7d0ac2",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "seat_relax_rear_left",
+    "name": "左后座椅舒躺",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "执行该姿态/折叠动作",
+        "expected": null,
+        "labelKey": "text_089e3e4ec3"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-car-seat",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_f0cfe2868d",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "seat_relax_rear_right",
+    "name": "右后座椅舒躺",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "执行该姿态/折叠动作",
+        "expected": null,
+        "labelKey": "text_089e3e4ec3"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-car-seat",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_68e9018e59",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "seat_flat_driver",
+    "name": "主驾座椅平躺",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "执行该姿态/折叠动作",
+        "expected": null,
+        "labelKey": "text_089e3e4ec3"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-car-seat",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_0437c76210",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "seat_flat_passenger",
+    "name": "副驾座椅平躺",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "执行该姿态/折叠动作",
+        "expected": null,
+        "labelKey": "text_089e3e4ec3"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-car-seat",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_033dedcadf",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "seat_flat_rear_left",
+    "name": "左后座椅平躺",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "执行该姿态/折叠动作",
+        "expected": null,
+        "labelKey": "text_089e3e4ec3"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-car-seat",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_24180188f4",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  },
+  {
+    "id": "seat_flat_rear_right",
+    "name": "右后座椅平躺",
+    "category": "座椅",
+    "validation": "inferred",
+    "readField": null,
+    "feedbackFields": [],
+    "options": [
+      {
+        "value": 1,
+        "label": "执行该姿态/折叠动作",
+        "expected": null,
+        "labelKey": "text_089e3e4ec3"
+      }
+    ],
+    "states": {},
+    "icon": "vehicle-car-seat",
+    "unit": "",
+    "capability": "button",
+    "nameKey": "text_9e1050a18e",
+    "categoryKey": "text_88c48ae75b",
+    "stateKeys": {}
+  }
+]

@@ -1,0 +1,6 @@
+LibADB Android 3.1.1 · Copyright 2021 Muntashir Al-Islam; stream/protocol contributions Copyright 2013 Cameron Gutman. Apache-2.0 with BSD-3-Clause portions.
+Source and SkyInfo timeout/OPEN patches: android/third_party/libadb in the SkyInfo source tree. Upstream: https://github.com/MuntashirAkon/libadb-android/tree/3.1.1
+
+SPAKE2 Android 2.2.1 · GNU LGPL-3.0. Unmodified dependency. Source: https://github.com/MuntashirAkon/spake2-java/tree/2.2.1 (including submodules), build with the upstream Android Gradle/CMake configuration.
+Conscrypt Android 2.5.3 · Apache-2.0. https://github.com/google/conscrypt
+Bouncy Castle 1.81 · MIT-style Bouncy Castle License. https://www.bouncycastle.org/about/license/
