@@ -24,6 +24,9 @@ class MainActivity : FlutterActivity() {
             override fun onCancel(arguments: Any?) { runtime.listen(null) }
         })
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "app.skyinfo.vehicle/runtime").setMethodCallHandler { call, result ->
+            if (call.method == "auditFields" && !ChannelDiagnostics.enabled) {
+                result.notImplemented(); return@setMethodCallHandler
+            }
             when (call.method) {
                 "requestOverlay" -> { startActivity(Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName"))); result.success(null) }
                 "openStartup" -> {

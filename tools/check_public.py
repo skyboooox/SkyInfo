@@ -1,4 +1,4 @@
-"""Check the staged/committed public file set without printing sensitive values."""
+"""Check public source files, including untracked changes, without printing secrets."""
 import json
 import re
 import subprocess
@@ -6,7 +6,9 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-paths = subprocess.check_output(['git', '-C', str(ROOT), 'ls-files', '-z']).decode().split('\0')
+paths = [name for name in subprocess.check_output(
+    ['git', '-C', str(ROOT), 'ls-files', '--cached', '--others', '--exclude-standard', '-z']
+).decode().split('\0') if name and (ROOT / name).exists()]
 issues = []
 for name in filter(None, paths):
     path = ROOT / name
@@ -35,6 +37,6 @@ for name in filter(None, paths):
         if re.search(pattern, content):
             issues.append({'path': name, 'reason': reason})
 result = {'checkedFiles': len(list(filter(None, paths))), 'issues': issues,
-          'scope': 'Tracked host files; run Gitleaks and review nested dependency separately before first publication'}
+          'scope': 'Existing tracked and untracked host files; run Gitleaks and review nested dependency separately before first publication'}
 print(json.dumps(result, ensure_ascii=False, indent=2))
 sys.exit(bool(issues))

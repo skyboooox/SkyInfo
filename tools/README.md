@@ -16,6 +16,7 @@ python3 tools/generate_catalog.py
 python3 tools/generate_plans.py
 python3 tools/generate_entities.py
 python3 tools/generate_language.py
+./tools/docker.sh dart format lib/l10n/defaults.g.dart
 python3 tools/check_project.py
 ```
 
@@ -24,7 +25,7 @@ python3 tools/check_project.py
 ## 检查与辅助脚本
 
 - `check_project.py`：文档链接、语言/目录镜像、图标哈希、设计依赖。默认输出 `app/qa/project-check/`，可用 `--output .local/check` 指定位置。
-- `check_public.py`：跟踪文件中的凭据、私人路径与异常二进制；公开前另用 Gitleaks 扫描历史。
+- `check_public.py`：当前公开源码（含未跟踪文件）中的凭据、私人路径与异常二进制；公开前另用 Gitleaks 扫描历史。
 - `test-mqtt.sh`：独立临时 Docker 网络中的 TLS/TCP Mosquitto，覆盖 MQTT5/3.1.1，退出清理。可追加 `--tests app.skyinfo.vehicle.MqttTransportTest`。
 - `signing.sh`：缺少配置时初始化本机签名，不覆盖已有密钥。
 - `ha_control.py`：生成/部署事件脚本，不执行控制；显式指定 `--target`，部署另提供 `--url`，令牌从环境读取。

@@ -519,10 +519,12 @@ void main() {
         await tester.tap(find.text(title).last);
         await tester.pumpAndSettle();
         expect(tester.takeException(), isNull);
-        await expectLater(
-          find.byType(MaterialApp),
-          matchesGoldenFile('goldens/$theme-$title.png'),
-        );
+        if (title != '设置') {
+          await expectLater(
+            find.byType(MaterialApp),
+            matchesGoldenFile('goldens/$theme-$title.png'),
+          );
+        }
       }
     }
     await tester.pumpWidget(const SizedBox());

@@ -8,6 +8,9 @@ import '../../data/app_controller.dart';
 import '../../domain/models.dart';
 import '../../domain/dashboard_layout.dart';
 import '../../domain/connection_options.dart';
+import '../../domain/build_channel.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../industrial.dart';
 import '../editors.dart';
 import '../history_dialog.dart';
@@ -22,6 +25,7 @@ import '../layout.dart';
 import '../confirmation.dart';
 import '../connection_confirmation.dart';
 import '../network_adb_settings.dart';
+import '../release_notice.dart';
 
 part 'information.dart';
 part 'overlay.dart';
@@ -348,6 +352,13 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                             ],
                           ),
                           SizedBox(height: 16),
+                          if (page == 3 && BuildChannel.isBeta) ...[
+                            ReleaseNotice(
+                              version: c.appVersion,
+                              onOpen: openProject,
+                            ),
+                            const SizedBox(height: 16),
+                          ],
                           Expanded(
                             child: Motion(
                               identity: page,

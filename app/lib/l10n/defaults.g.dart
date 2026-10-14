@@ -658,7 +658,8 @@ const defaultStrings = <String, String>{
   "text_b62f025730": "搜索图标或数据名称",
   "text_677fe3d598": "{value0}秒前",
   "text_b78bec3cd7": "没有匹配的图标",
-  "text_a61b02882d": "{value0}  {value1}  最低 {value2} @ {value3}  最高 {value4} @ {value5}",
+  "text_a61b02882d":
+      "{value0}  {value1}  最低 {value2} @ {value3}  最高 {value4} @ {value5}",
   "text_beff4a1cd1": "不可用",
   "text_c5bf1313e8": "仅界面预览",
   "text_6cfbed4855": "配置读取失败",
@@ -1008,4 +1009,11 @@ const defaultStrings = <String, String>{
   "adb_authorize": "授权连接",
   "adb_later": "稍后",
   "adb_connection_action": "连接设置",
+  "about": "关于",
+  "app_version": "版本",
+  "project_github": "GitHub",
+  "beta_notice": "正在使用测试版",
+  "version_updates": "版本与更新",
+  "project_open_failed": "无法打开链接，请检查是否已安装浏览器",
+  "test_tools": "测试工具",
 };

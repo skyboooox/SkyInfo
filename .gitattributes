@@ -7,3 +7,4 @@ gradlew text eol=lf
 *.ttf binary
 *.jar binary
 app/assets/fonts/LICENSE-IBM.txt -text -whitespace
+app/assets/licenses/* -text -whitespace

@@ -73,6 +73,15 @@ extension _Settings on _HomeState {
             settingAction('text_280779a502', importSettings),
             settingAction('text_3d05c8ad5e', exportSettings),
             settingAction('text_0b673e8796', showDiagnostics),
+            settingHeading('about'),
+            ParameterRow(
+              Strings.text('app_version'),
+              trailing: Text(
+                c.versionLabel,
+                style: const TextStyle(fontFamily: 'IBMPlexMono', fontSize: 20),
+              ),
+            ),
+            projectLink(),
           ],
           1 => [
             settingHeading('acquisition'),
@@ -281,11 +290,65 @@ extension _Settings on _HomeState {
             settingAction('text_a304ba2797', () => c.action('openStartup')),
             settingHeading('diagnostics'),
             settingAction('text_0b673e8796', showDiagnostics),
-            settingAction('text_9fd69b1f22', () => c.action('auditFields')),
             settingAction('text_f403f4466e', entitySettings),
+            if (BuildChannel.isBeta) ...[
+              settingHeading('test_tools'),
+              settingAction('text_9fd69b1f22', () => c.action('auditFields')),
+            ],
           ],
         },
       ),
+    ),
+  );
+  Future<void> openProject() async {
+    try {
+      if (await launchUrl(
+        Uri.parse(BuildChannel.projectUrl),
+        mode: LaunchMode.externalApplication,
+      )) {
+        return;
+      }
+    } catch (_) {}
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(Strings.text('project_open_failed'))),
+      );
+    }
+  }
+
+  Widget projectLink() => LayoutBuilder(
+    builder: (context, box) => ParameterRow(
+      Strings.text('project_github'),
+      trailing: SizedBox(
+        width: box.maxWidth < 600
+            ? (box.maxWidth - 16).clamp(0, 700).toDouble()
+            : (box.maxWidth * .7).clamp(0, 700).toDouble(),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                BuildChannel.projectUrl,
+                style: TextStyle(
+                  color: Palette.of(context).blue,
+                  fontSize: 20,
+                  fontFamily: 'IBMPlexMono',
+                ),
+              ),
+            ),
+            const SizedBox(width: 16),
+            SvgPicture.asset(
+              'assets/ui/external-link.svg',
+              width: 24,
+              height: 24,
+              colorFilter: ColorFilter.mode(
+                Palette.of(context).blue,
+                BlendMode.srcIn,
+              ),
+            ),
+          ],
+        ),
+      ),
+      onTap: openProject,
     ),
   );
   Widget settingHeading(String key) => Padding(

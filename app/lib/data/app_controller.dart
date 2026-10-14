@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import '../domain/models.dart';
 import '../domain/control_entity.dart';
 import '../domain/ha_entity.dart';
@@ -75,6 +76,9 @@ class AppController extends ChangeNotifier {
   double? overlayX, overlayY;
   StreamSubscription<Map<String, dynamic>>? _events;
   String? error;
+  String appVersion = '—', appBuildNumber = '';
+  String get versionLabel =>
+      appBuildNumber.isEmpty ? appVersion : '$appVersion ($appBuildNumber)';
   Map<String, dynamic> get config => {
     'schema': 2,
     'adbEnabled': adbEnabled,
@@ -140,6 +144,14 @@ class AppController extends ChangeNotifier {
   };
   Future<void> initialize() async {
     await Strings.load();
+    try {
+      final info = await PackageInfo.fromPlatform();
+      appVersion = info.version;
+      appBuildNumber = info.buildNumber;
+    } catch (_) {
+      appVersion = '—';
+      appBuildNumber = '';
+    }
     final catalog =
         jsonDecode(await rootBundle.loadString('assets/catalog.json')) as List;
     metrics = catalog

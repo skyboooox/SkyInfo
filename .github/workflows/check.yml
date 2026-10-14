@@ -35,8 +35,23 @@ jobs:
       - name: Flutter analysis and tests
         run: |
           ./tools/docker.sh flutter analyze
-          ./tools/docker.sh flutter test
+          ./tools/docker.sh flutter test --flavor beta
+          ./tools/docker.sh flutter test --flavor stable
       - name: Android tests with temporary local MQTT
         run: ./tools/test-mqtt.sh
-      - name: Debug APK smoke build
-        run: ./tools/docker.sh flutter build apk --debug --target-platform android-arm64
+      - name: Channel release smoke builds
+        run: |
+          ./tools/docker.sh flutter build apk --flavor beta --release --target-platform android-arm64
+          ./tools/docker.sh flutter build apk --flavor stable --release --target-platform android-arm64
+      - name: Verify release architectures
+        run: |
+          python3 - <<'PYCODE'
+          from pathlib import Path
+          from zipfile import ZipFile
+          for channel in ('beta', 'stable'):
+              path = Path(f'app/build/app/outputs/flutter-apk/app-{channel}-release.apk')
+              with ZipFile(path) as apk:
+                  libraries = {n for n in apk.namelist() if n.startswith('lib/') and n.endswith('.so')}
+                  assert {n.split('/')[1] for n in libraries} == {'arm64-v8a'}, path
+                  assert {'lib/arm64-v8a/libapp.so', 'lib/arm64-v8a/libflutter.so'} <= libraries, path
+          PYCODE

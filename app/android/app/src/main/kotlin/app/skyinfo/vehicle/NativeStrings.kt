@@ -1010,6 +1010,13 @@ object NativeStrings {
     const val adb_authorize = "授权连接"
     const val adb_later = "稍后"
     const val adb_connection_action = "连接设置"
+    const val about = "关于"
+    const val app_version = "版本"
+    const val project_github = "GitHub"
+    const val beta_notice = "正在使用测试版"
+    const val version_updates = "版本与更新"
+    const val project_open_failed = "无法打开链接，请检查是否已安装浏览器"
+    const val test_tools = "测试工具"
     fun text(key: String, values: Map<String, Any?> = emptyMap()): String {
         val template = defaults[key] ?: key
         return Regex("\\{([a-zA-Z0-9_]+)\\}").replace(template) { match -> values[match.groupValues[1]]?.toString() ?: match.value }
@@ -2023,6 +2030,13 @@ object NativeStrings {
         "adb_connection_message" to adb_connection_message,
         "adb_authorize" to adb_authorize,
         "adb_later" to adb_later,
-        "adb_connection_action" to adb_connection_action
+        "adb_connection_action" to adb_connection_action,
+        "about" to about,
+        "app_version" to app_version,
+        "project_github" to project_github,
+        "beta_notice" to beta_notice,
+        "version_updates" to version_updates,
+        "project_open_failed" to project_open_failed,
+        "test_tools" to test_tools
     ) }
 }

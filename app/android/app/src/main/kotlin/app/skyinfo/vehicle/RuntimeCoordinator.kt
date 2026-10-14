@@ -406,24 +406,7 @@ class RuntimeCoordinator private constructor(context: Context) {
         if (changed.isNotEmpty()) publishSelected(changed.keys)
     }
     fun auditFields(): JSONObject {
-        val auditId = java.util.UUID.randomUUID().toString()
-        val ordinary = ReadOnlyVehicle(fields)
-        val counts = mutableMapOf<String,Int>()
-        var blocked = false
-        android.util.Log.i("SkyInfo.Adaptation",JSONObject().put("kind","start").put("audit_id",auditId).put("uid",android.os.Process.myUid()).put("count",fields.keys.count { !isDerived(it) }).put("at",System.currentTimeMillis()).toString())
-        for (id in fields.keys.filterNot(::isDerived)) {
-            val result = if (blocked) JSONObject().put("quality","not_attempted") else try {
-                val future = source.submit<JSONObject> { ordinary.read(id) }
-                try { future.get(2,TimeUnit.SECONDS) } catch (_: java.util.concurrent.TimeoutException) {
-                    future.cancel(true); source.purge(); blocked = true; readBlocked = true; JSONObject().put("quality","timeout")
-                }
-            } catch (_: Throwable) { JSONObject().put("quality","error") }
-            val quality = result.optString("quality","error")
-            counts[quality] = (counts[quality] ?: 0) + 1
-            android.util.Log.i("SkyInfo.Adaptation",JSONObject().put("kind","read").put("audit_id",auditId).put("uid",android.os.Process.myUid()).put("id",id).put("at",System.currentTimeMillis()).put("result",result).toString())
-        }
-        adaptationAudit = JSONObject().put("audit_id",auditId).put("uid",android.os.Process.myUid()).put("qualities",JSONObject(counts as Map<*,*>))
-        android.util.Log.i("SkyInfo.Adaptation",JSONObject().put("kind","finished").put("audit",adaptationAudit).toString())
+        adaptationAudit = ChannelDiagnostics.audit(fields, source) { readBlocked = true }
         return diagnostics()
     }
     fun refresh() { readBlocked = false; readCurrent() }
@@ -529,6 +512,7 @@ class RuntimeCoordinator private constructor(context: Context) {
         networkCallback?.let { try { context.getSystemService(android.net.ConnectivityManager::class.java).unregisterNetworkCallback(it) } catch (_: Throwable) { } }; networkCallback = null
     }
     fun diagnostics(): JSONObject = JSONObject().put("app_version", context.packageManager.getPackageInfo(context.packageName,0).versionName).put("android", android.os.Build.VERSION.RELEASE)
+        .put("channel",BuildConfig.FLAVOR).put("build_type",BuildConfig.BUILD_TYPE)
         .put("uid",android.os.Process.myUid()).put("status",status()).put("demand_fields",wanted().size)
         .put("registered_fields",session.registered.size).put("cached_fields",samples.size).put("local_history_storage",localHistory.storageStats())
         .put("quality_counts",JSONObject(samples.values.groupingBy { it.optString("quality") }.eachCount()))

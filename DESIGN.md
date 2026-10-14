@@ -2,7 +2,7 @@
 
 所有UI/UX遵循固定submodule的[AGENTS](docs/design/fluorite-design/AGENTS.md)、[DESIGN](docs/design/fluorite-design/DESIGN.md)与[REVIEW](docs/design/fluorite-design/REVIEW.md)。通用主题、控件、装饰、动效、可访问性和选择流程只在上游维护，本文仅维护SkyInfo的产品约束、平台映射及差异。
 
-产品要求见[需求说明](docs/需求说明.md)，操作合同见[组件添加与数据选择](docs/组件添加与数据选择.md)，实现及待同步项见[开发状态](docs/开发状态.md)。[SkyInfo Figma](https://www.figma.com/design/T7jZP95JDLgkNKUI5NeEqy/ToGPT?node-id=140-3983)是页面交付；Fluorite的Figma/Web是通用组件和交互示例，不是车辆业务默认值。
+产品要求见[需求说明](docs/需求说明.md)，操作合同见[组件添加与数据选择](docs/组件添加与数据选择.md)，实现及待同步项见[开发状态](docs/开发状态.md)。[SkyInfo Figma](https://www.figma.com/design/vL6LyS0ORqs34dYAzoFkrS/SkyInfo)是页面交付；Fluorite的Figma/Web是通用组件和交互示例，不是车辆业务默认值。
 
 ## 平台与组织
 
@@ -10,14 +10,14 @@ Flutter承载主界面，Android原生承载悬浮条。通过本平台组件适
 
 1600×900为Figma参考视口，运行时以车机逻辑密度与实际触摸区域验证尺寸。宽屏侧预览、窄屏上下重排，字体缩放不得挤压操作；DesignViewport只负责焦点遍历，不缩放整页；预览、分类与操作栏按可用空间重排，软键盘打开后优先保留输入和退出操作。
 
-一个项目一个Page：SkyInfo的页面、组件、图标集中在唯一SkyInfo Page，归档使用单独 Page。通用规则不在SkyInfo Figma另造一套。
+SkyInfo 设计文件分为三个 Page：基础（品牌、图标与主题资源）、组件（共享控件与信息/实体组件）、页面（四页及完整操作流程）。保留组件引用与原型目标；通用规则不在 SkyInfo Figma 另造一套。
 
 <a id="二字体与数字系统"></a>
 ## 字体、图标与主题映射
 
 ChillDINGothic v1.300使用真实Std样式，Flutter注册族为ChillDIN；数字使用IBM Plex Mono Medium，注册族IBMPlexMono。授权与源文件见[字体资源](app/assets/fonts/LICENSE-ChillDIN.txt)。
 
-现有Palette别名acid/red/blue/green/rose分别对应上游primary/danger/accentBlue/positive/accentRose；其余同名。值由固定版Fluorite规范约束，`tools/check_design.py`检查镜像一致性，
+现有Palette别名acid/red/blue/green/rose分别对应上游primary/danger/accentBlue/positive/accentRose；其余同名。值由固定版Fluorite规范约束，`tools/check_design.py`检查镜像一致性。
 
 90个图标按图形名称与8个分类维护，车辆/HA推荐映射独立，来源见[图标资源](design-assets/icons/README.md)。图标可选，新建默认无图标；标题20/28、实体行32、状态24、图例20px，关闭后收回空位。启动器品牌图标采用[几何信息符号](design-assets/app-icon/README.md)：中性黑底、白色主体、右上黄色方块，Figma可编辑矢量源对应Android传统/自适应/单色资源，保持系统遮罩安全区域。
 
@@ -90,3 +90,9 @@ MQTT设置提供TLS/普通TCP互斥选择，默认TLS，端口可编辑；切换
 ## 启动采集与授权提示
 
 主页默认标准档，保留已有用户选择。APP每次启动恢复采集及本机ADB检查；未授权时使用共享确认弹窗，主操作“授权连接”、次操作“稍后”。拒绝不退出APP，稍后仍可从高级网络ADB设置处理；不可达提示实际地址/连接配置入口，不将端口故障描述成缺少授权。每次启动只自动提示一次，已授权不弹。确认进入网络ADB连接设置；系统RSA弹窗由adbd提供，Figma只表现APP引导，不绘制假授权成功。启动不改变悬浮、上报或远控开关。
+
+## 测试版与项目入口
+
+beta 在设置 Header 下、分类与滚动内容上方放固定全宽版本提示：警示图形、“正在使用测试版”、右侧实际版本号及“版本与更新”跳转按钮。按钮复用48px中性描边样式、宽160、左侧24px地球图标，跳转与“关于”入口一致。高度64，水平内距16，垂直内距8，主题 surface 背景、4px primary 左边带；文字用 ink，版本用 muted，浅深布局一致。无关闭按钮、额外确认或满屏警告。窄屏将版本号与“版本与更新”按钮换至第二行，保持48px触摸高度；提示随字号增长，不覆盖设置操作。
+
+stable 完全移除提示条并回收布局空间；高级页隐藏“车辆适配检查”及所属空分组，保留诊断信息和实体映射。常规末尾“关于”显示实际版本号，并提供一行 GitHub：完整 URL 与独立24px外链图标，整行可点击、触摸高度≥64，焦点可见；地址过长换行，不截断域名或挤压图标。入口使用中性底和链接色，系统浏览器打开。失败复用轻提示，不退出设置。

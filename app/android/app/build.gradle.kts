@@ -11,7 +11,7 @@ if (signingFile.exists()) signingFile.inputStream().use { signingProperties.load
 
 android {
     packaging { resources.excludes += "bundle.properties" }
-    buildFeatures { aidl = true }
+    buildFeatures { aidl = true; buildConfig = true }
     testOptions { unitTests.isIncludeAndroidResources = true }
     namespace = "app.skyinfo.vehicle"
     compileSdk = 36
@@ -27,6 +27,14 @@ android {
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
+    flavorDimensions += "channel"
+    productFlavors {
+        create("beta") {
+            dimension = "channel"
+            versionNameSuffix = "-beta.1"
+        }
+        create("stable") { dimension = "channel" }
+    }
     signingConfigs {
         if (signingFile.exists()) create("skyinfoRelease") {
             storeFile = file(signingProperties.getProperty("storeFile"))
@@ -36,6 +44,10 @@ android {
         }
     }
     buildTypes {
+        configureEach {
+            val supportedAbis = if (name == "release") listOf("arm64-v8a") else listOf("armeabi-v7a", "arm64-v8a", "x86_64")
+            ndk { abiFilters.addAll(supportedAbis) }
+        }
         release {
             signingConfig = if (signingFile.exists()) signingConfigs.getByName("skyinfoRelease") else signingConfigs.getByName("debug")
             isMinifyEnabled = false
@@ -61,7 +73,9 @@ dependencies {
 }
 
 tasks.configureEach {
-    if (name == "packageDebugUnitTestForUnitTest") dependsOn("copyFlutterAssetsDebug")
+    for (channel in listOf("Beta", "Stable")) {
+        if (name == "package${channel}DebugUnitTestForUnitTest") dependsOn("copyFlutterAssets${channel}Debug")
+    }
 }
 
 configurations.matching { it.name.contains("UnitTest", ignoreCase = true) }.configureEach {

@@ -1007,5 +1007,12 @@
   "adb_connection_message": "无法连接本机ADB，请检查调试开关、地址和端口。",
   "adb_authorize": "授权连接",
   "adb_later": "稍后",
-  "adb_connection_action": "连接设置"
+  "adb_connection_action": "连接设置",
+  "about": "关于",
+  "app_version": "版本",
+  "project_github": "GitHub",
+  "beta_notice": "正在使用测试版",
+  "version_updates": "版本与更新",
+  "project_open_failed": "无法打开链接，请检查是否已安装浏览器",
+  "test_tools": "测试工具"
 }
