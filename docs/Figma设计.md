@@ -10,7 +10,7 @@ Figma 读取、编辑、原型检查、截图和资源导出只使用 Desktop Br
 
 ## SkyInfo 画板
 
-当前设计文件 [ToGPT / SkyInfo](https://www.figma.com/design/T7jZP95JDLgkNKUI5NeEqy/ToGPT?node-id=140-896)，唯一 SkyInfo Page 为 `140:896`（成品）。一个项目一个 Page，其他项目及归档不复制到 SkyInfo 仓库；共享文件的访问权限由维护者管理。
+当前设计文件 [ToGPT / SkyInfo](https://www.figma.com/design/T7jZP95JDLgkNKUI5NeEqy/ToGPT?node-id=140-896)，唯一 SkyInfo Page 为 `140:896`（成品）。一个项目一个 Page。
 
 四页和编辑器覆盖信息、悬浮条、连接与设置；数据优先的创建流程、实体控制详情、删除/清空确认和共享控件维护在同一套设计。主页大小采用实际车机逻辑视口，默认标准；启动引导复用确认对话框。
 
@@ -21,4 +21,4 @@ Figma 读取、编辑、原型检查、截图和资源导出只使用 Desktop Br
 | 浅色授权 / 不可达引导 | 254:34467 / 254:34490 |
 | 深色授权 / 不可达引导 | 254:34513 / 254:34536 |
 
-正式图标、矢量源及哈希在 [design-assets](../design-assets/app-icon/README.md)。设计预览数值是快照或示意，不能称实时采样/已执行命令；APP 可见预览使用实际缓存，缺失显示空值。未授权参考图、旧实验、Figma 备份及操作原件只保留本地，不进入公共仓库。
+正式图标、矢量源及哈希在 [design-assets](../design-assets/app-icon/README.md)。设计预览数值是快照或示意，不能称实时采样/已执行命令；APP 可见预览使用实际缓存，缺失显示空值。

@@ -1,19 +1,23 @@
 # SkyInfo 工作约定
 
-本仓库独立维护 SkyInfo，APP 在 `app/`，工具在 `tools/`。先读[需求说明](docs/需求说明.md)、[开发状态](docs/开发状态.md)及[架构](docs/项目规划.md)。后续用户明确要求覆盖旧方案。
+工程在 `app/`，工具在 `tools/`。先读[需求](docs/需求说明.md)、[架构](docs/项目规划.md)和[开发状态](docs/开发状态.md)。
 
-所有 UI/UX 遵循固定 submodule 的 [AGENTS](docs/design/fluorite-design/AGENTS.md)、[DESIGN](docs/design/fluorite-design/DESIGN.md) 与 [REVIEW](docs/design/fluorite-design/REVIEW.md)，宿主差异只在 [DESIGN.md](DESIGN.md) 维护。缺失时运行 `git submodule update --init --recursive`；仅用户明确要求时升级，不直接修改子模块。
+## 设计与开发
 
-UI/UX 按文档 → 设计 → 代码 → 验证执行。Figma 读取、编辑、原型检查和导出仅使用 Desktop Bridge，核对目标文件/Page，保留可编辑节点。连接失败恢复已有 Bridge，不调用官方 MCP/REST、不用截图冒充设计交付。
+- UI/UX 遵循固定子模块的 [AGENTS](docs/design/fluorite-design/AGENTS.md)、[DESIGN](docs/design/fluorite-design/DESIGN.md) 与 [REVIEW](docs/design/fluorite-design/REVIEW.md)；宿主差异只写 [DESIGN.md](DESIGN.md)。缺失时初始化子模块，仅明确要求时升级，不直接修改上游。
+- UI/UX 按文档 → 设计 → 代码 → 验证执行。Figma 仅使用 Desktop Bridge，核对文件/Page，保留可编辑节点；断开先恢复，不调用官方 MCP/REST。
+- 优先 Docker 与现有库，界面、模型、采集、通信分层。语言只编辑 `app/assets/i18n/zh_CN.json`，生成文件不手改。
+- 文档只写当前规则、接口、操作和已知限制。同一事实只维护一处，其他文档引用；不记对话、开发过程、迁移流水或重复警告。版本记录只列用户可见变化，过程与验收原件放本地私有记录。
 
-优先 Docker 构建，复用 Flutter/Android、OkHttp/Paho/SQLite/LibADB。界面、模型、采集、通信和生成资源分层维护，不机械拆分生成计划。语言只编辑 `app/assets/i18n/zh_CN.json`；用工具生成镜像，不手改生成文件。
+## 数据与实车
 
-采集订阅优先，历史统一本地；默认 HA，高级配置 MQTT。信息、悬浮窗、连接、设置四页，车辆/HA 控制通过仪表盘实体，不另设车辆控制菜单。默认标准，保留已保存档位；应用启动恢复采集并检查本机网络 ADB，未授权与不可达分开提示一次，不替用户确认系统 RSA、不自动开启新的上传/悬浮/远控。
+- 开发期无需兼容旧配置/历史；清理仅限 SkyInfo，不改原始调查或其他设备数据。
+- 控制保持固定参数与实际权限校验，推测项保留待验证。接口接受、软件读回和物理效果分别判断，不自动试写新功能。
+- 实车默认只读；安装、授权和写入须有对应授权。车屏识别及 ADB 点击交给 GPT 5.6 Luna low；其他工作不因此自动委托。
+- 网络 ADB 只连接本机，密钥/配对码不进入导出、日志或 Git。
 
-开发期不要求向前兼容旧配置/历史，可在明确范围内清理 SkyInfo 本机数据；不改写原始调查、不清理其他设备。动态判断 Android 用户、实际权限、协议与方法兼容性；不按完整固件或固定 UID 阻断，不设置 APP P挡门槛。推测控制沿用固定计划并持续标记待验证，不扩大参数、自动试写或将 accepted/软件读回当成物理效果。
+## 检查与发布
 
-网络 ADB 只连接本机 adbd，无 Shizuku 依赖，独立密钥与配对码不进入导出/日志/Git。实车默认只读，安装/授权/写入须有对应授权。车屏识别和 ADB 点击依用户要求交给 GPT 5.6 Luna low；其他工作不因此自动委托。
+运行 `python3 tools/check_public.py`、`python3 tools/check_project.py`；代码改动按范围做 Docker 回归。凭据、实车数据、厂商二进制和私有 QA 不提交；Gradle wrapper 可随源码维护。
 
-公共仓库仅保留源码、当前文档、正式资源与匿名测试。禁止提交签名、令牌、个人服务器/设备数据、实车截图、厂商 APK/JAR、旧检查点或私有 QA。原件保留在维护者本地调查工程，不是普通构建依赖。提交前运行 `python3 tools/check_public.py` 与 `python3 tools/check_project.py`，代码改动按范围做 Docker 回归。
-
-自有代码与原创资源采用 GPL-3.0-only，第三方保留原许可。首次公开、推送或 APK 发布前必须由维护者人工确认已审阅内容；CI 不自动发布、不使用正式签名。发布步骤和 LGPL 依赖材料见[构建与发布](docs/构建与发布.md)及[许可清单](THIRD_PARTY_NOTICES.md)。
+自有代码及原创资源为 GPL-3.0-only，第三方保留原许可。首次公开和 APK 发布须人工确认；CI 不发布或使用正式签名。步骤见[构建与发布](docs/构建与发布.md)。

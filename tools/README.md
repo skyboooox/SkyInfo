@@ -1,32 +1,15 @@
-# SkyInfo工具
+# 工具
 
-从仓库根目录执行。生成工具只整理已确认目录/固定计划，不访问车辆、不扩大允许写入参数。
+从仓库根目录执行。构建、测试与签名命令见[构建指南](../docs/构建与发布.md)。Docker 复用固定镜像及依赖缓存，只挂载 APP 工程；不要同时运行共用 Gradle 缓存的多个构建容器。
 
-## Docker构建和回归
+## 资源生成
 
-```sh
-./tools/docker.sh flutter analyze
-./tools/docker.sh flutter test
-./tools/docker.sh bash -lc 'cd android && ./gradlew testDebugUnitTest'
-./tools/test-mqtt.sh
-./tools/docker.sh flutter build apk --release --target-platform android-arm64
-```
-
-`docker.sh`复用Flutter3.44.0/Android/NDK镜像及依赖缓存，仅挂载APP工程。`test-mqtt.sh`临时创建本机TLS Mosquitto，验证MQTT5及3.1.1，会在退出时清理容器与测试证书；不连接用户Broker。构建产物在`app/build/app/outputs/flutter-apk/`。
-
-已有签名材料由`app/android/key.properties`与忽略的signing目录引用。`signing.sh`只在没有签名配置时初始化，不覆盖已用证书；私钥、密码和HA令牌不得提交。
-
-## 生成资源
-
-| 源 | 输出/工具 |
+| 维护源 | 工具与输出 |
 | --- | --- |
-| 分类清单、适配结果、design-assets图标manifest | `generate_catalog.py` → Flutter/Android目录 |
-| `app/assets/controls.json`（已审阅公开计划） | `generate_plans.py` → 26项 Kotlin 镜像 |
-| `app/assets/inferred-controls.json`（固定推测计划） | `generate_plans.py` → 134项 Kotlin 镜像 |
-| 原生13项定义、上述计划、图形推荐映射 | `generate_entities.py` → 173项实体、90图标资源 |
-| `app/assets/i18n/zh_CN.json` | `generate_language.py` → Dart/Kotlin默认表及原生中文副本 |
-
-按依赖顺序生成，中文文件是可编辑源，自动生成的`defaults.g.dart`、`NativeStrings.kt`及Android镜像资源不得手改。正常只需重新生成变动涉及的源；完整同步顺序：
+| 分类、适配结果、图标 manifest | `generate_catalog.py` → Flutter/Android 字段目录 |
+| `app/assets/controls.json`、`inferred-controls.json` | `generate_plans.py` → 固定计划 Kotlin 镜像 |
+| 原生定义、计划、推荐映射 | `generate_entities.py` → 实体与图标资源 |
+| `app/assets/i18n/zh_CN.json` | `generate_language.py` → Dart/Kotlin 默认表及 Android 语言副本 |
 
 ```sh
 python3 tools/generate_catalog.py
@@ -36,57 +19,34 @@ python3 tools/generate_language.py
 python3 tools/check_project.py
 ```
 
-新增名称由`resource_keys.py`提供稳定键，已有键保留；字段ID、动作ID、单位、用户自定义内容不翻译。图标按图形名称/用途分类，字段和实体推荐映射独立。固定计划的公开 JSON 是维护源，生成只同步 Kotlin 镜像，不推断新参数；来源和验证摘要见 docs/验证与兼容性.md。原始证据仍在维护者私有调查工程，不是构建前提。
+只生成受影响资源，完整同步按上表顺序。`resource_keys.py` 维护稳定语言键；字段/实体/图标 ID、单位及用户名称不翻译。固定计划生成只做镜像，不推断参数或访问车辆。
 
-## HA兼容工具
+## 检查与辅助脚本
 
-`ha_control.py`维护已有事件脚本，凭据从环境读取；它不会执行脚本。原生设备控制实体由APP运行时发现，不能用生成脚本数量代替新实体发现验收。
+- `check_project.py`：文档链接、语言/目录镜像、图标哈希、设计依赖。默认输出 `app/qa/project-check/`，可用 `--output .local/check` 指定位置。
+- `check_public.py`：跟踪文件中的凭据、私人路径与异常二进制；公开前另用 Gitleaks 扫描历史。
+- `test-mqtt.sh`：独立临时 Docker 网络中的 TLS/TCP Mosquitto，覆盖 MQTT5/3.1.1，退出清理。可追加 `--tests app.skyinfo.vehicle.MqttTransportTest`。
+- `signing.sh`：缺少配置时初始化本机签名，不覆盖已有密钥。
+- `ha_control.py`：生成/部署事件脚本，不执行控制；显式指定 `--target`，部署另提供 `--url`，令牌从环境读取。
 
-`check_project.py`检查文档链接、镜像资源、语言引用、图标哈希及目录一致性。默认输出到`app/qa/project-check/`；可用`--output app/qa/<本轮目录>`指定报告位置，避免覆盖历史QA；不对车机写入，也不把本机验证升级成物理控制验收。
+网络 ADB 测试仅连接模拟 adbd；依赖与补丁见 [LibADB](../app/android/third_party/libadb/README.md)。
 
 ## Figma Desktop Bridge
 
-Figma只使用Desktop Bridge，覆盖读取、编辑、原型检查及导出。Bridge通过本机Figma中的插件连接访问原生节点；不调用官方Figma MCP、REST设计接口，也不在连接失败时切换到其他通道。
+1. 更新需求及宿主说明，读取固定 Fluorite 规范。
+2. 在 Figma 打开[目标文件](../docs/Figma设计.md)，启动已有 Bridge，核对 fileKey、Page 和节点。
+3. 保留文字、组件、向量及原型目标，用 `exportAsync` 导出受影响浅深画板。
+4. 核对设计后修改 APP，完成行为/视觉回归；节点和操作记录留本机 QA。
 
-操作顺序：
-
-1. 更新需求及宿主设计说明，读取固定版Fluorite规范。
-2. 在本机Figma打开目标文件，启动已有Desktop Bridge插件，确认连接正常。
-3. 核对fileKey、Page及节点，与[Figma交付说明](../docs/Figma设计.md#维护方式)一致后执行。
-4. 保留可编辑组件、文字、向量及原型目标，导出受影响浅深画板；将节点ID、实际修改与检查结果写入本轮QA。
-5. 按检查后的设计修改APP，再做行为/视觉验证。
-
-导出优先在Bridge执行环境调用节点`exportAsync`；不得使用会自动回退REST的截图工具。Bridge断开时恢复已有连接并重新核对目标；操作超时先检查实际节点状态，避免重复创建或重复缩放。无法恢复时记录阻碍，不将旧导出当作新修改结果。临时连接脚本、凭据和本机端口不写入产品配置或作为固定依赖。
+Figma 所有读取、修改和导出仅用 Desktop Bridge。断开先恢复，不回退官方 MCP/REST；超时先读取实际节点状态，避免重复修改。临时连接脚本不成为产品依赖。
 
 ## Fluorite Design
 
-`docs/design/fluorite-design/`是规范submodule，不进入APK或Docker构建上下文。通用规则和检查分别在其DESIGN.md/REVIEW.md维护；SkyInfo DESIGN.md只写平台差异。主题别名镜像由`check_design.py`检查，不复制或改写上游Web组件。
-
-从仓库根目录初始化固定版本：
+`docs/design/fluorite-design/` 为固定规范子模块，不进入 APK 或构建上下文；主题别名由 `check_design.py` 校验。初始化：
 
 ```sh
 git submodule update --init --recursive -- docs/design/fluorite-design
-```
-
-仅用户明确要求升级时，获取上游、审阅指定提交，然后显式固定版本；不得用`--remote`自动追随。示例命令中的SHA必须替换为已审阅的真实提交：
-
-```sh
-git -C docs/design/fluorite-design fetch origin
-git -C docs/design/fluorite-design checkout --detach <reviewed-sha>
-git add .gitmodules docs/design/fluorite-design
-```
-
-升级后核对Fluorite规则、SkyInfo平台差异、主题镜像、Figma及受影响页面；提交子模块指针与宿主说明。本项目不在子模块直接修改规范；上游改动需在独立上游工程处理。只更新文档/依赖约定时检查链接、指针和生成资源；改UI行为时增加Docker行为/视觉验证。
-
-从SkyInfo目录运行：
-
-```sh
 python3 tools/check_design.py
-python3 tools/check_project.py --output app/qa/<本轮目录>
 ```
 
-`check_project.py`包含规范检查；缺失初始化、工作树/暂存指针不一致、子模块脏修改或Palette与固定规范不一致会失败。文件清单排除外部submodule内部文件，原始QA与调查证据不作为无用资源清除。
-
-公开配置工具：ha_control.py须显式提供--target，部署另提供--url，不使用测试服务器或设备名称默认值。tools/test-mqtt.sh启动仅本机临时Mosquitto TLS/普通TCP监听并清理临时证书；可传Gradle测试过滤参数，例如--tests app.skyinfo.vehicle.MqttTransportTest。不要将多个Gradle容器同时绑定同一缓存运行，避免跨容器锁等待。
-
-网络ADB使用固定LibADB Android源码模块（仅超时/通知竞态补丁）、Conscrypt、Spake2与BouncyCastle；来源及许可见[依赖说明](../app/android/third_party/libadb/README.md)。网络协议测试只连接本机模拟adbd，不自动连接车机；配对码与密钥不得进入测试日志。
+仅明确要求时升级：审阅提交、detached checkout、提交 gitlink，再核对主题、Figma 与受影响页面；不用 `--remote`，不直接修改子模块。

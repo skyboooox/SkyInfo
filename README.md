@@ -38,7 +38,7 @@ python3 tools/check_project.py
 ./tools/test-mqtt.sh
 ```
 
-Flutter 负责界面，Kotlin 负责采集、网络 ADB、悬浮窗、历史与通信。普通构建不需要私有车辆调查仓库、厂商 APK/JAR 或采样原件。UI/UX 使用固定提交的 [Fluorite Design](docs/design/fluorite-design/DESIGN.md)，Figma 维护只使用 Desktop Bridge。
+Flutter 负责界面，Kotlin 负责采集、网络 ADB、悬浮窗、历史与通信。UI/UX 使用固定提交的 [Fluorite Design](docs/design/fluorite-design/DESIGN.md)，Figma 维护只使用 Desktop Bridge。
 
 | 目录 | 内容 |
 | --- | --- |
