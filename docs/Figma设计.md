@@ -4,13 +4,13 @@ UI/UX 统一遵循固定子模块的 [Fluorite Design](design/fluorite-design/DE
 
 ## Desktop Bridge
 
-Figma 读取、编辑、原型检查、截图和资源导出只使用 Desktop Bridge，通过本机原生 Plugin API 操作。Bridge 断开时恢复已有插件，不使用官方 MCP/REST 或把 APP 截图冒充设计交付。设计不是源码构建依赖。
+Figma 读取、编辑、原型检查、截图和资源导出只使用 Desktop Bridge，通过本机原生 Plugin API 操作。Bridge 断开时恢复已有插件，不使用官方 MCP/REST 。设计不是源码构建依赖。
 
 先核对目标文件与 Page，保留文字、矢量、组件实例及原型连接。UI/UX 按文档 → 设计 → 代码 → 验证执行；导出受影响浅深画板，操作节点与检查记录写本机 QA，不公开个人诊断。
 
 ## SkyInfo 画板
 
-当前设计文件 [SkyInfo](https://www.figma.com/design/vL6LyS0ORqs34dYAzoFkrS/SkyInfo)，分为三个 Page：
+设计文件 [SkyInfo](https://www.figma.com/design/vL6LyS0ORqs34dYAzoFkrS/SkyInfo)，分为三个 Page：
 
 | Page | 内容 | 节点 |
 | --- | --- | --- |
@@ -33,4 +33,4 @@ Figma 读取、编辑、原型检查、截图和资源导出只使用 Desktop Br
 
 提示条及项目入口的地球、警示和外链图标从上述组件导出，位于 [APP UI 矢量](../app/assets/ui/)，24×24 几何不变，颜色随主题映射。
 
-正式图标、矢量源及哈希在 [design-assets](../design-assets/app-icon/README.md)。设计预览数值是快照或示意，不能称实时采样/已执行命令；APP 可见预览使用实际缓存，缺失显示空值。
+正式图标、矢量源及哈希在 [design-assets](../design-assets/app-icon/README.md)。设计预览数值是快照或示意，不代表实时采样或已执行命令；APP 可见预览使用实际缓存，缺失显示空值。

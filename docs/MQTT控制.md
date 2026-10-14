@@ -1,8 +1,8 @@
 # 自定义MQTT控制
 
-自定义MQTT明确提供TLS及普通TCP两种连接，默认TLS；普通TCP首次保存提示未加密，确认后相同连接不重复提示，修改端口不会自动改变传输方式。TLS仍校验证书和主机名。
+自定义MQTT明确提供TLS及普通TCP两种连接，默认TLS；普通TCP首次保存提示未加密，确认后相同连接不重复提示，修改端口不会自动改变传输方式。TLS校验证书和主机名。
 
-自定义MQTT位于“连接”的高级配置，默认仍为Home Assistant。MQTT远程控制默认关闭，启用后使用与[HA控制](HA控制.md)相同的173项车辆控制目录和4项APP操作，其中134项推测控制直接使用固定计划且始终保留待验证标记；车辆写入由当前用户的内置网络ADB桥接执行，实时检查接口兼容性、参数、权限和反馈。不提供任意FID、Shell命令或原始Binder写入入口。
+自定义MQTT位于“连接”的高级配置，默认连接为Home Assistant。MQTT远程控制默认关闭，启用后使用与[HA控制](HA控制.md)相同的173项车辆控制目录和4项APP操作，其中134项推测控制直接使用固定计划且始终保留待验证标记；车辆写入由当前用户的内置网络ADB桥接执行，实时检查接口兼容性、参数、权限和反馈。不提供任意FID、Shell命令或原始Binder写入入口。
 
 ## 主题与命令
 
@@ -25,8 +25,8 @@ Broker账号需允许发布自身主题及订阅自身`command`主题。每次�
   "target": "skyinfo_demo",
   "command_id": "unique_command_id",
   "command_session": "从当前meta或heartbeat读取",
-  "issued_at": "2026-10-09T02:00:00Z",
-  "expires_at": "2026-10-09T02:00:20Z",
+  "issued_at": "2030-01-01T00:00:00Z",
+  "expires_at": "2030-01-01T00:00:20Z",
   "action": "app_refresh",
   "value": 1
 }
@@ -34,7 +34,7 @@ Broker账号需允许发布自身主题及订阅自身`command`主题。每次�
 
 `command_id`为1—128位字母、数字、下划线或连字符，最近256个已接受ID持久化去重。`value`必须为整数，操作与范围见HA控制白名单或当前meta。载荷最大16KiB；无效JSON、错误目标、旧会话、重复ID、过期或越界请求不执行，拒绝原因进入诊断。
 
-命令有效期最多30秒；设备时钟判断要求发出时间距当前时间不超过正负30秒且尚未超过expires_at。MQTT没有HA握手的HTTP Date校准，发送端与车机应保持时钟同步；偏差过大时拒绝，不自动改写设备时钟。HA仍使用自己的服务器时间口径。
+命令有效期最多30秒；设备时钟判断要求发出时间距当前时间不超过正负30秒且尚未超过expires_at。MQTT没有HA握手的HTTP Date校准，发送端与车机应保持时钟同步；偏差过大时拒绝，不自动改写设备时钟。HA使用服务器时间口径。
 
 MQTT5订阅开启retain-as-published，拒绝带保留标志的控制。MQTT3.1.1拒绝新订阅时Broker重放的保留消息；协议会清除实时转发消息的保留标志，无法从接收端辨认发布者当时是否使用retained，因此发送端必须设置false。新连接会话与去重校验同时防止旧命令补放。[Paho订阅定义](https://github.com/eclipse-paho/paho.mqtt.java/blob/v1.2.5/org.eclipse.paho.mqttv5.client/src/main/java/org/eclipse/paho/mqttv5/common/MqttSubscription.java)、[MQTT3.1.1规范](https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html)。
 
