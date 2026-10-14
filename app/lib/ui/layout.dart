@@ -57,7 +57,7 @@ class CategoryPane<T> extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           SizedBox(
-            width: 224,
+            width: 176,
             child: ClipRect(
               child: ListView(
                 children: [
@@ -80,7 +80,7 @@ class CategoryPane<T> extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 24),
+          const SizedBox(width: 16),
           Expanded(child: ClipRect(child: child)),
         ],
       );
@@ -105,20 +105,32 @@ class PreviewLayout extends StatelessWidget {
       if (box.maxHeight < 280) {
         return parameters;
       }
-      if (box.maxWidth >= 1200 &&
+      if (box.maxWidth >= 960 &&
           MediaQuery.textScalerOf(context).scale(20) <= 30) {
         return Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: previewFirst
               ? [
-                  SizedBox(width: previewWidth, child: preview),
-                  const SizedBox(width: 24),
+                  SizedBox(
+                    width: (box.maxWidth * .32).clamp(
+                      320.0,
+                      previewWidth.clamp(320.0, 400.0),
+                    ),
+                    child: preview,
+                  ),
+                  const SizedBox(width: 16),
                   Expanded(child: parameters),
                 ]
               : [
                   Expanded(child: parameters),
-                  const SizedBox(width: 24),
-                  SizedBox(width: previewWidth, child: preview),
+                  const SizedBox(width: 16),
+                  SizedBox(
+                    width: (box.maxWidth * .32).clamp(
+                      320.0,
+                      previewWidth.clamp(320.0, 400.0),
+                    ),
+                    child: preview,
+                  ),
                 ],
         );
       }
@@ -239,7 +251,7 @@ class AdaptivePanels extends StatelessWidget {
         return Row(
           children: [
             Expanded(flex: firstFlex, child: first),
-            const SizedBox(width: 24),
+            const SizedBox(width: 16),
             Expanded(flex: secondFlex, child: second),
           ],
         );

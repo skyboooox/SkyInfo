@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../l10n/strings.dart';
 import 'layout.dart';
+import 'touch_targets.dart';
 
 part 'industrial_controls.dart';
 part 'industrial_buttons.dart';
@@ -99,9 +100,9 @@ ThemeData industrialTheme(Brightness b) {
       error: p.red,
     ),
     textTheme: TextTheme(
-      bodyLarge: TextStyle(fontSize: 20, color: p.ink),
+      bodyLarge: TextStyle(fontSize: 18, color: p.ink),
       bodyMedium: TextStyle(
-        fontSize: 20,
+        fontSize: 18,
         color: p.ink,
         fontWeight: FontWeight.w400,
       ),
@@ -141,7 +142,7 @@ ThemeData industrialTheme(Brightness b) {
       ),
       contentTextStyle: TextStyle(
         fontFamily: 'ChillDIN',
-        fontSize: 20,
+        fontSize: 18,
         color: p.ink,
       ),
     ),
@@ -271,8 +272,8 @@ class ParameterRow extends StatelessWidget {
         focusColor: p.blue.withValues(alpha: .10),
         hoverColor: p.ink.withValues(alpha: .04),
         child: Container(
-          constraints: const BoxConstraints(minHeight: 80),
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+          constraints: const BoxConstraints(minHeight: 64),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
           decoration: BoxDecoration(
             border: Border(bottom: BorderSide(color: p.grid)),
           ),

@@ -392,7 +392,7 @@ class _FieldSelectorState extends State<FieldSelector> {
                 const SizedBox(height: 8),
                 SizedBox(
                   height: MediaQuery.textScalerOf(context).scale(20) <= 20
-                      ? 80
+                      ? 64
                       : MediaQuery.textScalerOf(context).scale(20) * 2.6 + 24,
                   child: ReorderableListView.builder(
                     scrollDirection: Axis.horizontal,

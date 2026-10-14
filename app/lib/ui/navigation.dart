@@ -38,7 +38,7 @@ class NavigationHeading extends StatelessWidget {
     builder: (context, box) {
       final required =
           90 +
-          MediaQuery.textScalerOf(context).scale(40) * title.length +
+          MediaQuery.textScalerOf(context).scale(28) * title.length +
           actions.fold<double>(
             0,
             (sum, item) => sum + preferredToolbarWidth(context, item),
@@ -58,24 +58,24 @@ class NavigationHeading extends StatelessWidget {
               outlined: true,
               size: 56,
             ),
-            const SizedBox(width: 16),
+            const SizedBox(width: 12),
             SizedBox(
               width: 2,
-              height: 32,
+              height: 28,
               child: ColoredBox(color: Palette.of(context).acid),
             ),
-            const SizedBox(width: 16),
+            const SizedBox(width: 12),
             Expanded(
               child: Text(
                 title,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontSize: 40),
+                style: const TextStyle(fontSize: 28),
               ),
             ),
             if (!stacked)
               for (var i = 0; i < actions.length; i++) ...[
-                if (i > 0) const SizedBox(width: 16),
+                if (i > 0) const SizedBox(width: 12),
                 actions[i],
               ],
           ],

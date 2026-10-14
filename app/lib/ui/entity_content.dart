@@ -5,6 +5,7 @@ import '../domain/models.dart';
 import '../domain/control_entity.dart';
 import 'design_dialog.dart';
 import 'industrial.dart';
+import 'touch_targets.dart';
 import 'attention.dart';
 import 'ha_entity_content.dart';
 
@@ -191,6 +192,10 @@ class _EntityRow extends StatelessWidget {
                       entity?.capability == EntityCapability.number) ...[
                     for (final direction in [-1, 1])
                       IconButton(
+                        constraints: BoxConstraints(
+                          minWidth: TouchTargets.minimum(context),
+                          minHeight: TouchTargets.minimum(context),
+                        ),
                         tooltip: direction < 0 ? '−' : '+',
                         onPressed:
                             blocked ||
@@ -242,6 +247,10 @@ class _EntityRow extends StatelessWidget {
                   else if (entity != null &&
                       entity.capability != EntityCapability.toggle)
                     IconButton(
+                      constraints: BoxConstraints(
+                        minWidth: TouchTargets.minimum(context),
+                        minHeight: TouchTargets.minimum(context),
+                      ),
                       key: ValueKey('entity-details-$id'),
                       tooltip: Strings.text('details'),
                       onPressed: disabled

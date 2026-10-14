@@ -4,6 +4,7 @@ import '../domain/ha_entity.dart';
 import '../domain/models.dart';
 import '../l10n/strings.dart';
 import 'industrial.dart';
+import 'touch_targets.dart';
 import 'attention.dart';
 import 'design_dialog.dart';
 import 'entity_content.dart' show commandLabel;
@@ -229,6 +230,7 @@ class _HaFunctionControlState extends State<HaFunctionControl> {
       case 'select':
         return SizedBox(
           width: widget.detail ? 280 : 160,
+          height: TouchTargets.minimum(context),
           child: DropdownButtonFormField<String>(
             borderRadius: BorderRadius.zero,
             itemHeight: null,

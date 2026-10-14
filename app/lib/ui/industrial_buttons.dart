@@ -26,6 +26,9 @@ class IndustrialButton extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
+    final targetHeight = height < TouchTargets.minimum(context)
+        ? TouchTargets.minimum(context)
+        : height;
     final p = Palette.of(context), role = primary ? ButtonKind.primary : kind;
     final foreground = role == ButtonKind.primary
         ? const Color(0xff161616)
@@ -45,7 +48,7 @@ class IndustrialButton extends StatelessWidget {
         child: SizedBox(
           width: width,
           child: ConstrainedBox(
-            constraints: BoxConstraints(minHeight: height),
+            constraints: BoxConstraints(minHeight: targetHeight),
             child: DecoratedBox(
               position: DecorationPosition.foreground,
               decoration: BoxDecoration(
@@ -76,7 +79,7 @@ class IndustrialButton extends StatelessWidget {
                   overlayColor: const WidgetStatePropertyAll(
                     Colors.transparent,
                   ),
-                  minimumSize: WidgetStatePropertyAll(Size(0, height)),
+                  minimumSize: WidgetStatePropertyAll(Size(0, targetHeight)),
                   padding: const WidgetStatePropertyAll(
                     EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   ),
@@ -108,7 +111,7 @@ class IndustrialButton extends StatelessWidget {
                             label,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(fontSize: 20),
+                            style: const TextStyle(fontSize: 18),
                           ),
                         ),
                         if (trailing != null) ...[
@@ -144,9 +147,12 @@ class IndustrialIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = Palette.of(context);
+    final targetSize = size < TouchTargets.minimum(context)
+        ? TouchTargets.minimum(context)
+        : size;
     return SizedBox(
-      width: size,
-      height: size,
+      width: targetSize,
+      height: targetSize,
       child: DecoratedBox(
         position: DecorationPosition.foreground,
         decoration: BoxDecoration(
@@ -174,7 +180,7 @@ class IndustrialIconButton extends StatelessWidget {
                   : Colors.transparent,
             ),
             padding: const WidgetStatePropertyAll(EdgeInsets.zero),
-            fixedSize: WidgetStatePropertyAll(Size(size, size)),
+            fixedSize: WidgetStatePropertyAll(Size(targetSize, targetSize)),
             shape: const WidgetStatePropertyAll(RoundedRectangleBorder()),
             side: WidgetStateProperty.resolveWith(
               (states) => states.contains(WidgetState.focused)

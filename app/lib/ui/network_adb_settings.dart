@@ -148,6 +148,7 @@ class _NetworkAdbSettingsState extends State<NetworkAdbSettings> {
   Widget build(BuildContext context) => AnimatedBuilder(
     animation: widget.controller,
     builder: (context, _) => SettingsEditor(
+      controller: widget.controller,
       title: Strings.text('adb_title'),
       selectedTab: 4,
       onNavigate: widget.onNavigate,

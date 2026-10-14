@@ -147,7 +147,7 @@ class _OverlayEditorState extends State<_OverlayEditor> {
     child: Column(
       children: [
         SizedBox(
-          height: 208,
+          height: 96,
           child: Container(
             color: Palette.of(context).paper,
             child: OverlayStripPreview(
@@ -223,7 +223,7 @@ class _OverlayEditorState extends State<_OverlayEditor> {
               ParameterRow(
                 Strings.text('text_39df92f27c'),
                 trailing: SizedBox(
-                  width: 600,
+                  width: 432,
                   child: ChoiceButtons<String>(
                     value: alignment,
                     values: const ['left', 'center', 'right'],

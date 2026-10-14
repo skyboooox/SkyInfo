@@ -23,7 +23,7 @@ class ReleaseNotice extends StatelessWidget {
         Expanded(
           child: Text(
             Strings.text('beta_notice'),
-            style: const TextStyle(fontSize: 24),
+            style: const TextStyle(fontSize: 18),
           ),
         ),
       ],
@@ -33,7 +33,7 @@ class ReleaseNotice extends StatelessWidget {
         version,
         style: TextStyle(
           fontFamily: 'IBMPlexMono',
-          fontSize: 20,
+          fontSize: 18,
           color: p.muted,
         ),
       ),
@@ -53,7 +53,7 @@ class ReleaseNotice extends StatelessWidget {
               Flexible(
                 child: Text(
                   Strings.text('version_updates'),
-                  style: const TextStyle(fontSize: 20),
+                  style: const TextStyle(fontSize: 18),
                 ),
               ),
             ],

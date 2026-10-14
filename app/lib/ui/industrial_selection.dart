@@ -52,7 +52,7 @@ class _SelectionRowState extends State<SelectionRow> {
                         widget.label,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(fontSize: 20),
+                        style: const TextStyle(fontSize: 18),
                       ),
                     ),
                     ?widget.trailing,
@@ -107,8 +107,8 @@ class XCheck extends StatelessWidget {
       child: _ControlTarget(
         onTap: onChanged == null ? null : () => onChanged!(!value),
         child: SizedBox(
-          width: 48,
-          height: 48,
+          width: TouchTargets.minimum(context),
+          height: TouchTargets.minimum(context),
           child: Center(
             child: Container(
               width: 24,
@@ -152,7 +152,7 @@ class IndustrialSwitch extends StatelessWidget {
         onTap: onChanged == null ? null : () => onChanged!(!value),
         child: SizedBox(
           width: 76,
-          height: 48,
+          height: TouchTargets.minimum(context),
           child: Center(
             child: Container(
               width: 64,

@@ -214,7 +214,7 @@ void main() {
     await close(t, c);
   });
 
-  testWidgets('0.7.3实车截图基准含240dpi和系统栏，两档尺寸按APP可用内容计算', (t) async {
+  testWidgets('车机240dpi和系统栏，两档尺寸按APP可用内容计算', (t) async {
     viewport(t, const Size(1920, 1080));
     t.view.devicePixelRatio = 1.5;
     const insets = FakeViewPadding(top: 84, bottom: 96);
@@ -233,18 +233,18 @@ void main() {
     expect(t.getTopLeft(slot).dx * 1.5, closeTo(24, 1e-5));
     final layout = DashboardLayout.forViewport(
       1248,
-      495,
+      496,
       size: DashboardSize.standard,
     );
     expect(layout.columns, 7);
     expect(layout.visibleRows, 3);
-    expect(layout.scale, closeTo(495 / 616, 1e-8));
+    expect(layout.scale, closeTo(496 / 616, 1e-8));
     c.dashboardSize = DashboardSize.standard;
     await c.save();
     await t.pumpAndSettle();
     final small = t.getSize(slot);
-    expect(small.width / large.width, closeTo(495 / 616, 1e-8));
-    expect(small.height / large.height, closeTo(495 / 616, 1e-8));
+    expect(small.width / large.width, closeTo(496 / 616, 1e-8));
+    expect(small.height / large.height, closeTo(496 / 616, 1e-8));
     expect(t.takeException(), isNull);
     await close(t, c);
   });

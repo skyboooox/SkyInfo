@@ -375,7 +375,11 @@ void main() {
     await t.scrollUntilVisible(
       find.byKey(const ValueKey('library-电池温度历史')),
       400,
-      scrollable: find.byType(Scrollable).first,
+      scrollable: find
+          .byWidgetPredicate(
+            (w) => w is Scrollable && w.axisDirection == AxisDirection.down,
+          )
+          .last,
     );
     await t.pumpAndSettle();
     await t.tap(find.byKey(const ValueKey('library-电池温度历史')));
@@ -452,7 +456,15 @@ void main() {
     );
     expect(c.localHistory, isTrue);
     expect(c.uploaded, isEmpty);
-    await t.ensureVisible(find.text('历史设置'));
+    await t.scrollUntilVisible(
+      find.text('历史设置'),
+      200,
+      scrollable: find
+          .byWidgetPredicate(
+            (w) => w is Scrollable && w.axisDirection == AxisDirection.down,
+          )
+          .last,
+    );
     await t.tap(find.text('历史设置'));
     await t.pumpAndSettle();
     expect(

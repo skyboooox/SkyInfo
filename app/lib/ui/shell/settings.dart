@@ -9,7 +9,7 @@ extension _Settings on _HomeState {
     onChanged: (tab) => update(() => settingsTab = tab),
     child: Container(
       color: Palette.of(context).surface,
-      padding: const EdgeInsets.symmetric(horizontal: 24),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: ListView(
         children: switch (settingsTab) {
           0 => [
@@ -17,7 +17,7 @@ extension _Settings on _HomeState {
             ParameterRow(
               Strings.text('theme'),
               trailing: SizedBox(
-                width: 520,
+                width: 432,
                 child: ChoiceButtons<String>(
                   value: c.theme,
                   values: const ['system', 'light', 'dark'],
@@ -300,21 +300,7 @@ extension _Settings on _HomeState {
       ),
     ),
   );
-  Future<void> openProject() async {
-    try {
-      if (await launchUrl(
-        Uri.parse(BuildChannel.projectUrl),
-        mode: LaunchMode.externalApplication,
-      )) {
-        return;
-      }
-    } catch (_) {}
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(Strings.text('project_open_failed'))),
-      );
-    }
-  }
+  Future<void> openProject() => openProjectLink(context);
 
   Widget projectLink() => LayoutBuilder(
     builder: (context, box) => ParameterRow(

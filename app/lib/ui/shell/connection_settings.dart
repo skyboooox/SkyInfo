@@ -24,6 +24,7 @@ extension _ConnectionSettings on _HomeState {
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, setState) => SettingsEditor(
+          controller: c,
           onNavigate: (p) {
             Navigator.pop(context);
             update(() {

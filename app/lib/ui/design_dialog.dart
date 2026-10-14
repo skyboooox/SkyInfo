@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import 'industrial.dart';
 import 'navigation.dart';
 import 'layout.dart';
+import '../data/app_controller.dart';
+import '../domain/build_channel.dart';
+import 'release_notice.dart';
+import 'project_link.dart';
 
 Future<T?> showDesignDialog<T>({
   required BuildContext context,
@@ -38,8 +42,8 @@ class DesignDialog extends StatelessWidget {
     super.key,
     required this.title,
     required this.child,
-    this.width = 1440,
-    this.height = 820,
+    this.width = 1232,
+    this.height = 568,
     this.footer,
     this.onClose,
   });
@@ -51,7 +55,7 @@ class DesignDialog extends StatelessWidget {
       width: width,
       height: height,
       child: Padding(
-        padding: EdgeInsets.all(24),
+        padding: EdgeInsets.all(16),
         child: Column(
           children: [
             Container(
@@ -66,7 +70,7 @@ class DesignDialog extends StatelessWidget {
                   Expanded(
                     child: Text(
                       title,
-                      style: TextStyle(fontSize: 32),
+                      style: TextStyle(fontSize: 24),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -169,7 +173,7 @@ class ParameterInput extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) => ConstrainedBox(
-    constraints: const BoxConstraints(minHeight: 80),
+    constraints: const BoxConstraints(minHeight: 64),
     child: TextField(
       controller: controller,
       maxLength: maxLength,
@@ -179,7 +183,7 @@ class ParameterInput extends StatelessWidget {
       enableSuggestions: false,
       smartDashesType: SmartDashesType.disabled,
       smartQuotesType: SmartQuotesType.disabled,
-      style: TextStyle(fontSize: 20, color: Palette.of(context).ink),
+      style: TextStyle(fontSize: 18, color: Palette.of(context).ink),
       onChanged: onChanged,
       decoration: InputDecoration(
         labelText: label,
@@ -193,6 +197,7 @@ class ParameterInput extends StatelessWidget {
 
 class SettingsEditor extends StatefulWidget {
   final String title;
+  final AppController controller;
   final Widget child, footer;
   final ValueChanged<int> onNavigate, onTab;
   final int selectedTab;
@@ -201,6 +206,7 @@ class SettingsEditor extends StatefulWidget {
     required this.title,
     required this.child,
     required this.footer,
+    required this.controller,
     required this.onNavigate,
     required this.onTab,
     this.selectedTab = 3,
@@ -236,6 +242,13 @@ class _SettingsEditorState extends State<SettingsEditor> {
               onMenu: openNavigation,
             ),
             const SizedBox(height: 16),
+            if (BuildChannel.isBeta) ...[
+              ReleaseNotice(
+                version: widget.controller.appVersion,
+                onOpen: () => openProjectLink(context),
+              ),
+              const SizedBox(height: 16),
+            ],
             Expanded(
               child: CategoryPane<int>(
                 values: const [0, 1, 2, 3, 4],

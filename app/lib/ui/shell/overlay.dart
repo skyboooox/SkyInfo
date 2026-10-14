@@ -7,7 +7,7 @@ extension _Overlay on _HomeState {
   Widget overlayPage() => Column(
     children: [
       SizedBox(
-        height: 208,
+        height: 112,
         child: Panel(
           title: Strings.text('text_de61aa8e1c'),
           child: overlayPreview(),

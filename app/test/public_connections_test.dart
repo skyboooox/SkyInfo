@@ -15,8 +15,8 @@ void main() {
         'https://ha.example.com/',
         'http://192.168.10.40:8123/',
         'http://[::1]:8123/',
-      'HTTP://home.example.com:8123/',
-      'HTTPS://HA.example.com/',
+        'HTTP://home.example.com:8123/',
+        'HTTPS://HA.example.com/',
       ]) {
         expect(validHaEndpoint(value), isNotNull);
       }

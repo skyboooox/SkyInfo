@@ -36,9 +36,9 @@ class _FieldRowState extends State<_FieldRow> {
   Widget build(BuildContext context) {
     final p = Palette.of(context), m = widget.metric;
     return Container(
-      height: MediaQuery.textScalerOf(context).scale(20) <= 20
-          ? 80
-          : MediaQuery.textScalerOf(context).scale(20) * 2.6 + 24,
+      height: MediaQuery.textScalerOf(context).scale(18) <= 18
+          ? 64
+          : MediaQuery.textScalerOf(context).scale(18) * 2.6 + 24,
       decoration: BoxDecoration(
         border: Border(bottom: BorderSide(color: p.grid)),
       ),
@@ -57,7 +57,7 @@ class _FieldRowState extends State<_FieldRow> {
                     m.name,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 20),
+                    style: const TextStyle(fontSize: 18),
                   ),
                 ),
               ),

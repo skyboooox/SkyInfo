@@ -9,6 +9,10 @@ import 'package:skyinfo/main.dart';
 import 'package:skyinfo/ui/attention.dart';
 import 'package:skyinfo/ui/history_preferences.dart';
 import 'package:skyinfo/ui/industrial.dart';
+import 'package:skyinfo/ui/layout.dart';
+import 'package:skyinfo/ui/touch_targets.dart';
+import 'package:skyinfo/ui/design_dialog.dart';
+import 'package:skyinfo/ui/network_adb_settings.dart';
 import 'package:skyinfo/ui/tile_editor.dart';
 
 class UiBridge extends VehicleBridge {
@@ -275,6 +279,111 @@ void main() {
     await t.tap(find.text('取消'));
     await t.pumpAndSettle();
     t.view.resetViewInsets();
+    await dispose(t, c);
+  });
+
+  testWidgets('车机600dp配置预览与参数左右排列，窄屏才上下重排', (t) async {
+    viewport(t, size: const Size(1280, 600));
+    await t.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: Builder(
+            builder: (context) => TextButton(
+              onPressed: () => showDesignDialog(
+                context: context,
+                builder: (_) => DesignDialog(
+                  title: '配置',
+                  child: PreviewLayout(
+                    preview: const SizedBox(key: ValueKey('preview')),
+                    parameters: const SizedBox(key: ValueKey('parameters')),
+                  ),
+                ),
+              ),
+              child: const Text('打开'),
+            ),
+          ),
+        ),
+      ),
+    );
+    await t.tap(find.text('打开'));
+    await t.pumpAndSettle();
+    final preview = t.getRect(find.byKey(const ValueKey('preview')));
+    final parameters = t.getRect(find.byKey(const ValueKey('parameters')));
+    expect(preview.top, parameters.top);
+    expect(preview.right, lessThan(parameters.left));
+    expect(parameters.width, greaterThan(600));
+    expect(t.takeException(), isNull);
+    await t.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('标准卡片视觉缩小时开关及编辑按钮仍有48dp实际热区', (t) async {
+    viewport(t, size: const Size(1280, 600));
+    var taps = 0;
+    await t.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: SizedBox(
+            width: 320,
+            height: 160,
+            child: FittedBox(
+              fit: BoxFit.fill,
+              child: SizedBox(
+                width: 400,
+                height: 200,
+                child: TouchTargets(
+                  visualScale: .8,
+                  child: Row(
+                    children: [
+                      IndustrialIconButton(
+                        icon: Icons.edit,
+                        tooltip: '卡片编辑',
+                        onPressed: () => taps++,
+                      ),
+                      IndustrialSwitch(value: true, onChanged: (_) => taps++),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    for (final finder in [
+      find.byTooltip('卡片编辑'),
+      find.byType(IndustrialSwitch),
+    ]) {
+      final box = t.renderObject<RenderBox>(finder);
+      final origin = box.localToGlobal(Offset.zero);
+      final end = box.localToGlobal(Offset(box.size.width, box.size.height));
+      expect(end.dy - origin.dy, greaterThanOrEqualTo(48));
+      expect(end.dx - origin.dx, greaterThanOrEqualTo(48));
+      await t.tapAt(Offset((origin.dx + end.dx) / 2, origin.dy + 2));
+      await t.pumpAndSettle();
+    }
+    expect(taps, 2);
+    expect(t.takeException(), isNull);
+    await t.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('beta的网络ADB独立设置编辑器保留版本提示', (t) async {
+    viewport(t, size: const Size(1280, 600));
+    final c = await load(t, UiBridge());
+    await t.pumpWidget(
+      MaterialApp(
+        home: NetworkAdbSettings(
+          controller: c,
+          onNavigate: (_) {},
+          onTab: (_) {},
+        ),
+      ),
+    );
+    await t.pumpAndSettle();
+    expect(
+      find.byKey(const ValueKey('beta-notice')),
+      appFlavor == 'beta' ? findsOneWidget : findsNothing,
+    );
+    expect(t.takeException(), isNull);
     await dispose(t, c);
   });
 

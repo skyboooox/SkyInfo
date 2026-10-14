@@ -129,29 +129,32 @@ extension _Information on _HomeState {
                                   layout.span(slot.tile.columns) / layout.scale,
                               height:
                                   layout.span(slot.tile.rows) / layout.scale,
-                              child: MetricTile(
-                                key: ValueKey(slot.tile.id),
-                                tile: slot.tile,
-                                controller: c,
-                                now: now,
-                                clock: DateTime.now,
-                                editing: editing,
-                                onEdit: () => addTile(slot.tile),
-                                onHistory:
-                                    !slot.tile.kind.controls &&
-                                        slot.tile.fields.any(
-                                          (id) => ![
-                                            'text',
-                                          ].contains(c.metric(id).encoding),
+                              child: TouchTargets(
+                                visualScale: layout.scale,
+                                child: MetricTile(
+                                  key: ValueKey(slot.tile.id),
+                                  tile: slot.tile,
+                                  controller: c,
+                                  now: now,
+                                  clock: DateTime.now,
+                                  editing: editing,
+                                  onEdit: () => addTile(slot.tile),
+                                  onHistory:
+                                      !slot.tile.kind.controls &&
+                                          slot.tile.fields.any(
+                                            (id) => ![
+                                              'text',
+                                            ].contains(c.metric(id).encoding),
+                                          )
+                                      ? () => showHistoryDetails(
+                                          context,
+                                          c,
+                                          slot.tile,
+                                          onEdit: () => addTile(slot.tile),
+                                          onConnection: connectionSettings,
                                         )
-                                    ? () => showHistoryDetails(
-                                        context,
-                                        c,
-                                        slot.tile,
-                                        onEdit: () => addTile(slot.tile),
-                                        onConnection: connectionSettings,
-                                      )
-                                    : null,
+                                      : null,
+                                ),
                               ),
                             ),
                           ),
