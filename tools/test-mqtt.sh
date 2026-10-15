@@ -1,7 +1,7 @@
 #!/bin/sh
 set -eu
 TOOLS_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
-CERT_DIR="$TOOLS_DIR/../app/.dart_tool/mqtt-test"
+CERT_DIR="$TOOLS_DIR/../app/.local/mqtt-test"
 BROKER_NAME="skyinfo-mqtt-test-$$"
 SKYINFO_TEST_NETWORK="$BROKER_NAME"
 export SKYINFO_TEST_NETWORK

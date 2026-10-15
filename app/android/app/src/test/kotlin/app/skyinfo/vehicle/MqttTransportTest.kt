@@ -26,7 +26,7 @@ import javax.net.ssl.TrustManagerFactory
 class MqttTransportTest {
     private fun verify(protocol: String, secure: Boolean = true) {
         assumeTrue(System.getenv(if (secure) "SKYINFO_MQTT_TEST_TLS" else "SKYINFO_MQTT_TEST_TCP") == "1")
-        val trust = KeyStore.getInstance(KeyStore.getDefaultType()).apply { load(null,null); File("/workspace/.dart_tool/mqtt-test/ca.crt").inputStream().use { setCertificateEntry("test",CertificateFactory.getInstance("X.509").generateCertificate(it)) } }
+        val trust = KeyStore.getInstance(KeyStore.getDefaultType()).apply { load(null,null); File("/workspace/.local/mqtt-test/ca.crt").inputStream().use { setCertificateEntry("test",CertificateFactory.getInstance("X.509").generateCertificate(it)) } }
         val factory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm()).apply { init(trust) }
         val ssl = SSLContext.getInstance("TLS").apply { init(null,factory.trustManagers,null) }.socketFactory
         val topic = "test/skyinfo/${UUID.randomUUID()}"
