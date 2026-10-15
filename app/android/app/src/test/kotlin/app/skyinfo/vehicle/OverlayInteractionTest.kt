@@ -41,7 +41,7 @@ class OverlayInteractionTest {
         assertTrue(runCatching { primaryTouchDevice(output.replace("max 1930","max 10")) }.isFailure)
         assertTrue(runCatching { primaryTouchDevice(output + "\n" + output) }.isFailure)
     }
-    private fun config() = JSONObject().put("overlayEnabled",true).put("overlayLeft",128).put("overlays",JSONArray().put(
+    private fun config() = JSONObject().put("overlayEnabled",true).put("overlays",JSONArray().put(
         JSONObject().put("field","voltage").put("icon","battery").put("unit","V").put("alignment","left")))
     private fun view(overlay: OverlayWindow) = ReflectionHelpers.getField<View>(overlay,"view")
     private fun params(overlay: OverlayWindow) = ReflectionHelpers.getField<WindowManager.LayoutParams>(overlay,"parameters")
@@ -97,6 +97,30 @@ class OverlayInteractionTest {
         assertEquals(x,params(overlay).x); assertEquals(y,params(overlay).y)
         shadowOf(Looper.getMainLooper()).idleFor(Duration.ofSeconds(6))
         assertTrue(params(overlay).flags and WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE != 0)
+        overlay.close()
+    }
+    @Test fun resetDuringDragCancelsTheGestureWithoutSavingItsOldPosition() {
+        val events = mutableListOf<JSONObject>(); val overlay = window(events)
+        overlay.arm()
+        val down = SystemClock.uptimeMillis()
+        fun touch(action: Int, x: Float, y: Float) {
+            val event = MotionEvent.obtain(down,SystemClock.uptimeMillis(),action,x,y,0)
+            view(overlay).dispatchTouchEvent(event); event.recycle()
+        }
+        touch(MotionEvent.ACTION_DOWN,20f,20f)
+        shadowOf(Looper.getMainLooper()).idleFor(Duration.ofMillis(700))
+        touch(MotionEvent.ACTION_MOVE,120f,220f)
+        assertTrue(params(overlay).y > 0)
+        overlay.resetPosition()
+        touch(MotionEvent.ACTION_UP,120f,220f)
+        shadowOf(Looper.getMainLooper()).idleFor(Duration.ofSeconds(6))
+        assertFalse(events.any { it.has("x") })
+        assertEquals(0,params(overlay).y)
+        assertEquals((1280-params(overlay).width)/2,params(overlay).x)
+        assertTrue(params(overlay).flags and WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE != 0)
+        overlay.update(config(),emptyMap(),emptyMap())
+        assertEquals(0,params(overlay).y)
+        assertEquals((1280-params(overlay).width)/2,params(overlay).x)
         overlay.close()
     }
     @Test fun closeCancelsPendingUnlockAndCannotArmRemovedWindow() {

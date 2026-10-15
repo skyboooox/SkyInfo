@@ -135,16 +135,24 @@ void main() {
     expect(find.byType(Drawer), findsNothing);
     expect(tester.getSize(find.text('信息').last).height, lessThan(32));
     await tester.tapAt(const Offset(800, 400));
-    await tester.pumpAndSettle();
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+    await tester.pump();
     expect(find.text('悬浮窗'), findsNothing);
     await tester.tap(find.byIcon(Icons.menu));
-    await tester.pumpAndSettle();
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+    await tester.pump();
     await tester.binding.handlePopRoute();
-    await tester.pumpAndSettle();
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+    await tester.pump();
     expect(find.text('悬浮窗'), findsNothing);
     for (final name in ['悬浮窗', '连接', '设置', '信息']) {
       await tester.tap(find.byIcon(Icons.menu));
-      await tester.pumpAndSettle();
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.pump();
       await tester.tap(find.text(name).last);
       await tester.pump(const Duration(milliseconds: 150));
       expect(tester.takeException(), isNull);

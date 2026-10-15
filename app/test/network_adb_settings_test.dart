@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:skyinfo/data/app_controller.dart';
+import 'package:skyinfo/domain/build_channel.dart';
 import 'package:skyinfo/ui/network_adb_settings.dart';
 import 'package:skyinfo/ui/industrial.dart';
 
@@ -51,6 +52,10 @@ void main() {
     }
     await tester.pumpWidget(
       MaterialApp(
+        builder: (context, child) => MediaQuery(
+          data: MediaQuery.of(context).copyWith(disableAnimations: true),
+          child: child!,
+        ),
         theme: industrialTheme(brightness),
         home: NetworkAdbSettings(
           controller: controller,
@@ -143,7 +148,9 @@ void main() {
       expect(tester.takeException(), isNull);
       await expectLater(
         find.byType(NetworkAdbSettings),
-        matchesGoldenFile('goldens/${brightness.name}-network-adb.png'),
+        matchesGoldenFile(
+          'goldens/${BuildChannel.isTesting ? 'beta-' : ''}${brightness.name}-network-adb.png',
+        ),
       );
     });
   }

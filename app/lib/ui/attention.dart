@@ -1,83 +1,8 @@
 import 'package:flutter/material.dart';
 import 'industrial.dart';
 
-class AttentionSurface extends StatefulWidget {
-  final Widget child;
-  final Color color;
-  const AttentionSurface({super.key, required this.child, required this.color});
-  @override
-  State<AttentionSurface> createState() => _AttentionSurfaceState();
-}
-
-class _AttentionSurfaceState extends State<AttentionSurface>
-    with SingleTickerProviderStateMixin {
-  late final animation = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 1400),
-  );
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (!MediaQuery.disableAnimationsOf(context) &&
-        TickerMode.valuesOf(context).enabled) {
-      if (!animation.isAnimating) animation.repeat();
-    } else {
-      animation.stop();
-    }
-  }
-
-  @override
-  void dispose() {
-    animation.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) => ClipRect(
-    child: AnimatedBuilder(
-      animation: animation,
-      builder: (context, child) => CustomPaint(
-        painter: _AttentionStripes(
-          widget.color.withValues(
-            alpha: Theme.of(context).brightness == Brightness.dark ? .10 : .06,
-          ),
-          animation.value,
-        ),
-        child: child,
-      ),
-      child: widget.child,
-    ),
-  );
-}
-
-class _AttentionStripes extends CustomPainter {
-  final Color color;
-  final double phase;
-  _AttentionStripes(this.color, this.phase);
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()..color = color;
-    const period = 40.0;
-    for (
-      double x = -size.height - period;
-      x < size.width + period;
-      x += period
-    ) {
-      final offset = x + phase * period;
-      final path = Path()
-        ..moveTo(offset, size.height)
-        ..lineTo(offset + size.height, 0)
-        ..lineTo(offset + size.height + 20, 0)
-        ..lineTo(offset + 20, size.height)
-        ..close();
-      canvas.drawPath(path, paint);
-    }
-  }
-
-  @override
-  bool shouldRepaint(_AttentionStripes old) =>
-      old.phase != phase || old.color != color;
-}
+import 'attention_surface.dart';
+export 'attention_surface.dart';
 
 class CommandFeedback extends StatelessWidget {
   final String status, label;

@@ -5,9 +5,10 @@ import android.os.IBinder
 import android.os.Parcel
 import org.json.JSONObject
 
-class ReadOnlyVehicle(private val fields: Map<String, JSONObject>) {
+class ReadOnlyVehicle(private val fields: Map<String, JSONObject>, private val altitude: GnssAltitude? = null) {
     fun read(id: String): JSONObject {
         require(fields.containsKey(id))
+        if (id == GNSS_ALTITUDE) return altitude?.read() ?: failure("unsupported", id)
         if (isDerived(id)) return failure("unsupported", id)
         if (id == "system.android_version") return value(Build.VERSION.RELEASE, id)
         if (id == "system.firmware_version") return try {

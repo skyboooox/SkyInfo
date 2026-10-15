@@ -20,6 +20,14 @@ class Motion extends StatelessWidget {
         : Duration(milliseconds: 120),
     switchInCurve: Curves.easeOutCubic,
     switchOutCurve: Curves.easeOutCubic,
+    layoutBuilder: (current, previous) => Stack(
+      alignment: Alignment.center,
+      children: [
+        for (final old in previous)
+          ExcludeSemantics(child: IgnorePointer(child: old)),
+        ?current,
+      ],
+    ),
     transitionBuilder: (child, animation) => LayoutBuilder(
       builder: (context, box) => FadeTransition(
         opacity: animation,
@@ -34,6 +42,6 @@ class Motion extends StatelessWidget {
             : child,
       ),
     ),
-    child: KeyedSubtree(key: ValueKey(identity), child: child),
+    child: RepaintBoundary(key: ValueKey(identity), child: child),
   );
 }

@@ -1642,5 +1642,23 @@
     "shellRead": "available",
     "nameKey": "text_5c89700f5c",
     "categoryKey": "text_c2534d31c1"
+  },
+  {
+    "id": "location.gnss_altitude",
+    "name": "海拔 · GNSS",
+    "category": "车身与环境",
+    "icon": "tabler-arrows-up-down",
+    "unit": "m",
+    "encoding": "m",
+    "displayAllowed": true,
+    "entityKey": "gnss_altitude",
+    "subscription": "passive_location",
+    "verifiedFirmware": "59.7.4.26080703.1",
+    "shellRead": "unverified",
+    "valueType": "number",
+    "unitConfidence": "documented",
+    "altitudeReference": "WGS84",
+    "nameKey": "text_605a3e47ec",
+    "categoryKey": "text_698a26075a"
   }
 ]

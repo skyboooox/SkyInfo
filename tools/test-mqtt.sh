@@ -33,4 +33,4 @@ allow_anonymous true
 CONF
 docker network create "$SKYINFO_TEST_NETWORK" >/dev/null
 docker run -d --name "$BROKER_NAME" --network "$SKYINFO_TEST_NETWORK" --network-alias host.docker.internal -v "$CERT_DIR:/mosquitto/config:ro" eclipse-mosquitto:2.0.22@sha256:199ea8ef2e35ec2b1b37e59cfd1dbae538ed4dfa4a2251a121a52215a6248a21 >/dev/null
-"$TOOLS_DIR/docker.sh" sh -c 'cd android && SKYINFO_MQTT_TEST_TLS=1 SKYINFO_MQTT_TEST_TCP=1 ./gradlew :app:testBetaDebugUnitTest :app:testStableDebugUnitTest --rerun --no-daemon "$@"' sh "$@"
+"$TOOLS_DIR/docker.sh" sh -c 'cd android && SKYINFO_MQTT_TEST_TLS=1 SKYINFO_MQTT_TEST_TCP=1 ./gradlew :app:testAlphaDebugUnitTest :app:testBetaDebugUnitTest :app:testStableDebugUnitTest --rerun --no-daemon "$@"' sh "$@"

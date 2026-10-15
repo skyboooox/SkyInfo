@@ -14,29 +14,65 @@ Future<T?> showDesignDialog<T>({
   bool useSafeArea = true,
   bool barrierDismissible = true,
   Color? barrierColor,
-}) => showDialog<T>(
-  context: context,
-  builder: builder,
-  useSafeArea: useSafeArea,
-  barrierDismissible: barrierDismissible,
-  barrierColor: barrierColor,
-  animationStyle: AnimationStyle(
-    duration: MediaQuery.disableAnimationsOf(context)
-        ? Duration.zero
-        : const Duration(milliseconds: 240),
-    reverseDuration: MediaQuery.disableAnimationsOf(context)
-        ? Duration.zero
-        : const Duration(milliseconds: 120),
-    curve: Curves.easeOutCubic,
-    reverseCurve: Curves.easeOutCubic,
+}) => Navigator.of(context, rootNavigator: true).push<T>(
+  _DesignDialogRoute<T>(
+    context: context,
+    builder: builder,
+    themes: InheritedTheme.capture(
+      from: context,
+      to: Navigator.of(context, rootNavigator: true).context,
+    ),
+    useSafeArea: useSafeArea,
+    barrierDismissible: barrierDismissible,
+    barrierColor: barrierColor ?? Colors.black54,
+    animationStyle: AnimationStyle(
+      duration: MediaQuery.disableAnimationsOf(context)
+          ? Duration.zero
+          : const Duration(milliseconds: 240),
+      reverseDuration: MediaQuery.disableAnimationsOf(context)
+          ? Duration.zero
+          : const Duration(milliseconds: 120),
+    ),
   ),
 );
+
+class _DesignDialogRoute<T> extends DialogRoute<T> {
+  _DesignDialogRoute({
+    required super.context,
+    required super.builder,
+    super.themes,
+    super.useSafeArea,
+    super.barrierDismissible,
+    super.barrierColor,
+    super.animationStyle,
+  });
+  @override
+  Widget buildTransitions(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
+    if (MediaQuery.disableAnimationsOf(context)) return child;
+    final eased = animation.drive(CurveTween(curve: Curves.easeOutCubic));
+    return IgnorePointer(
+      ignoring: animation.status == AnimationStatus.reverse,
+      child: FadeTransition(
+        opacity: eased,
+        child: ScaleTransition(
+          scale: Tween(begin: .985, end: 1.0).animate(eased),
+          child: child,
+        ),
+      ),
+    );
+  }
+}
 
 class DesignDialog extends StatelessWidget {
   final String title;
   final double width, height;
   final Widget child;
-  final Widget? footer;
+  final Widget? footer, leading;
   final VoidCallback? onClose;
   const DesignDialog({
     super.key,
@@ -45,6 +81,7 @@ class DesignDialog extends StatelessWidget {
     this.width = 1232,
     this.height = 568,
     this.footer,
+    this.leading,
     this.onClose,
   });
   @override
@@ -67,6 +104,7 @@ class DesignDialog extends StatelessWidget {
               ),
               child: Row(
                 children: [
+                  if (leading != null) ...[leading!, const SizedBox(width: 8)],
                   Expanded(
                     child: Text(
                       title,
@@ -230,46 +268,48 @@ class _SettingsEditorState extends State<SettingsEditor> {
   @override
   Widget build(BuildContext context) => Material(
     color: Palette.of(context).paper,
-    child: SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            NavigationHeading(
-              title: widget.title,
-              menuOpen: menuOpen,
-              menuKey: menuKey,
-              onMenu: openNavigation,
-            ),
-            const SizedBox(height: 16),
-            if (BuildChannel.isBeta) ...[
-              ReleaseNotice(
-                version: widget.controller.appVersion,
-                onOpen: () => openProjectLink(context),
+    child: IndustrialPaper(
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            children: [
+              NavigationHeading(
+                title: widget.title,
+                menuOpen: menuOpen,
+                menuKey: menuKey,
+                onMenu: openNavigation,
               ),
               const SizedBox(height: 16),
-            ],
-            Expanded(
-              child: CategoryPane<int>(
-                values: const [0, 1, 2, 3, 4],
-                selected: widget.selectedTab,
-                label: (i) => settingsTitles[i],
-                onChanged: widget.onTab,
-                child: Column(
-                  children: [
-                    Expanded(child: widget.child),
-                    const SizedBox(height: 16),
-                    if (widget.footer is Row)
-                      ResponsiveToolbar(
-                        children: (widget.footer as Row).children,
-                      )
-                    else
-                      widget.footer,
-                  ],
+              if (BuildChannel.isTesting) ...[
+                ReleaseNotice(
+                  version: widget.controller.appVersion,
+                  onOpen: () => openProjectLink(context),
+                ),
+                const SizedBox(height: 16),
+              ],
+              Expanded(
+                child: CategoryPane<int>(
+                  values: settingsTabs,
+                  selected: widget.selectedTab,
+                  label: (i) => settingsTitles[i],
+                  onChanged: widget.onTab,
+                  child: Column(
+                    children: [
+                      Expanded(child: widget.child),
+                      const SizedBox(height: 16),
+                      if (widget.footer is Row)
+                        ResponsiveToolbar(
+                          children: (widget.footer as Row).children,
+                        )
+                      else
+                        widget.footer,
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     ),

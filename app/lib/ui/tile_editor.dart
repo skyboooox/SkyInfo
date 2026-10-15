@@ -4,6 +4,7 @@ import '../data/app_controller.dart';
 import '../domain/models.dart';
 import 'industrial.dart';
 import 'design_dialog.dart';
+import 'motion.dart';
 import 'component_library.dart';
 import 'icon_picker.dart';
 import 'unit_picker.dart';
@@ -319,7 +320,10 @@ class _TileEditorState extends State<_TileEditor> {
         ),
         const SizedBox(height: 24),
         Expanded(
-          child: LiveComponentPreview(controller: widget.c, tile: draft),
+          child: Motion(
+            identity: (kind, size),
+            child: LiveComponentPreview(controller: widget.c, tile: draft),
+          ),
         ),
       ],
     ),
@@ -437,38 +441,44 @@ class _TileEditorState extends State<_TileEditor> {
       children: [
         if (widget.existing == null) ...[steps(), const SizedBox(height: 12)],
         Expanded(
-          child: switch (step) {
-            0 => FieldSelector(
-              controller: widget.c,
-              filters: fieldFilters,
-              selected: fields,
-              onChanged: (value) => update(() => fields = value),
-              action: IndustrialButton(
-                Strings.text('use_preset'),
-                width: 160,
-                onPressed: () async {
-                  final preset = await choosePreset(context, widget.c);
-                  if (preset == null || !mounted) return;
-                  update(() {
-                    fields = [...preset.fields];
-                    kind = preset.kind;
-                    size = (preset.columns, preset.rows);
-                    title.text = preset.title;
-                    minutes = preset.historyMinutes;
-                    minimum.text = preset.minimum?.toString() ?? '';
-                    maximum.text = preset.maximum?.toString() ?? '';
-                    step = 2;
-                  });
-                },
+          child: Motion(
+            identity: step,
+            child: switch (step) {
+              0 => FieldSelector(
+                controller: widget.c,
+                filters: fieldFilters,
+                selected: fields,
+                onChanged: (value) => update(() => fields = value),
+                action: IndustrialButton(
+                  Strings.text('use_preset'),
+                  width: 160,
+                  onPressed: () async {
+                    final preset = await choosePreset(context, widget.c);
+                    if (preset == null || !mounted) return;
+                    update(() {
+                      fields = [...preset.fields];
+                      kind = preset.kind;
+                      size = (preset.columns, preset.rows);
+                      title.text = preset.title;
+                      minutes = preset.historyMinutes;
+                      minimum.text = preset.minimum?.toString() ?? '';
+                      maximum.text = preset.maximum?.toString() ?? '';
+                      step = 2;
+                    });
+                  },
+                ),
               ),
-            ),
-            1 => ComponentStyleSelector(
-              controller: widget.c,
-              draft: draft,
-              onChanged: setKind,
-            ),
-            _ => PreviewLayout(preview: preview(), parameters: configuration()),
-          },
+              1 => ComponentStyleSelector(
+                controller: widget.c,
+                draft: draft,
+                onChanged: setKind,
+              ),
+              _ => PreviewLayout(
+                preview: preview(),
+                parameters: configuration(),
+              ),
+            },
+          ),
         ),
       ],
     ),

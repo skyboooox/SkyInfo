@@ -41,8 +41,11 @@ for f in manifest['fields']:
         entityKey='low_voltage' if source == '1032/7/1128267816' else
         'android_version' if source == 'system.android_version' else
         'firmware_version' if source == 'system.firmware_version' else
+        'gnss_altitude' if source == 'location.gnss_altitude' else
         source.replace('/', '_').replace('-', 'n'), subscription=support.get(source, {}).get('subscription', 'unverified'),
         verifiedFirmware=adaptation.get('firmware', ''), shellRead=support.get(source, {}).get('shell_quality', 'unverified')))
+    if source == 'location.gnss_altitude':
+        fields[-1].update(valueType='number', unitConfidence='documented', altitudeReference='WGS84', subscription='passive_location')
     if source in {'1014/7/1246777400','1014/5/1145045040','1012/5/339738642',
         '1013/5/874512392','1013/5/874512400','1032/7/1128267816',
         '1001/5/947912728','1001/5/1267728400','1001/5/947912736','1001/5/947912752'}:

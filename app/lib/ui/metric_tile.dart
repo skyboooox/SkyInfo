@@ -7,12 +7,15 @@ import 'industrial.dart';
 import 'entity_content.dart';
 import 'history_chart.dart';
 import 'value_gauge.dart';
+import 'touch_targets.dart';
+import 'data_activity.dart';
+import 'retained_history.dart';
 
 class MetricTile extends StatefulWidget {
   final TileSpec tile;
   final AppController controller;
   final DateTime now;
-  final bool editing, preview;
+  final bool editing, preview, externalEditAction;
   final VoidCallback? onHistory;
   final DateTime Function()? clock;
   final VoidCallback onEdit;
@@ -24,6 +27,7 @@ class MetricTile extends StatefulWidget {
     required this.onEdit,
     this.editing = false,
     this.preview = false,
+    this.externalEditAction = false,
     this.onHistory,
     this.clock,
   });
@@ -32,6 +36,7 @@ class MetricTile extends StatefulWidget {
 }
 
 class _MetricTileState extends State<MetricTile> {
+  final historyApplied = ValueNotifier<int>(0);
   DateTime get displayNow => widget.clock?.call() ?? widget.now;
   Future<List<List<HistoryPoint>>>? _history;
   Timer? _historyRefresh;
@@ -70,6 +75,7 @@ class _MetricTileState extends State<MetricTile> {
     for (final listener in _historyListeners) {
       listener.$1.removeListener(listener.$2);
     }
+    historyApplied.dispose();
     super.dispose();
   }
 
@@ -290,25 +296,18 @@ class _MetricTileState extends State<MetricTile> {
             ),
           ),
         Expanded(
-          child: FutureBuilder<List<List<HistoryPoint>>>(
+          child: RetainedHistory(
+            key: ValueKey((
+              widget.controller,
+              widget.tile.fields.join('\u0000'),
+              widget.tile.historyMinutes,
+            )),
             future: _history,
-            builder: (context, s) {
-              if (s.connectionState != ConnectionState.done) {
-                return Center(child: Text(Strings.text('text_3182341bcc')));
-              }
-              if (s.hasError) {
-                return Center(
-                  child: Text(
-                    s.error.toString().replaceFirst('Bad state: ', ''),
-                  ),
-                );
-              }
-              if (s.data == null || s.data!.every((v) => v.isEmpty)) {
-                return Center(child: Text(Strings.text('text_482a16ecfa')));
-              }
+            onApplied: () => historyApplied.value++,
+            builder: (data) {
               if (widget.tile.kind == WidgetKind.timeline) {
                 return StateTimeline(
-                  points: s.data!.first,
+                  points: data.first,
                   minutes: widget.tile.historyMinutes,
                 );
               }
@@ -316,7 +315,7 @@ class _MetricTileState extends State<MetricTile> {
                 children: [
                   Expanded(
                     child: HistoryChart(
-                      series: s.data!,
+                      series: data,
                       minutes: widget.tile.historyMinutes,
                       minimum: widget.tile.minimum,
                       maximum: widget.tile.maximum,
@@ -371,10 +370,10 @@ class _MetricTileState extends State<MetricTile> {
                 ),
               ),
             ),
-            IconButton(
+            IndustrialIconButton(
               tooltip: Strings.text('text_a99001a7bf'),
               onPressed: () => setState(() => _query(refresh: true)),
-              icon: Icon(Icons.refresh),
+              icon: Icons.refresh,
             ),
           ],
         ),
@@ -512,6 +511,10 @@ class _MetricTileState extends State<MetricTile> {
       title: t.title,
       dashboard: true,
       showTitle: t.showTitle,
+      titleIndicator: DataActivityDot(
+        readings: [for (final id in t.fields) widget.controller.reading(id)],
+        historyApplied: historyApplied,
+      ),
       leading: t.showIcon && t.icon != null
           ? MetricIcon(t.icon, size: t.columns == 1 || t.rows == 1 ? 20 : 28)
           : t.showDataIcons &&
@@ -527,11 +530,13 @@ class _MetricTileState extends State<MetricTile> {
       action: widget.preview
           ? null
           : widget.editing
-          ? IndustrialIconButton(
-              onPressed: widget.onEdit,
-              icon: Icons.edit_outlined,
-              tooltip: Strings.text('text_17fe884603'),
-            )
+          ? widget.externalEditAction
+                ? SizedBox(width: TouchTargets.minimum(context))
+                : IndustrialIconButton(
+                    onPressed: widget.onEdit,
+                    icon: Icons.edit_outlined,
+                    tooltip: Strings.text('text_17fe884603'),
+                  )
           : null,
       child: Padding(
         padding: EdgeInsets.zero,

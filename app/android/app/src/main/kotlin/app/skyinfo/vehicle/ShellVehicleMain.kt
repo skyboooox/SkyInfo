@@ -42,6 +42,7 @@ object ShellVehicleMain {
                     try {
                         val result = when(command.getString("op")) {
                             "identity" -> JSONObject().put("uid",Process.myUid()).put("pid",Process.myPid()).put("backend","shell_bridge")
+                            "restoreAdbSettings" -> AutoAdbSettings(AndroidAdbSettings(context, user)).restore(true, prepareAppPermission = true)
                             "read" -> reader.read(command.getString("field"))
                             "controls" -> controls.snapshot()
                             "control" -> controls.execute(command.getString("action"),command.getInt("value"))
@@ -54,6 +55,11 @@ object ShellVehicleMain {
                                 JSONObject().put("state",state).put("registered",JSONArray(observer.registered.toList()))
                             }
                             "cancel" -> { observer.close(); JSONObject() }
+                            "overlayReset" -> {
+                                val result = java.util.concurrent.CompletableFuture<Boolean>()
+                                main.post { overlay.resetPosition(); result.complete(true) }
+                                JSONObject().put("reset",result.get(2,java.util.concurrent.TimeUnit.SECONDS))
+                            }
                             "overlayEdit" -> {
                                 val result = java.util.concurrent.CompletableFuture<Boolean>()
                                 main.post { result.complete(overlay.arm()) }

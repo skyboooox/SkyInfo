@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../l10n/strings.dart';
 import 'industrial.dart';
+import 'motion.dart';
 
 class CategoryPane<T> extends StatelessWidget {
   final List<T> values;
@@ -49,7 +50,11 @@ class CategoryPane<T> extends StatelessWidget {
               },
             ),
             const SizedBox(height: 16),
-            Expanded(child: ClipRect(child: child)),
+            Expanded(
+              child: ClipRect(
+                child: Motion(identity: current as Object, child: child),
+              ),
+            ),
           ],
         );
       }
@@ -81,7 +86,11 @@ class CategoryPane<T> extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 16),
-          Expanded(child: ClipRect(child: child)),
+          Expanded(
+            child: ClipRect(
+              child: Motion(identity: current as Object, child: child),
+            ),
+          ),
         ],
       );
     },

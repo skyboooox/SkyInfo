@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:skyinfo/domain/build_channel.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:skyinfo/data/app_controller.dart';
 import 'package:skyinfo/data/vehicle_bridge.dart';
@@ -159,6 +160,10 @@ void main() {
     final c = await load(t, bridge);
     await t.pumpWidget(
       MaterialApp(
+        builder: (context, child) => MediaQuery(
+          data: MediaQuery.of(context).copyWith(disableAnimations: true),
+          child: child!,
+        ),
         theme: industrialTheme(Brightness.light),
         home: Scaffold(
           body: Builder(
@@ -201,6 +206,10 @@ void main() {
     final c = await load(t, bridge);
     await t.pumpWidget(
       MaterialApp(
+        builder: (context, child) => MediaQuery(
+          data: MediaQuery.of(context).copyWith(disableAnimations: true),
+          child: child!,
+        ),
         theme: industrialTheme(Brightness.light),
         home: Scaffold(
           body: Builder(
@@ -286,6 +295,10 @@ void main() {
     viewport(t, size: const Size(1280, 600));
     await t.pumpWidget(
       MaterialApp(
+        builder: (context, child) => MediaQuery(
+          data: MediaQuery.of(context).copyWith(disableAnimations: true),
+          child: child!,
+        ),
         home: Scaffold(
           body: Builder(
             builder: (context) => TextButton(
@@ -321,6 +334,10 @@ void main() {
     var taps = 0;
     await t.pumpWidget(
       MaterialApp(
+        builder: (context, child) => MediaQuery(
+          data: MediaQuery.of(context).copyWith(disableAnimations: true),
+          child: child!,
+        ),
         home: Scaffold(
           body: SizedBox(
             width: 320,
@@ -366,11 +383,15 @@ void main() {
     await t.pumpWidget(const SizedBox());
   });
 
-  testWidgets('beta的网络ADB独立设置编辑器保留版本提示', (t) async {
+  testWidgets('测试渠道的网络ADB独立设置编辑器保留版本提示', (t) async {
     viewport(t, size: const Size(1280, 600));
     final c = await load(t, UiBridge());
     await t.pumpWidget(
       MaterialApp(
+        builder: (context, child) => MediaQuery(
+          data: MediaQuery.of(context).copyWith(disableAnimations: true),
+          child: child!,
+        ),
         home: NetworkAdbSettings(
           controller: c,
           onNavigate: (_) {},
@@ -381,7 +402,7 @@ void main() {
     await t.pumpAndSettle();
     expect(
       find.byKey(const ValueKey('beta-notice')),
-      appFlavor == 'beta' ? findsOneWidget : findsNothing,
+      BuildChannel.isTesting ? findsOneWidget : findsNothing,
     );
     expect(t.takeException(), isNull);
     await dispose(t, c);
@@ -393,6 +414,10 @@ void main() {
     bool changed = false;
     await t.pumpWidget(
       MaterialApp(
+        builder: (context, child) => MediaQuery(
+          data: MediaQuery.of(context).copyWith(disableAnimations: true),
+          child: child!,
+        ),
         theme: industrialTheme(Brightness.light),
         home: Scaffold(
           body: Column(
@@ -427,6 +452,10 @@ void main() {
   testWidgets('等待纹理只在前台运动，减少动画与后台停帧', (t) async {
     viewport(t);
     Widget scene(bool enabled, bool reduce) => MaterialApp(
+      builder: (context, child) => MediaQuery(
+        data: MediaQuery.of(context).copyWith(disableAnimations: true),
+        child: child!,
+      ),
       home: MediaQuery(
         data: MediaQueryData(disableAnimations: reduce),
         child: TickerMode(

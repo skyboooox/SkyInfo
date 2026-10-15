@@ -11,7 +11,7 @@ internal fun overlayFieldIds(config: JSONObject): Set<String> {
 internal fun overlayRequest(config: JSONObject, samples: Map<String, JSONObject>): JSONObject {
     val ids = overlayFieldIds(config)
     val safe = JSONObject()
-    for (key in listOf("overlayEnabled","overlays","theme","overlayFont","overlayOpacity","overlayOffset","overlayLeft","overlayRight","overlayX","overlayY")) {
+    for (key in listOf("overlayEnabled","overlays","theme","overlayFont","overlayOpacity","overlayX","overlayY")) {
         if (config.has(key)) safe.put(key, config.get(key))
     }
     val definitions = config.optJSONObject("haFields") ?: JSONObject()

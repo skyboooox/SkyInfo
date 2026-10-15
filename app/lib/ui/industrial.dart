@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../l10n/strings.dart';
 import 'layout.dart';
+import 'attention_surface.dart';
+export 'industrial_paper.dart';
 import 'touch_targets.dart';
 
 part 'industrial_controls.dart';
@@ -72,6 +74,8 @@ class Palette {
     warning: Color(0xffD6A968),
     red: Color(0xffF18D83),
   );
+  Color get activity =>
+      this == dark ? const Color(0xff88A392) : const Color(0xff6B8776);
   static Palette of(BuildContext c) =>
       Theme.of(c).brightness == Brightness.dark ? dark : light;
 }
@@ -187,7 +191,7 @@ class MetricIcon extends StatelessWidget {
 class Panel extends StatelessWidget {
   final String title;
   final Widget child;
-  final Widget? action, leading;
+  final Widget? action, leading, titleIndicator;
   final bool compact, showTitle, dashboard;
   const Panel({
     super.key,
@@ -195,6 +199,7 @@ class Panel extends StatelessWidget {
     required this.child,
     this.action,
     this.leading,
+    this.titleIndicator,
     this.compact = false,
     this.showTitle = true,
     this.dashboard = false,
@@ -229,6 +234,10 @@ class Panel extends StatelessWidget {
               child: Row(
                 children: [
                   if (leading != null) ...[leading!, SizedBox(width: 10)],
+                  if (showTitle && titleIndicator != null) ...[
+                    titleIndicator!,
+                    const SizedBox(width: 8),
+                  ],
                   Expanded(
                     child: Text(
                       showTitle ? title : '',
@@ -253,12 +262,14 @@ class ParameterRow extends StatelessWidget {
   final String label;
   final Widget trailing;
   final Widget? leading;
+  final Widget? labelAction;
   final VoidCallback? onTap;
   const ParameterRow(
     this.label, {
     super.key,
     required this.trailing,
     this.leading,
+    this.labelAction,
     this.onTap,
   });
   @override
@@ -284,11 +295,16 @@ class ParameterRow extends StatelessWidget {
                 children: [
                   if (leading != null) ...[leading!, const SizedBox(width: 8)],
                   Flexible(child: Text(label)),
+                  if (labelAction != null) ...[
+                    const SizedBox(width: 8),
+                    labelAction!,
+                  ],
                 ],
               );
               if (box.maxWidth <
                       preferredToolbarWidth(context, Text(label)) +
                           preferredToolbarWidth(context, trailing) +
+                          (labelAction == null ? 0 : 56) +
                           32 ||
                   MediaQuery.textScalerOf(context).scale(20) > 30) {
                 return Column(
@@ -313,31 +329,4 @@ class ParameterRow extends StatelessWidget {
       ),
     );
   }
-}
-
-class IndustrialPaper extends StatelessWidget {
-  final Widget child;
-  const IndustrialPaper({super.key, required this.child});
-  @override
-  Widget build(BuildContext context) => CustomPaint(
-    painter: _PaperGrid(Palette.of(context).grid.withValues(alpha: .5)),
-    child: child,
-  );
-}
-
-class _PaperGrid extends CustomPainter {
-  final Color color;
-  _PaperGrid(this.color);
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()..color = color;
-    for (double x = 8; x < size.width; x += 24) {
-      for (double y = 8; y < size.height; y += 24) {
-        canvas.drawCircle(Offset(x, y), .5, paint);
-      }
-    }
-  }
-
-  @override
-  bool shouldRepaint(_PaperGrid old) => old.color != color;
 }

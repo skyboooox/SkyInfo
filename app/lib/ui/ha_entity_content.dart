@@ -187,6 +187,7 @@ class _HaFunctionControlState extends State<HaFunctionControl> {
                 children: [
                   IndustrialButton(
                     Strings.text('cancel'),
+                    autofocus: true,
                     kind: ButtonKind.quiet,
                     width: 96,
                     onPressed: () => Navigator.pop(context),
@@ -195,6 +196,7 @@ class _HaFunctionControlState extends State<HaFunctionControl> {
                   IndustrialButton(
                     Strings.text(f.label),
                     kind: ButtonKind.danger,
+                    attention: true,
                     width: 160,
                     onPressed: () => Navigator.pop(context, true),
                   ),

@@ -1,9 +1,9 @@
 #!/bin/sh
 set -eu
-channel=${1:-beta}
+channel=${1:-alpha}
 case "$channel" in
-  beta|stable) ;;
-  *) echo 'Usage: tools/release-build.sh [beta|stable]' >&2; exit 2 ;;
+  alpha|beta|stable) ;;
+  *) echo 'Usage: tools/release-build.sh [alpha|beta|stable]' >&2; exit 2 ;;
 esac
 project_dir=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 cd "$project_dir"

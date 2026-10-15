@@ -5,12 +5,16 @@ import org.json.JSONObject
 
 object ConfigValidator {
     private val tileKeys = setOf("id", "title", "kind", "fields", "columns", "rows", "time", "icons", "units", "labels", "digits", "historyMinutes", "minimum", "maximum", "column", "row", "icon", "fontSize", "glanceColumns", "rowHeight", "showTitle", "showUnits", "showIcon", "showDataIcons", "hiddenControls")
-    private val keys = setOf("adbEnabled", "adbHost", "adbPort", "adbMode", "deviceId", "mqttTransport", "haBirthTopic", "haBirthPayload", "insecureAcknowledgements", "localHistoryPolicyVersion", "schema", "tiles", "overlays", "uploaded", "theme", "dashboardSize", "connection", "haUrl", "prefix", "mqttHost", "mqttPort", "mqttTopic", "mqttUser", "reduceMotion", "autoStart", "collect", "overlayEnabled", "publishEnabled", "fallbackPolling", "overlayFont", "overlayOpacity", "overlayOffset", "overlayLeft", "overlayRight", "overlayX", "overlayY", "localHistory", "retainHistory", "localHistoryMinutes", "mqttProtocol", "mqttState", "entityMappings", "haControlEnabled", "mqttControlEnabled", "haConnectionId", "haImportEnabled", "haFields")
+    private val keys = setOf("autoSystemAdb", "adbEnabled", "adbHost", "adbPort", "adbMode", "deviceId", "mqttTransport", "haBirthTopic", "haBirthPayload", "insecureAcknowledgements", "localHistoryPolicyVersion", "schema", "tiles", "overlays", "uploaded", "theme", "dashboardSize", "connection", "haUrl", "prefix", "mqttHost", "mqttPort", "mqttTopic", "mqttUser", "reduceMotion", "autoStart", "collect", "overlayEnabled", "publishEnabled", "fallbackPolling", "overlayFont", "overlayOpacity", "overlayX", "overlayY", "localHistory", "retainHistory", "localHistoryMinutes", "mqttProtocol", "mqttState", "entityMappings", "haControlEnabled", "mqttControlEnabled", "haConnectionId", "haImportEnabled", "haFields")
     fun validate(input: JSONObject, fields: Map<String, JSONObject>): JSONObject {
         AdbEndpoint.from(input)
         require(input.optInt("schema", 1) in 1..2)
         val config = JSONObject(input.toString()); config.keys().asSequence().filter { it !in keys }.toList().forEach(config::remove)
         config.put("schema", 2)
+        if (input.has("autoSystemAdb")) {
+            require(input.get("autoSystemAdb") is Boolean) { "invalid_boolean:autoSystemAdb" }
+        }
+        config.put("autoSystemAdb", input.optBoolean("autoSystemAdb", false))
         migrateLocalHistory(config)
         for (key in listOf("haControlEnabled", "mqttControlEnabled", "publishEnabled", "collect", "overlayEnabled", "autoStart", "localHistory", "retainHistory")) {
             if (config.has(key)) require(config.get(key) is Boolean) { "invalid_boolean:$key" }
@@ -83,12 +87,11 @@ object ConfigValidator {
             require(m.optInt("digits",1) in 0..4)
         }
         val uploaded = RuntimeCoordinator.list(config.optJSONArray("uploaded")); require(uploaded.size <= fields.size && uploaded.all(fields::containsKey))
-        require(config.optDouble("overlayLeft",128.0) in 0.0..640.0 && config.optDouble("overlayRight",320.0) in 0.0..640.0)
         for (key in listOf("overlayX","overlayY")) if (config.has(key) && !config.isNull(key)) {
             val value = config.getDouble(key); require(value.isFinite() && value in 0.0..1.0)
         }
         require(config.optDouble("overlayFont",18.0) in listOf(14.0,16.0,18.0,20.0,24.0))
-        require(config.optDouble("overlayOpacity",0.8) in 0.1..0.8 && config.optDouble("overlayOffset",0.0) in 0.0..120.0)
+        require(config.optDouble("overlayOpacity",0.8) in 0.1..0.8)
         require(config.optInt("localHistoryMinutes",30) in 1..1440 && config.optString("mqttProtocol","5") in listOf("5","3.1.1"))
         require(config.optInt("mqttPort",8883) in 1..65535)
         val host = config.optString("mqttHost"); require(host.length <= 253 && !host.contains('/') && !host.contains('@'))

@@ -60,6 +60,7 @@ class ShellVehicleBridgeTest {
                         "subscribe" -> JSONObject().put("state","registered").put("registered",command.getJSONArray("fields"))
                         "read" -> JSONObject().put("value",13.7).put("quality","available")
                         "overlay" -> JSONObject().put("visible",true)
+                        "restoreAdbSettings" -> JSONObject().put("state","enabled").put("appPermission",true)
                         else -> JSONObject()
                     }
                     if (command.getString("op") != "read" || !holdReads) {
@@ -124,6 +125,20 @@ class ShellVehicleBridgeTest {
             assertEquals(2000,JSONObject(bridge.identity()).getInt("uid"))
             val commands = mutableListOf<JSONObject>(); child.messages.drainTo(commands)
             assertFalse(commands.any { it.optString("op") == "overlay" })
+        } finally { bridge.close() }
+        assertTrue(child.terminated.await(4,TimeUnit.SECONDS))
+    }
+    @Test fun systemSettingsRecoveryUsesOnlyTheFixedBridgeOperationAndKeepsTheSession() {
+        val child = Child(); val ready = CountDownLatch(1)
+        val bridge = ShellVehicleBridge(RuntimeEnvironment.getApplication(),{}, { _,_ -> child })
+        try {
+            bridge.start({ ready.countDown() },{})
+            assertTrue(ready.await(5,TimeUnit.SECONDS))
+            assertEquals("enabled",bridge.restoreAdbSettings().getString("state"))
+            assertEquals(13.7,JSONObject(bridge.read(id)).getDouble("value"),0.001)
+            val commands = mutableListOf<JSONObject>(); child.messages.drainTo(commands)
+            val recovery = commands.single { it.optString("op") == "restoreAdbSettings" }
+            assertEquals(setOf("op","request"),recovery.keys().asSequence().toSet())
         } finally { bridge.close() }
         assertTrue(child.terminated.await(4,TimeUnit.SECONDS))
     }

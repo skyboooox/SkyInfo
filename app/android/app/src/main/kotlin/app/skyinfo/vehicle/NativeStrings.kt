@@ -572,26 +572,25 @@ object NativeStrings {
     const val text_6d0bd504b9 = "不使用图标"
     const val text_e4490b3a2c = "向前"
     const val text_04f29ee568 = "向后"
-    const val text_09109fb3b9 = "名称 ›"
-    const val text_3f82750bdf = "图标 ›"
+    const val text_09109fb3b9 = "名称"
+    const val text_3f82750bdf = "图标"
     const val text_393a6c9117 = "样式"
     const val text_eab4600a96 = "读数字号"
     const val text_067f80c392 = "列数"
     const val text_b534c8636c = "行高"
     const val text_75bf5c7a3e = "小数位"
-    const val text_b311283033 = "显示下界"
-    const val text_820be8bca9 = "显示上界"
+    const val text_b311283033 = "最小值"
+    const val text_820be8bca9 = "最大值"
     const val text_41204cbe7a = "数据图标"
     const val text_1301a0c1ab = "时间显示"
     const val text_5c23be05d4 = "不显示"
     const val text_f8ca224e88 = "上次更新时间"
     const val text_d62b45e808 = "上次变动时间"
     const val text_8ceec443e3 = "历史 · 本地 / {value0} 分钟"
-    const val text_830db5f33a = "设置 ›"
+    const val text_830db5f33a = "设置"
     const val text_43c288bd11 = "配置组件 · {value0}"
     const val text_e4783dcbb2 = "编辑组件 · {value0}"
     const val text_42527a1700 = "删除组件"
-    const val text_3182341bcc = "读取历史…"
     const val text_482a16ecfa = "暂无历史"
     const val text_ba1415d782 = "本地 · {value0} 分钟{value1}"
     const val text_a99001a7bf = "刷新历史"
@@ -625,12 +624,12 @@ object NativeStrings {
     const val text_4a655bce80 = "选择 {value0} 项"
     const val text_be78b20585 = "历史"
     const val text_56c7f934b5 = "历史来源"
-    const val text_8b4c1c5f0c = "本机"
-    const val text_8d995281bf = "图表查看窗口"
+    const val text_8b4c1c5f0c = "本地"
+    const val text_8d995281bf = "显示时长"
     const val text_db8d00ea5b = "最近 {value0} 分钟"
     const val text_8c714efbb0 = "保留时长"
     const val text_b16f805a29 = "{value0} 分钟"
-    const val text_aca879b8f8 = "本机历史记录"
+    const val text_aca879b8f8 = "本地历史记录"
     const val text_2bf163bcf2 = "记录主页数据"
     const val text_dbea859a62 = "不记录"
     const val text_0e28dc80c5 = "本地记录"
@@ -639,7 +638,7 @@ object NativeStrings {
     const val text_bf8952cb3e = "记录状态"
     const val text_25d2843150 = "已启用"
     const val text_fcbae46bf8 = "已暂停"
-    const val text_cdc52e7e86 = "跨启动保留"
+    const val text_cdc52e7e86 = "重启后保留"
     const val text_d046ac70de = "保留"
     const val text_7d431991f3 = "不保留"
     const val text_ae96d42107 = "历史设置"
@@ -647,7 +646,7 @@ object NativeStrings {
     const val text_98dbf1f9d5 = "历史范围"
     const val text_530b5e0c70 = "组件设置"
     const val text_2b2c1f3643 = "2 小时"
-    const val text_af7dccdcca = "选择 ›"
+    const val text_af7dccdcca = "选择"
     const val text_c7ed249504 = "导航"
     const val page_information = "信息"
     const val page_overlay = "悬浮窗"
@@ -712,7 +711,7 @@ object NativeStrings {
     const val text_84fcd70d42 = "清空"
     const val text_605a11ec62 = "高级 · 自定义 MQTT"
     const val text_c5bf073aba = "Home Assistant · 连接设置"
-    const val text_1c3c9dc393 = "请输入有效的 HA 地址"
+    const val text_1c3c9dc393 = "请输入完整的 HTTP 或 HTTPS 地址"
     const val text_ecae147fe8 = "请检查 MQTT 主机、端口和主题"
     const val text_874cc4c277 = "前缀使用小写字母、数字和下划线"
     const val text_30d94cb3b9 = "服务器"
@@ -733,14 +732,14 @@ object NativeStrings {
     const val text_071017752f = "上报方式"
     const val text_a0c1a96b67 = "跟随车辆 · 变化上报"
     const val text_1ae901d844 = "重复值不上报"
-    const val text_311609fd41 = "发布完整最近状态"
+    const val text_311609fd41 = "立即上报当前数据"
     const val text_9aa0af6f30 = "MQTT协议"
     const val text_0b673e8796 = "诊断信息"
     const val text_e429415481 = "诊断读取失败"
     const val text_3d05c8ad5e = "导出配置"
-    const val text_4edd1d0087 = "复制"
+    const val text_4edd1d0087 = "复制配置"
     const val text_280779a502 = "导入配置"
-    const val text_60e2bcad85 = "导入"
+    const val text_60e2bcad85 = "导入配置"
     const val text_2ec70e2b63 = "仅看已选 · {value0}"
     const val text_6e07203c1b = "保存选择"
     const val text_435c5259e4 = "分类"
@@ -758,34 +757,29 @@ object NativeStrings {
     const val text_f19d5ec1de = "实体ID使用 sensor. 和小写字母、数字、下划线"
     const val text_ffc1aeb3ed = "尚未添加组件"
     const val text_c1bebd4ab3 = "模块"
-    const val text_d056ee5616 = "显示设置 ›"
+    const val text_d056ee5616 = "显示设置"
     const val text_05a1b9eab5 = "尚未添加模块"
     const val text_09b58aa342 = "外观"
     const val text_71b6771bc7 = "显示"
     const val text_999365fe74 = "连接方式"
-    const val text_f4bbd91f79 = "跟随系统"
+    const val text_f4bbd91f79 = "自动"
     const val text_80ec9e2b1b = "浅色"
     const val text_30b2c979ac = "深色"
     const val text_6fb0efeed7 = "减少动画"
-    const val text_518c133e30 = "启动后采集"
-    const val text_b3a73c91a8 = "低频读取回退"
+    const val text_518c133e30 = "采集车辆数据"
+    const val text_b3a73c91a8 = "低频轮询回退"
     const val text_ab3b7651bf = "接入路径"
-    const val text_5319af762d = "订阅"
-    const val text_4d4b8f80e8 = "读取一次"
+    const val text_5319af762d = "订阅状态"
+    const val text_4d4b8f80e8 = "刷新当前数据"
     const val text_67be57f398 = "恢复运行"
     const val text_42bf555da5 = "停止运行"
     const val text_b399f97c5f = "显示悬浮条"
     const val text_88c34452cc = "位置"
     const val text_3cc7a5af4c = "已锁定"
-    const val text_1079054b5c = "调整位置"
-    const val text_4bbc7d97b6 = "恢复顶部位置"
     const val text_576ccdb1f1 = "字号"
-    const val text_a0c053c4c2 = "顶部偏移"
-    const val text_a2e6984f77 = "左侧留空"
-    const val text_72c61f96bf = "右侧留空"
     const val text_d626470d5a = "背景不透明度"
     const val text_11d0241540 = "返回"
-    const val text_9036c21092 = "高级 ›"
+    const val text_9036c21092 = "高级"
     const val text_5033b61a3f = "HA远程控制"
     const val text_846f8d4fb3 = "MQTT远程控制"
     const val text_40548fd30f = "检查连接"
@@ -1016,7 +1010,49 @@ object NativeStrings {
     const val beta_notice = "正在使用测试版"
     const val version_updates = "版本与更新"
     const val project_open_failed = "无法打开链接，请检查是否已安装浏览器"
-    const val test_tools = "测试工具"
+    const val auto_system_adb = "自动开启系统ADB"
+    const val auto_system_adb_explanation = "自动开启系统ADB说明"
+    const val auto_system_adb_message = "开启后，应用启动或 ADB 连接成功时尝试恢复系统 ADB 和无线调试。\n\n无线调试需连接 Wi-Fi（含手机热点），并允许当前网络；首次连接需授权或配对。\n\n重启后若无法自动恢复，请手动开启。关闭此项不会关闭系统 ADB。"
+    const val overlay_authorization_error = "无法完成悬浮窗授权，请从权限设置重试"
+    const val system_adb_switch = "系统 ADB"
+    const val system_wifi_adb_switch = "Android 无线调试"
+    const val system_adb_permission = "应用设置写入权限"
+    const val system_adb_state_granted = "已授权"
+    const val system_adb_state_enabled = "已开启"
+    const val system_adb_state_permission_required = "需要授权"
+    const val system_adb_state_error = "恢复失败"
+    const val system_adb_state_pending = "待检查"
+    const val text_605a3e47ec = "海拔 · GNSS"
+    const val quality_stale = "已过期"
+    const val gnss_source = "车机 GNSS"
+    const val altitude_reference = "高度基准"
+    const val wgs84_ellipsoid = "WGS84 椭球"
+    const val location_authorization = "定位授权"
+    const val location_authorization_hint = "海拔需要精确定位权限"
+    const val laboratory = "实验室"
+    const val laboratory_description = "测试专用工具，用于排查适配问题。"
+    const val adaptation_check_description = "检查只读取数据，不控制车辆；逐项原值写入本机调试日志。"
+    const val start_check = "开始检查"
+    const val checking = "检查中…"
+    const val check_completed = "检查完成"
+    const val check_failed = "检查失败，请重试"
+    const val runtime_state = "运行状态"
+    const val action_configure = "设置"
+    const val action_view = "查看"
+    const val action_import = "导入"
+    const val action_export = "导出"
+    const val action_authorize = "授权"
+    const val action_clear = "清除"
+    const val action_startup_settings = "打开设置"
+    const val quality_not_attempted = "未尝试"
+    const val overlay_adjust_position = "调整位置"
+    const val overlay_restore_position = "恢复默认"
+    const val overlay_position_hint = "点“调整位置”后，按住悬浮条拖动；闲置5秒自动锁定。"
+    const val overlay_position_disabled = "开启悬浮条后可调整位置。"
+    const val overlay_position_empty = "添加悬浮模块后可调整位置。"
+    const val overlay_position_stopped = "恢复运行后可调整位置。"
+    const val overlay_position_error = "无法调整悬浮条位置，请确认悬浮条已显示后重试。"
+    const val overlay_restore_error = "无法恢复默认位置，请重试。"
     fun text(key: String, values: Map<String, Any?> = emptyMap()): String {
         val template = defaults[key] ?: key
         return Regex("\\{([a-zA-Z0-9_]+)\\}").replace(template) { match -> values[match.groupValues[1]]?.toString() ?: match.value }
@@ -1612,7 +1648,6 @@ object NativeStrings {
         "text_43c288bd11" to text_43c288bd11,
         "text_e4783dcbb2" to text_e4783dcbb2,
         "text_42527a1700" to text_42527a1700,
-        "text_3182341bcc" to text_3182341bcc,
         "text_482a16ecfa" to text_482a16ecfa,
         "text_ba1415d782" to text_ba1415d782,
         "text_a99001a7bf" to text_a99001a7bf,
@@ -1798,12 +1833,7 @@ object NativeStrings {
         "text_b399f97c5f" to text_b399f97c5f,
         "text_88c34452cc" to text_88c34452cc,
         "text_3cc7a5af4c" to text_3cc7a5af4c,
-        "text_1079054b5c" to text_1079054b5c,
-        "text_4bbc7d97b6" to text_4bbc7d97b6,
         "text_576ccdb1f1" to text_576ccdb1f1,
-        "text_a0c053c4c2" to text_a0c053c4c2,
-        "text_a2e6984f77" to text_a2e6984f77,
-        "text_72c61f96bf" to text_72c61f96bf,
         "text_d626470d5a" to text_d626470d5a,
         "text_11d0241540" to text_11d0241540,
         "text_9036c21092" to text_9036c21092,
@@ -2037,6 +2067,48 @@ object NativeStrings {
         "beta_notice" to beta_notice,
         "version_updates" to version_updates,
         "project_open_failed" to project_open_failed,
-        "test_tools" to test_tools
+        "auto_system_adb" to auto_system_adb,
+        "auto_system_adb_explanation" to auto_system_adb_explanation,
+        "auto_system_adb_message" to auto_system_adb_message,
+        "overlay_authorization_error" to overlay_authorization_error,
+        "system_adb_switch" to system_adb_switch,
+        "system_wifi_adb_switch" to system_wifi_adb_switch,
+        "system_adb_permission" to system_adb_permission,
+        "system_adb_state_granted" to system_adb_state_granted,
+        "system_adb_state_enabled" to system_adb_state_enabled,
+        "system_adb_state_permission_required" to system_adb_state_permission_required,
+        "system_adb_state_error" to system_adb_state_error,
+        "system_adb_state_pending" to system_adb_state_pending,
+        "text_605a3e47ec" to text_605a3e47ec,
+        "quality_stale" to quality_stale,
+        "gnss_source" to gnss_source,
+        "altitude_reference" to altitude_reference,
+        "wgs84_ellipsoid" to wgs84_ellipsoid,
+        "location_authorization" to location_authorization,
+        "location_authorization_hint" to location_authorization_hint,
+        "laboratory" to laboratory,
+        "laboratory_description" to laboratory_description,
+        "adaptation_check_description" to adaptation_check_description,
+        "start_check" to start_check,
+        "checking" to checking,
+        "check_completed" to check_completed,
+        "check_failed" to check_failed,
+        "runtime_state" to runtime_state,
+        "action_configure" to action_configure,
+        "action_view" to action_view,
+        "action_import" to action_import,
+        "action_export" to action_export,
+        "action_authorize" to action_authorize,
+        "action_clear" to action_clear,
+        "action_startup_settings" to action_startup_settings,
+        "quality_not_attempted" to quality_not_attempted,
+        "overlay_adjust_position" to overlay_adjust_position,
+        "overlay_restore_position" to overlay_restore_position,
+        "overlay_position_hint" to overlay_position_hint,
+        "overlay_position_disabled" to overlay_position_disabled,
+        "overlay_position_empty" to overlay_position_empty,
+        "overlay_position_stopped" to overlay_position_stopped,
+        "overlay_position_error" to overlay_position_error,
+        "overlay_restore_error" to overlay_restore_error
     ) }
 }

@@ -1,14 +1,17 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:skyinfo/data/app_controller.dart';
 import 'package:skyinfo/data/vehicle_bridge.dart';
 import 'package:skyinfo/domain/build_channel.dart';
+import 'package:skyinfo/domain/models.dart';
 import 'package:skyinfo/main.dart';
 import 'package:skyinfo/ui/industrial.dart';
 import 'package:skyinfo/ui/release_notice.dart';
+import 'package:skyinfo/ui/laboratory.dart';
 
 class ChannelBridge extends VehicleBridge {
   final calls = <String>[];
@@ -22,7 +25,7 @@ class ChannelBridge extends VehicleBridge {
     calls.add(method);
     return method == 'load'
         ? {
-            'config': {'channel': BuildChannel.isBeta ? 'stable' : 'beta'},
+            'config': {'channel': BuildChannel.isTesting ? 'stable' : 'beta'},
             'status': {'adb': 'connected'},
           }
         : {};
@@ -51,7 +54,7 @@ void main() {
     PackageInfo.setMockInitialValues(
       appName: 'SkyInfo',
       packageName: 'app.skyinfo.vehicle',
-      version: BuildChannel.isBeta ? '9.8.7-beta' : '9.8.7',
+      version: BuildChannel.isTesting ? '9.8.7-beta' : '9.8.7',
       buildNumber: '123',
       buildSignature: '',
     );
@@ -99,7 +102,7 @@ void main() {
         await t.pumpAndSettle();
         expect(
           find.byType(ReleaseNotice),
-          BuildChannel.isBeta ? findsOneWidget : findsNothing,
+          BuildChannel.isTesting ? findsOneWidget : findsNothing,
         );
         expect(t.takeException(), isNull);
       }
@@ -116,25 +119,24 @@ void main() {
       await t.pumpAndSettle();
       expect(find.text('诊断信息'), findsOneWidget);
       expect(find.text('实体映射'), findsOneWidget);
-      if (BuildChannel.isBeta) {
-        await t.scrollUntilVisible(
-          find.text('车辆适配检查'),
-          250,
-          scrollable: find.byType(Scrollable).last,
-        );
-        await t.tap(find.text('车辆适配检查'));
+      if (BuildChannel.isTesting) {
+        expect(find.text('车辆适配检查'), findsNothing);
+        await t.tap(find.widgetWithText(SelectionRow, '实验室'));
+        await t.pumpAndSettle();
+        expect(find.text('车辆适配检查'), findsOneWidget);
+        await t.tap(find.text('开始检查'));
         await t.pumpAndSettle();
         expect(bridge.calls, contains('auditFields'));
       } else {
-        expect(find.text('测试工具'), findsNothing);
+        expect(find.widgetWithText(SelectionRow, '实验室'), findsNothing);
         expect(find.text('车辆适配检查'), findsNothing);
         expect(bridge.calls, isNot(contains('auditFields')));
       }
-      c.restore({'channel': BuildChannel.isBeta ? 'stable' : 'beta'});
+      c.restore({'channel': BuildChannel.isTesting ? 'stable' : 'beta'});
       await t.pump();
       expect(
         find.byType(ReleaseNotice),
-        BuildChannel.isBeta ? findsOneWidget : findsNothing,
+        BuildChannel.isTesting ? findsOneWidget : findsNothing,
       );
       await t.pumpWidget(const SizedBox());
     },
@@ -144,7 +146,7 @@ void main() {
     'about shows installed version and opens project externally; failure keeps settings',
     (t) async {
       final (c, bridge) = await show(t);
-      expect(c.appVersion, BuildChannel.isBeta ? '9.8.7-beta' : '9.8.7');
+      expect(c.appVersion, BuildChannel.isTesting ? '9.8.7-beta' : '9.8.7');
       expect(c.config.containsKey('channel'), isFalse);
       final link = find.text(BuildChannel.projectUrl);
       await t.scrollUntilVisible(
@@ -155,6 +157,7 @@ void main() {
       await t.ensureVisible(link);
       await t.pumpAndSettle();
       expect(find.text(c.versionLabel), findsOneWidget);
+      expect(t.widget<Text>(link).textAlign, TextAlign.right);
       await t.tap(link);
       await t.pumpAndSettle();
       expect(launches.single.arguments['url'], BuildChannel.projectUrl);
@@ -169,11 +172,21 @@ void main() {
     },
   );
 
-  if (BuildChannel.isBeta) {
+  if (BuildChannel.isTesting) {
     testWidgets('notice action opens project without runtime writes', (
       t,
     ) async {
       final (_, bridge) = await show(t);
+      final icons = t.widgetList<SvgPicture>(
+        find.descendant(
+          of: find.widgetWithText(IndustrialButton, '版本与更新'),
+          matching: find.byType(SvgPicture),
+        ),
+      );
+      expect(
+        (icons.single.bytesLoader as SvgAssetLoader).assetName,
+        'assets/ui/external-link.svg',
+      );
       await t.tap(find.text('版本与更新'));
       await t.pumpAndSettle();
       expect(launches.single.arguments['url'], BuildChannel.projectUrl);
@@ -187,10 +200,54 @@ void main() {
       await show(t, theme: theme);
       await expectLater(
         find.byType(SkyInfo),
-        matchesGoldenFile('goldens/${BuildChannel.name}-$theme-settings.png'),
+        matchesGoldenFile(
+          'goldens/${BuildChannel.isTesting ? 'beta' : 'stable'}-$theme-settings.png',
+        ),
       );
       await t.pumpWidget(const SizedBox());
     });
+    testWidgets('$theme overlay settings at vehicle size', (t) async {
+      final (c, _) = await show(t, theme: theme);
+      c.overlayEnabled = true;
+      c.overlays = [
+        const OverlaySpec(id: 'o1', field: 'voltage', icon: '', unit: 'V'),
+      ];
+      c.status['overlayInteraction'] = '已锁定 · 点击穿透';
+      t.view.physicalSize = const Size(1920, 900);
+      t.view.devicePixelRatio = 1.5;
+      await t.pumpAndSettle();
+      await t.tap(find.widgetWithText(SelectionRow, '悬浮窗'));
+      await t.pumpAndSettle();
+      expect(t.takeException(), isNull);
+      await expectLater(
+        find.byType(MaterialApp),
+        matchesGoldenFile(
+          'goldens/${BuildChannel.isTesting ? 'beta' : 'stable'}-$theme-overlay-settings.png',
+        ),
+      );
+      await t.pumpWidget(const SizedBox());
+    });
+    if (BuildChannel.isTesting) {
+      testWidgets(
+        '$theme laboratory is separate from normal tools at vehicle size',
+        (t) async {
+          await show(t, theme: theme);
+          t.view.physicalSize = const Size(1920, 900);
+          t.view.devicePixelRatio = 1.5;
+          await t.pumpAndSettle();
+          await t.tap(find.widgetWithText(SelectionRow, '实验室'));
+          await t.pumpAndSettle();
+          expect(find.byType(Laboratory), findsOneWidget);
+          expect(find.text('车辆适配检查'), findsOneWidget);
+          expect(find.text('网络ADB'), findsNothing);
+          await expectLater(
+            find.byType(MaterialApp),
+            matchesGoldenFile('goldens/beta-$theme-laboratory.png'),
+          );
+          await t.pumpWidget(const SizedBox());
+        },
+      );
+    }
     testWidgets(
       '$theme narrow notice supports large text without clipping actions',
       (t) async {

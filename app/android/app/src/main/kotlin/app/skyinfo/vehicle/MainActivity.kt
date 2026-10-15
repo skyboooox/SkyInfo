@@ -16,7 +16,13 @@ import org.json.JSONObject
 
 class MainActivity : FlutterActivity() {
     private val main = Handler(Looper.getMainLooper())
+    private var locationReply: MethodChannel.Result? = null
     private val runtime by lazy { RuntimeCoordinator.get(this) }
+    private val overlayAuthorization by lazy {
+        OverlayAuthorization({ Settings.canDrawOverlays(this) }, {
+            startActivityForResult(Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName")), 102)
+        })
+    }
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
         EventChannel(flutterEngine.dartExecutor.binaryMessenger, "app.skyinfo.vehicle/events").setStreamHandler(object : EventChannel.StreamHandler {
@@ -28,6 +34,26 @@ class MainActivity : FlutterActivity() {
                 result.notImplemented(); return@setMethodCallHandler
             }
             when (call.method) {
+                "requestLocation" -> {
+                    if (locationReply != null) { result.error("pending",NativeStrings.text_245a5a7f18,null); return@setMethodCallHandler }
+                    val prefs = getSharedPreferences("location_permission", MODE_PRIVATE)
+                    if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                        runtime.execute { runtime.reconfigure(); val snapshot = runtime.snapshot(); main.post { result.success(RuntimeCoordinator.jsonMap(snapshot)) } }
+                    } else if (prefs.getBoolean("requested",false) && !shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
+                        startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,Uri.parse("package:$packageName")))
+                        result.success(null)
+                    } else {
+                        prefs.edit().putBoolean("requested",true).apply(); locationReply = result
+                        requestPermissions(arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION),103)
+                    }
+                }
+                "setOverlayEnabled" -> {
+                    fun completed(enabled: Boolean) { runtime.execute {
+                        try { runtime.setOverlayEnabled(enabled); val snapshot = runtime.snapshot(); main.post { result.success(RuntimeCoordinator.jsonMap(snapshot)) } }
+                        catch (_: Throwable) { main.post { result.error("runtime", NativeStrings.text_245a5a7f18, null) } }
+                    } }
+                    if (call.argument<Boolean>("enabled") == true) overlayAuthorization.enable(::completed) else completed(false)
+                }
                 "requestOverlay" -> { startActivity(Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName"))); result.success(null) }
                 "openStartup" -> {
                     val candidate = Intent().setComponent(ComponentName("com.byd.appstartmanagement", "com.byd.appstartmanagement.frame.AppStartManagement"))
@@ -63,7 +89,10 @@ class MainActivity : FlutterActivity() {
                             "clearCredentials" -> { runtime.clearCredentials(); reply(runtime.snapshot()) }
                             "clearHistory" -> { runtime.clearHistory(); reply(runtime.snapshot()) }
                             "refresh" -> { runtime.refresh(); reply(runtime.snapshot()) }
+                            "saveOverlayAppearance" -> { runtime.saveOverlayAppearance(JSONObject(call.argument<Map<String, Any?>>("style") ?: throw IllegalArgumentException())); reply(runtime.snapshot()) }
+                            "previewOverlayStyle" -> { runtime.previewOverlayStyle(call.argument<Map<String, Any?>>("style")?.let { JSONObject(it) }); reply(JSONObject()) }
                             "previewFields" -> { runtime.preview((call.argument<List<String>>("fields") ?: emptyList()).toSet()); reply(runtime.snapshot()) }
+                            "resetOverlayPosition" -> { runtime.resetOverlayPosition(); reply(runtime.snapshot()) }
                             "editOverlay" -> { runtime.editOverlay(); reply(runtime.snapshot()) }
                             "stop" -> { runtime.stop(); reply(runtime.snapshot()) }
                             "resume" -> { runtime.resume(); reply(runtime.snapshot()) }
@@ -78,6 +107,25 @@ class MainActivity : FlutterActivity() {
         }
         if (Build.VERSION.SDK_INT >= 33) requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 101)
     }
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 103) {
+            val reply = locationReply; locationReply = null
+            runtime.execute { runtime.reconfigure(); val snapshot = runtime.snapshot(); main.post { reply?.success(RuntimeCoordinator.jsonMap(snapshot)) } }
+        }
+    }
+    override fun onDestroy() {
+        locationReply?.success(null); locationReply = null
+        super.onDestroy()
+    }
     override fun onResume() { super.onResume(); runtime.execute { runtime.setVisible(true); runtime.reconfigure() } }
+    override fun onConfigurationChanged(newConfig: android.content.res.Configuration) {
+        super.onConfigurationChanged(newConfig)
+        runtime.execute { runtime.appearanceChanged() }
+    }
     override fun onPause() { runtime.execute { runtime.setVisible(false) }; super.onPause() }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 102) overlayAuthorization.returned()
+    }
 }

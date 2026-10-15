@@ -4,7 +4,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 fun haNumericField(field: JSONObject): Boolean = field.getString("id").let {
-    isDerived(it) || it.contains("/5/") || it.contains("/7/")
+    field.optString("valueType") == "number" || isDerived(it) || it.contains("/5/") || it.contains("/7/")
 }
 
 fun haReading(sample: JSONObject, field: JSONObject): JSONObject {

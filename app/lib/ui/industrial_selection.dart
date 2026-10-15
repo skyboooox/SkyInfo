@@ -151,7 +151,7 @@ class IndustrialSwitch extends StatelessWidget {
       child: _ControlTarget(
         onTap: onChanged == null ? null : () => onChanged!(!value),
         child: SizedBox(
-          width: 76,
+          width: TouchTargets.minimum(context).clamp(76, double.infinity),
           height: TouchTargets.minimum(context),
           child: Center(
             child: Container(

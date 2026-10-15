@@ -44,6 +44,7 @@ Future<bool> confirmAction(
             const SizedBox(width: 16),
             IndustrialButton(
               action,
+              attention: true,
               kind: kind,
               width: 160,
               onPressed: () => Navigator.pop(context, true),

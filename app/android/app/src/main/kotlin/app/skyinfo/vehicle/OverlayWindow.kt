@@ -26,19 +26,7 @@ import com.caverock.androidsvg.SVG
 import org.json.JSONObject
 import java.util.Locale
 import kotlin.math.roundToInt
-
-internal data class StripPlacement(val y: Int, val height: Int)
-internal fun stripPlacement(barHeight: Int, requestedOffset: Int, minimumHeight: Int): StripPlacement {
-    val minimum = minimumHeight.coerceIn(1, barHeight)
-    val y = requestedOffset.coerceIn(0, barHeight - minimum)
-    return StripPlacement(y, barHeight - y)
-}
-
-internal fun floatingCoordinate(fraction: Double?, initial: Int, screen: Int, size: Int): Int =
-    (fraction?.let { (it * (screen - size).coerceAtLeast(0)).roundToInt() } ?: initial).coerceIn(0,(screen-size).coerceAtLeast(0))
-
-internal fun overlayHit(x: Float, y: Float, width: Int, height: Int): Boolean =
-    x >= 0 && y >= 0 && x < width && y < height
+import android.os.SystemClock
 
 class OverlayWindow(private val context: Context, private val privileged: Boolean = false,
     private val changed: (JSONObject) -> Unit = {}) {
@@ -111,19 +99,17 @@ class OverlayWindow(private val context: Context, private val privileged: Boolea
         }
         val barHeight = if (Build.VERSION.SDK_INT >= 30) windows.maximumWindowMetrics.windowInsets.getInsetsIgnoringVisibility(WindowInsets.Type.statusBars()).top else 0
         val statusHeight = barHeight.takeIf { it > 0 } ?: (56 * density).toInt()
-        val placement = stripPlacement(statusHeight, (config.optDouble("overlayOffset",0.0) * density).toInt(), (24 * density).toInt())
-        val left = (config.optDouble("overlayLeft",128.0) * density).toInt().coerceIn(0, screen / 2)
-        val right = (config.optDouble("overlayRight",320.0) * density).toInt().coerceIn(0, screen / 2)
         val windowOpacity = if (!privileged && Build.VERSION.SDK_INT >= 31) context.getSystemService(InputManager::class.java).maximumObscuringOpacityForTouch.coerceAtMost(1f) else 1f
         view.configure(config, fields, samples, windowOpacity)
-        val width = view.contentWidth((screen-left-right).coerceAtLeast((64*density).toInt()),placement.height)
+        val width = view.contentWidth(maximumStripWidth(screen,density),statusHeight)
         val initialX = (screen-width)/2
         fun coordinate(key: String) = if (config.has(key) && !config.isNull(key)) config.optDouble(key).takeIf { it.isFinite() && it in 0.0..1.0 } else null
         val fractionX = coordinate("overlayX"); val fractionY = coordinate("overlayY")
         val previous = parameters
         val reset = !attached || viewportChanged || fractionX != configuredX || fractionY != configuredY
+        val defaultTop = fractionY == null && !armed && !unlocked
         val defaultCentered = fractionX == null && configuredX == null && !armed && !unlocked
-        val next = WindowManager.LayoutParams(width, placement.height,
+        val next = WindowManager.LayoutParams(width, statusHeight,
             if (privileged) WindowManager.LayoutParams.TYPE_SYSTEM_ERROR else WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE or
                 WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
@@ -134,7 +120,7 @@ class OverlayWindow(private val context: Context, private val privileged: Boolea
                 x = floatingCoordinate(if (reset) fractionX else null,if (reset || defaultCentered) initialX else previous?.x ?: initialX,screen,width)
                 if (Build.VERSION.SDK_INT >= 30) setFitInsetsTypes(0)
                 layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS
-                y = floatingCoordinate(if (reset) fractionY else null,if (reset) placement.y else previous?.y ?: placement.y,screenHeight,placement.height)
+                y = floatingCoordinate(if (reset) fractionY else null,if (reset || defaultTop) 0 else previous?.y ?: 0,screenHeight,statusHeight)
                 alpha = windowOpacity
             }
         parameters = next; configuredX = fractionX; configuredY = fractionY
@@ -179,6 +165,13 @@ class OverlayWindow(private val context: Context, private val privileged: Boolea
         main.removeCallbacks(lockTask); main.postDelayed(lockTask,5000)
         return true
     }
+    fun resetPosition() {
+        main.removeCallbacks(lockTask)
+        armed = false; unlocked = false; dragging = false; tap = null
+        configuredX = null; configuredY = null
+        parameters?.let { it.x = (screenWidth-it.width).coerceAtLeast(0)/2; it.y = 0 }
+        updateTouchability()
+    }
     private fun lock() {
         if (dragging) savePosition()
         armed = false; unlocked = false; dragging = false; tap = null
@@ -206,7 +199,7 @@ class OverlayWindow(private val context: Context, private val privileged: Boolea
         val y = if (screenHeight > p.height) p.y.toDouble()/(screenHeight-p.height) else 0.0
         configuredX = x; configuredY = y
         changed(JSONObject().put("state","unlocked").put("gesture",monitorReady).put("visible",attached)
-            .put("x",x).put("y",y))
+            .put("x",x).put("y",y).put("positionTime",SystemClock.elapsedRealtimeNanos()))
     }
     fun close() {
         main.removeCallbacks(lockTask); monitor?.close(); monitor = null; monitorReady = false

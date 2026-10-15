@@ -63,9 +63,9 @@ void main() {
     c.dispose();
   }
 
-  test('标准两轴新增一格，组件和间距共享比例且适应车机视口', () {
+  test('标准新增两列一行、固定间距与正方格适应车机视口', () {
     for (final size in [
-      const Size(1248, 528),
+      const Size(1248, 496),
       const Size(1568, 796),
       const Size(1888, 984),
     ]) {
@@ -79,7 +79,7 @@ void main() {
         size.height,
         size: DashboardSize.standard,
       );
-      expect(standard.columns, large.columns + 1);
+      expect(standard.columns, large.columns + 2);
       expect(standard.visibleRows, large.visibleRows + 1);
       expect(large.scale, 1);
       expect(standard.scale, lessThan(1));
@@ -88,14 +88,20 @@ void main() {
         standard.span(standard.visibleRows),
         lessThanOrEqualTo(size.height + 1e-8),
       );
+      expect(standard.gap, 9.6);
       expect(
-        standard.cell / large.cell,
-        closeTo(standard.gap / large.gap, 1e-8),
+        standard.height,
+        closeTo(standard.span(standard.visibleRows), 1e-8),
       );
+      expect(
+        standard.verticalInset * 2 + standard.height,
+        closeTo(size.height, 1e-8),
+      );
+      expect(standard.span(2) / large.span(2), closeTo(standard.scale, 1e-8));
       for (final cells in [1, 2, 4]) {
         expect(
-          standard.span(cells) / large.span(cells),
-          closeTo(standard.scale, 1e-8),
+          standard.span(cells),
+          closeTo(cells * standard.cell + (cells - 1) * 9.6, 1e-8),
         );
       }
     }
@@ -236,15 +242,18 @@ void main() {
       496,
       size: DashboardSize.standard,
     );
-    expect(layout.columns, 7);
+    expect(layout.columns, 8);
     expect(layout.visibleRows, 3);
-    expect(layout.scale, closeTo(496 / 616, 1e-8));
+    expect(layout.scale, closeTo(304.8 / (608 / 1.5), 1e-8));
     c.dashboardSize = DashboardSize.standard;
     await c.save();
     await t.pumpAndSettle();
     final small = t.getSize(slot);
-    expect(small.width / large.width, closeTo(496 / 616, 1e-8));
-    expect(small.height / large.height, closeTo(496 / 616, 1e-8));
+    expect(small.width / large.width, closeTo(layout.scale, 1e-8));
+    expect(small.height / large.height, closeTo(layout.scale, 1e-8));
+    expect(small.width * 1.5, closeTo(457.2, 1e-5));
+    expect(t.getTopLeft(slot).dx, closeTo(16, 1e-5));
+    expect(t.getTopLeft(slot).dy, closeTo(161, 1e-5));
     expect(t.takeException(), isNull);
     await close(t, c);
   });

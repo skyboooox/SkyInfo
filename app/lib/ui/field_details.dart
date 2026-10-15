@@ -25,6 +25,7 @@ class _FieldDetails extends StatefulWidget {
 }
 
 class _FieldDetailsState extends State<_FieldDetails> {
+  bool authorizing = false;
   late final lease = widget.controller.acquirePreview([widget.id]);
   @override
   void initState() {
@@ -70,6 +71,8 @@ class _FieldDetailsState extends State<_FieldDetails> {
               trailing: Text(
                 id.startsWith('ha|')
                     ? 'Home Assistant'
+                    : id == 'location.gnss_altitude'
+                    ? Strings.text('gnss_source')
                     : Strings.text('vehicle_source'),
               ),
             ),
@@ -86,6 +89,31 @@ class _FieldDetailsState extends State<_FieldDetails> {
               Strings.text('quality'),
               trailing: Text(sample.qualityLabel),
             ),
+            if (id == 'location.gnss_altitude')
+              ParameterRow(
+                Strings.text('altitude_reference'),
+                trailing: Text(Strings.text('wgs84_ellipsoid')),
+              ),
+            if (id == 'location.gnss_altitude' &&
+                sample.quality == 'permission')
+              ParameterRow(
+                Strings.text('location_authorization_hint'),
+                trailing: IndustrialButton(
+                  Strings.text('location_authorization'),
+                  kind: ButtonKind.secondary,
+                  width: 160,
+                  onPressed: authorizing
+                      ? null
+                      : () async {
+                          setState(() => authorizing = true);
+                          try {
+                            await c.action('requestLocation');
+                          } finally {
+                            if (mounted) setState(() => authorizing = false);
+                          }
+                        },
+                ),
+              ),
             if (entity != null) ...[
               if (entity.device.isNotEmpty)
                 ParameterRow(

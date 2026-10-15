@@ -49,6 +49,10 @@ void main() {
       var returned = false;
       await tester.pumpWidget(
         MaterialApp(
+          builder: (context, child) => MediaQuery(
+            data: MediaQuery.of(context).copyWith(disableAnimations: true),
+            child: child!,
+          ),
           theme: industrialTheme(Brightness.dark),
           home: Scaffold(
             body: Builder(

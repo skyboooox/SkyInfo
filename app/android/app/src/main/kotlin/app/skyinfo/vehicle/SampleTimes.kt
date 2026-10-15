@@ -14,6 +14,7 @@ internal fun stampSampleTimes(fresh: JSONObject, old: JSONObject?, epoch: Long) 
             if (old.has(key)) fresh.put(key, old.get(key))
         if (!fresh.has("raw") && old.has("raw")) fresh.put("raw", old.get("raw"))
     }
+    if (fresh.optString("source") == GNSS_ALTITUDE && fresh.optString("quality") != "available") fresh.remove("value")
     fresh.put("sourceEpoch", epoch)
 }
 

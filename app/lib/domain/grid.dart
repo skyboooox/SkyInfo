@@ -7,7 +7,12 @@ class GridSlot {
   const GridSlot(this.tile, this.column, this.row);
 }
 
-List<GridSlot> packTiles(List<TileSpec> tiles, int columns) {
+List<GridSlot> packTiles(
+  List<TileSpec> tiles,
+  int columns, {
+  bool compact = false,
+  int? visibleRows,
+}) {
   final occupied = <String>{};
   final placed = <String, GridSlot>{};
   List<String> cells(TileSpec tile, int col, int row) => [
@@ -31,10 +36,24 @@ List<GridSlot> packTiles(List<TileSpec> tiles, int columns) {
       put(tile, tile.column!, tile.row!);
     }
   }
-  for (final tile in tiles) {
-    if (placed.containsKey(tile.id)) continue;
+  final pending = tiles.where((tile) => !placed.containsKey(tile.id)).toList();
+  if (compact) {
+    final order = {for (var i = 0; i < tiles.length; i++) tiles[i].id: i};
+    pending.sort((a, b) {
+      final height = b.rows.compareTo(a.rows);
+      return height != 0 ? height : order[a.id]!.compareTo(order[b.id]!);
+    });
+  }
+  for (final tile in pending) {
     var found = false;
     for (var row = 0; !found; row++) {
+      if (compact &&
+          visibleRows != null &&
+          tile.rows <= visibleRows &&
+          row < visibleRows &&
+          row + tile.rows > visibleRows) {
+        continue;
+      }
       for (
         var col = 0;
         col <= columns - math.min(tile.columns, columns);

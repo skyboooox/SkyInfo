@@ -29,11 +29,19 @@ android {
     }
     flavorDimensions += "channel"
     productFlavors {
+        create("alpha") {
+            dimension = "channel"
+            versionNameSuffix = "-alpha.6"
+        }
         create("beta") {
             dimension = "channel"
             versionNameSuffix = "-beta.2"
         }
         create("stable") { dimension = "channel" }
+    }
+    sourceSets {
+        getByName("alpha").java.srcDir("src/testing/kotlin")
+        getByName("beta").java.srcDir("src/testing/kotlin")
     }
     signingConfigs {
         if (signingFile.exists()) create("skyinfoRelease") {
@@ -73,7 +81,7 @@ dependencies {
 }
 
 tasks.configureEach {
-    for (channel in listOf("Beta", "Stable")) {
+    for (channel in listOf("Alpha", "Beta", "Stable")) {
         if (name == "package${channel}DebugUnitTestForUnitTest") dependsOn("copyFlutterAssets${channel}Debug")
     }
 }

@@ -5,7 +5,7 @@ enum ButtonKind { secondary, primary, quiet, selected, danger }
 class IndustrialButton extends StatelessWidget {
   final String label;
   final VoidCallback? onPressed;
-  final bool primary, reduceMotion, autofocus;
+  final bool primary, reduceMotion, autofocus, attention;
   final ButtonKind kind;
   final double height;
   final double? width;
@@ -16,6 +16,7 @@ class IndustrialButton extends StatelessWidget {
     super.key,
     this.onPressed,
     this.primary = false,
+    this.attention = false,
     this.reduceMotion = false,
     this.autofocus = false,
     this.width,
@@ -60,6 +61,13 @@ class IndustrialButton extends StatelessWidget {
                 autofocus: autofocus,
                 onPressed: onPressed,
                 style: ButtonStyle(
+                  backgroundBuilder: attention
+                      ? (context, states, child) => AttentionSurface(
+                          color: foreground,
+                          animate: onPressed != null && !reduceMotion,
+                          child: child ?? const SizedBox(),
+                        )
+                      : null,
                   foregroundColor: WidgetStatePropertyAll(foreground),
                   backgroundColor: WidgetStateProperty.resolveWith((states) {
                     if (states.contains(WidgetState.pressed)) {

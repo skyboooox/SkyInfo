@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:skyinfo/data/app_controller.dart';
 import 'package:skyinfo/domain/models.dart';
+import 'package:skyinfo/domain/build_channel.dart';
 import 'package:skyinfo/main.dart';
 import 'package:skyinfo/ui/component_library.dart';
 import 'package:skyinfo/ui/editors.dart';
@@ -470,7 +471,7 @@ void main() {
     expect(
       find.descendant(
         of: find.byType(DesignDialog).last,
-        matching: find.text('本机'),
+        matching: find.text('本地'),
       ),
       findsOneWidget,
     );
@@ -640,7 +641,9 @@ void main() {
         expect(t.takeException(), isNull);
         await expectLater(
           find.byType(MaterialApp),
-          matchesGoldenFile('goldens/${dark ? 'dark' : 'light'}-$name.png'),
+          matchesGoldenFile(
+            'goldens/${name == 'server' && BuildChannel.isTesting ? 'beta-' : ''}${dark ? 'dark' : 'light'}-$name.png',
+          ),
         );
         await t.pumpWidget(const SizedBox());
         await t.pumpAndSettle();

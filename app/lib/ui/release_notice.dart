@@ -44,10 +44,10 @@ class ReleaseNotice extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               SvgPicture.asset(
-                'assets/ui/globe.svg',
+                'assets/ui/external-link.svg',
                 width: 24,
                 height: 24,
-                colorFilter: ColorFilter.mode(p.ink, BlendMode.srcIn),
+                colorFilter: ColorFilter.mode(p.blue, BlendMode.srcIn),
               ),
               const SizedBox(width: 8),
               Flexible(

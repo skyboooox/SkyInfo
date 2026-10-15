@@ -1,7 +1,7 @@
 name: skyinfo
 description: Vehicle information dashboard.
 publish_to: none
-version: 0.1.0+2
+version: 0.1.0+9
 environment:
   sdk: '>=3.12.0 <4.0.0'
 dependencies:
@@ -15,7 +15,7 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^6.0.0
 flutter:
-  default-flavor: beta
+  default-flavor: alpha
   uses-material-design: true
   assets:
     - assets/catalog.json

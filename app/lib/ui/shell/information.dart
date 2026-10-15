@@ -96,71 +96,82 @@ extension _Information on _HomeState {
         final columns = layout.columns;
         final cell = layout.cell;
         final gap = layout.gap;
-        final slots = packTiles(c.tiles, columns);
+        final slots = packTiles(
+          c.tiles,
+          columns,
+          compact: c.dashboardSize == DashboardSize.standard,
+          visibleRows: layout.visibleRows,
+        );
         final rows = slots.map((s) => s.row + s.tile.rows).reduce(math.max);
-        return SizedBox(
-          width: box.maxWidth,
-          height: box.maxHeight,
-          child: SingleChildScrollView(
-            child: Align(
-              alignment: Alignment.topCenter,
-              child: SizedBox(
-                key: grid,
-                width: layout.width,
-                height: (rows + (editing ? 2 : 0)) * (cell + gap) - gap,
-                child: Stack(
-                  children: [
-                    for (final slot in slots)
-                      Positioned(
-                        key: ValueKey('dashboard-slot-${slot.tile.id}'),
-                        left: slot.column * (cell + gap),
-                        top: slot.row * (cell + gap),
-                        width: layout.span(slot.tile.columns),
-                        height: layout.span(slot.tile.rows),
-                        child: editableTile(
-                          slot,
-                          columns,
-                          cell,
-                          gap,
-                          FittedBox(
-                            fit: BoxFit.fill,
-                            child: SizedBox(
-                              width:
-                                  layout.span(slot.tile.columns) / layout.scale,
-                              height:
-                                  layout.span(slot.tile.rows) / layout.scale,
-                              child: TouchTargets(
-                                visualScale: layout.scale,
-                                child: MetricTile(
-                                  key: ValueKey(slot.tile.id),
-                                  tile: slot.tile,
-                                  controller: c,
-                                  now: now,
-                                  clock: DateTime.now,
-                                  editing: editing,
-                                  onEdit: () => addTile(slot.tile),
-                                  onHistory:
-                                      !slot.tile.kind.controls &&
-                                          slot.tile.fields.any(
-                                            (id) => ![
-                                              'text',
-                                            ].contains(c.metric(id).encoding),
+        return Padding(
+          padding: EdgeInsets.symmetric(vertical: layout.verticalInset),
+          child: SizedBox(
+            width: box.maxWidth,
+            height: layout.height,
+            child: SingleChildScrollView(
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: SizedBox(
+                  key: grid,
+                  width: layout.width,
+                  height: (rows + (editing ? 2 : 0)) * (cell + gap) - gap,
+                  child: Stack(
+                    children: [
+                      for (final slot in slots)
+                        Positioned(
+                          key: ValueKey('dashboard-slot-${slot.tile.id}'),
+                          left: slot.column * (cell + gap),
+                          top: slot.row * (cell + gap),
+                          width: layout.span(slot.tile.columns),
+                          height: layout.span(slot.tile.rows),
+                          child: editableTile(
+                            slot,
+                            columns,
+                            layout.visibleRows,
+                            cell,
+                            gap,
+                            FittedBox(
+                              fit: BoxFit.fill,
+                              child: SizedBox(
+                                width:
+                                    layout.span(slot.tile.columns) /
+                                    layout.scale,
+                                height:
+                                    layout.span(slot.tile.rows) / layout.scale,
+                                child: TouchTargets(
+                                  visualScale: layout.scale,
+                                  child: MetricTile(
+                                    key: ValueKey(slot.tile.id),
+                                    tile: slot.tile,
+                                    controller: c,
+                                    now: now,
+                                    clock: DateTime.now,
+                                    editing: editing,
+                                    externalEditAction: true,
+                                    onEdit: () => addTile(slot.tile),
+                                    onHistory:
+                                        !slot.tile.kind.controls &&
+                                            slot.tile.fields.any(
+                                              (id) => ![
+                                                'text',
+                                              ].contains(c.metric(id).encoding),
+                                            )
+                                        ? () => showHistoryDetails(
+                                            context,
+                                            c,
+                                            slot.tile,
+                                            onEdit: () => addTile(slot.tile),
+                                            onConnection: connectionSettings,
                                           )
-                                      ? () => showHistoryDetails(
-                                          context,
-                                          c,
-                                          slot.tile,
-                                          onEdit: () => addTile(slot.tile),
-                                          onConnection: connectionSettings,
-                                        )
-                                      : null,
+                                        : null,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -173,6 +184,7 @@ extension _Information on _HomeState {
   Widget editableTile(
     GridSlot slot,
     int columns,
+    int visibleRows,
     double cell,
     double gap,
     Widget child,
@@ -210,7 +222,12 @@ extension _Information on _HomeState {
                 tile.columns.toDouble(),
                 tile.rows.toDouble(),
               );
-              for (final existing in packTiles(c.tiles, columns)) {
+              for (final existing in packTiles(
+                c.tiles,
+                columns,
+                compact: c.dashboardSize == DashboardSize.standard,
+                visibleRows: visibleRows,
+              )) {
                 if (existing.tile.id != tile.id &&
                     occupied.overlaps(
                       Rect.fromLTWH(
@@ -228,6 +245,15 @@ extension _Information on _HomeState {
               save();
             },
             child: child,
+          ),
+        ),
+        Positioned(
+          top: 0,
+          right: 8,
+          child: IndustrialIconButton(
+            onPressed: () => addTile(tile),
+            icon: Icons.edit_outlined,
+            tooltip: Strings.text('text_17fe884603'),
           ),
         ),
       ],

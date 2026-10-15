@@ -13,7 +13,8 @@ class VehicleSession(
     private val sample: (String, JSONObject) -> Unit,
     private val changed: () -> Unit,
     private val lost: () -> Unit,
-    private val overlayChanged: (JSONObject) -> Unit = {}
+    private val overlayChanged: (JSONObject) -> Unit = {},
+    private val authorized: () -> Unit = {}
 ) {
     private val main = Handler(Looper.getMainLooper())
     private val ordinary = VehicleSubscription(context, reader)
@@ -53,11 +54,13 @@ class VehicleSession(
                 adbState = "connected"
                 bindingState = NativeStrings.text_65fe35c45e; retryAt = 0; retryDelay = 1000; retryTask?.let(main::removeCallbacks); retryTask = null
                 configure(wanted, true, keepOverlay, keepConnection)
+                authorized()
             } catch (_: Throwable) { adbState = "error"; failed(NativeStrings.text_42d2e51d37) }
             changed()
         }
     }
     fun controls(): JSONObject = remote?.let { JSONObject(it.controls()) } ?: JSONObject().put("error","bridge_unavailable")
+    fun restoreAdbSettings(): JSONObject? = bridge?.takeIf { remote === it }?.restoreAdbSettings()
     fun control(action: String, value: Int): JSONObject = remote?.let { JSONObject(it.control(action,value)) } ?: JSONObject().put("status","bridge_unavailable")
     fun configure(ids: Set<String>, granted: Boolean, overlayRequired: Boolean = false, connectionRequired: Boolean = false) {
         keepConnection = connectionRequired && granted
@@ -119,6 +122,7 @@ class VehicleSession(
         changed()
     }
     fun read(id: String): JSONObject = remote?.read(id)?.let(::JSONObject) ?: reader.read(id)
+    fun resetOverlayPosition(): Boolean = try { bridge?.takeIf { remote === it }?.resetOverlayPosition() ?: false } catch (_: Throwable) { false }
     fun editOverlay(): Boolean = try { bridge?.takeIf { remote === it }?.editOverlay() ?: false } catch (_: Throwable) { false }
     fun overlay(config: JSONObject, samples: Map<String,JSONObject>): Boolean {
         val current = bridge ?: return false

@@ -143,12 +143,10 @@ class RuntimeDataTest {
         tile.put("fields", JSONArray().put(high).put(id))
         assertThrows(IllegalArgumentException::class.java) { ConfigValidator.validate(cfg, catalog) }
     }
-    @Test fun verticalStripPlacementRemainsInsideStatusBar() {
-        assertEquals(StripPlacement(0,84), stripPlacement(84,0,36))
-        assertEquals(StripPlacement(24,60), stripPlacement(84,24,36))
-        assertEquals(StripPlacement(48,36), stripPlacement(84,180,36))
-        assertEquals(StripPlacement(0,84), stripPlacement(84,-5,36))
-        assertEquals(StripPlacement(0,20), stripPlacement(20,180,36))
+    @Test fun stripWidthUsesTheViewportWithAFixedSafetyInset() {
+        assertEquals(1248,maximumStripWidth(1280,1f))
+        assertEquals(1872,maximumStripWidth(1920,1.5f))
+        assertEquals(1,maximumStripWidth(16,1f))
     }
     @Test fun floatingPositionClampsAndRestoresAcrossScreenSizes() {
         assertEquals(800,floatingCoordinate(0.5,0,1920,320))

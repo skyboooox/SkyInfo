@@ -2050,6 +2050,13 @@
       "category": "动力电池",
       "icon_id": "tabler-battery-spark",
       "field_id": "derived.battery_power"
+    },
+    {
+      "name": "海拔 · GNSS",
+      "source": "Android LocationManager GPS / WGS84",
+      "category": "车身与环境",
+      "icon_id": "tabler-arrows-up-down",
+      "field_id": "location.gnss_altitude"
     }
   ],
   "fallback_icon": "tabler-help-hexagon",

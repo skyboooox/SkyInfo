@@ -3,7 +3,7 @@ part of 'home.dart';
 extension _Settings on _HomeState {
   String get adbState => c.status['adb'] ?? 'disabled';
   Widget settings() => CategoryPane<int>(
-    values: const [0, 1, 2, 3, 4],
+    values: settingsTabs,
     selected: settingsTab,
     label: (tab) => settingsTitles[tab],
     onChanged: (tab) => update(() => settingsTab = tab),
@@ -64,15 +64,9 @@ extension _Settings on _HomeState {
               c.autoStart,
               (v) => c.autoStart = v,
             ),
-            toggle(
-              Strings.text('text_518c133e30'),
-              c.collect,
-              (v) => c.collect = v,
-            ),
             settingHeading('configuration'),
             settingAction('text_280779a502', importSettings),
             settingAction('text_3d05c8ad5e', exportSettings),
-            settingAction('text_0b673e8796', showDiagnostics),
             settingHeading('about'),
             ParameterRow(
               Strings.text('app_version'),
@@ -112,9 +106,7 @@ extension _Settings on _HomeState {
             ),
             settingAction('text_4d4b8f80e8', () => c.action('refresh')),
             ParameterRow(
-              c.status['stopped'] == true
-                  ? Strings.text('text_67be57f398')
-                  : Strings.text('text_42bf555da5'),
+              Strings.text('runtime_state'),
               trailing: IndustrialButton(
                 c.status['stopped'] == true
                     ? Strings.text('text_67be57f398')
@@ -127,78 +119,7 @@ extension _Settings on _HomeState {
             settingHeading('local_history'),
             settingAction('text_219e5cc5ca', localHistorySettings),
           ],
-          2 => [
-            settingHeading('page_overlay'),
-            toggle(
-              Strings.text('text_b399f97c5f'),
-              c.overlayEnabled,
-              (v) => c.overlayEnabled = v,
-            ),
-            ParameterRow(
-              Strings.text('text_88c34452cc'),
-              trailing: Text(
-                c.status['overlayInteraction'] ??
-                    Strings.text('text_3cc7a5af4c'),
-              ),
-            ),
-            settingAction('text_1079054b5c', () => c.action('editOverlay')),
-            settingAction('text_4bbc7d97b6', () {
-              c.overlayX = null;
-              c.overlayY = null;
-              save();
-            }),
-            ParameterRow(
-              Strings.text('text_576ccdb1f1'),
-              trailing: SizedBox(
-                width: 200,
-                child: DropdownButton<double>(
-                  borderRadius: BorderRadius.zero,
-                  itemHeight: null,
-                  isExpanded: true,
-                  value: c.overlayFont,
-                  items: [
-                    for (final value in [14.0, 16.0, 18.0, 20.0, 24.0])
-                      DropdownMenuItem(
-                        value: value,
-                        child: Text('${value.toInt()}'),
-                      ),
-                  ],
-                  onChanged: (value) {
-                    c.overlayFont = value!;
-                    save();
-                  },
-                ),
-              ),
-            ),
-            settingSlider(
-              'text_d626470d5a',
-              c.overlayOpacity,
-              .1,
-              .8,
-              (value) => c.overlayOpacity = value,
-            ),
-            settingSlider(
-              'text_a0c053c4c2',
-              c.overlayOffset,
-              0,
-              120,
-              (value) => c.overlayOffset = value,
-            ),
-            settingSlider(
-              'text_a2e6984f77',
-              c.overlayLeft,
-              0,
-              640,
-              (value) => c.overlayLeft = value,
-            ),
-            settingSlider(
-              'text_72c61f96bf',
-              c.overlayRight,
-              0,
-              640,
-              (value) => c.overlayRight = value,
-            ),
-          ],
+          2 => [settingHeading('page_overlay'), OverlaySettings(controller: c)],
           3 => [
             settingHeading('ha_entities'),
             toggle(
@@ -246,7 +167,7 @@ extension _Settings on _HomeState {
               }
             }),
           ],
-          _ => [
+          4 => [
             settingHeading('advanced'),
             settingAction(
               'text_9f0ca615e8',
@@ -256,6 +177,18 @@ extension _Settings on _HomeState {
             ParameterRow(
               Strings.text('adb_name'),
               trailing: Text(Strings.text('adb_status_$adbState')),
+            ),
+            ParameterRow(
+              Strings.text('auto_system_adb'),
+              labelAction: IndustrialIconButton(
+                icon: Icons.error_outline,
+                tooltip: Strings.text('auto_system_adb_explanation'),
+                onPressed: () => showAutoAdbExplanation(context, c),
+              ),
+              trailing: IndustrialSwitch(
+                value: c.autoSystemAdb,
+                onChanged: c.autoSystemAdbPending ? null : c.setAutoSystemAdb,
+              ),
             ),
             ParameterRow(
               Strings.text('text_413484c00f'),
@@ -291,11 +224,9 @@ extension _Settings on _HomeState {
             settingHeading('diagnostics'),
             settingAction('text_0b673e8796', showDiagnostics),
             settingAction('text_f403f4466e', entitySettings),
-            if (BuildChannel.isBeta) ...[
-              settingHeading('test_tools'),
-              settingAction('text_9fd69b1f22', () => c.action('auditFields')),
-            ],
           ],
+          5 when BuildChannel.isTesting => [Laboratory(controller: c)],
+          _ => [],
         },
       ),
     ),
@@ -314,6 +245,7 @@ extension _Settings on _HomeState {
             Expanded(
               child: Text(
                 BuildChannel.projectUrl,
+                textAlign: TextAlign.right,
                 style: TextStyle(
                   color: Palette.of(context).blue,
                   fontSize: 20,
@@ -347,32 +279,24 @@ extension _Settings on _HomeState {
   Widget settingAction(String key, VoidCallback action) => ParameterRow(
     Strings.text(key),
     trailing: IndustrialButton(
-      Strings.text('open'),
+      Strings.text(switch (key) {
+        'text_280779a502' => 'action_import',
+        'text_3d05c8ad5e' => 'action_export',
+        'text_0b673e8796' => 'action_view',
+        'text_219e5cc5ca' ||
+        'text_03b78d7463' ||
+        'text_9f0ca615e8' ||
+        'adb_settings' ||
+        'text_f403f4466e' => 'action_configure',
+        'text_076b77e2ac' => 'action_authorize',
+        'text_a304ba2797' => 'action_startup_settings',
+        'text_b9da27a9e2' => 'action_clear',
+        _ => key,
+      }),
       width: 160,
       trailing: Icons.chevron_right,
       onPressed: action,
     ),
     onTap: action,
-  );
-  Widget settingSlider(
-    String key,
-    double value,
-    double min,
-    double max,
-    ValueChanged<double> change,
-  ) => ParameterRow(
-    Strings.text(key),
-    trailing: SizedBox(
-      width: 360,
-      child: Slider(
-        value: value,
-        min: min,
-        max: max,
-        onChanged: (next) {
-          change(next);
-          save();
-        },
-      ),
-    ),
   );
 }

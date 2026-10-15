@@ -11,6 +11,9 @@ import '../domain/dashboard_layout.dart';
 import 'vehicle_bridge.dart';
 
 part 'ha_controller.dart';
+part 'permissions_controller.dart';
+part 'overlay_appearance.dart';
+part 'overlay_preferences.dart';
 
 class AppController extends ChangeNotifier {
   void _notify() {
@@ -18,6 +21,8 @@ class AppController extends ChangeNotifier {
   }
 
   final VehicleBridge bridge;
+  late final overlayAppearance = OverlayAppearance(this);
+  bool overlayPositionPending = false;
   AppController({VehicleBridge? bridge}) : bridge = bridge ?? VehicleBridge();
   List<Metric> metrics = [];
   List<HaEntity> haEntities = [];
@@ -44,6 +49,8 @@ class AppController extends ChangeNotifier {
       mqttHost = '';
   DashboardSize dashboardSize = DashboardSize.standard;
   bool adbEnabled = false;
+  bool autoSystemAdb = false;
+  bool overlayPermissionPending = false, autoSystemAdbPending = false;
   String adbHost = '127.0.0.1', adbMode = 'tcp';
   int adbPort = 5555;
   int mqttPort = 8883;
@@ -68,20 +75,26 @@ class AppController extends ChangeNotifier {
   Map<String, String> entityMappings = {};
   final Map<String, (DateTime, Future<List<HistoryPoint>>)> _historyRequests =
       {};
-  double overlayFont = 18,
-      overlayOpacity = 0.8,
-      overlayOffset = 0,
-      overlayLeft = 128,
-      overlayRight = 320;
+  double overlayFont = 18, overlayOpacity = 0.8;
   double? overlayX, overlayY;
   StreamSubscription<Map<String, dynamic>>? _events;
   String? error;
   String appVersion = '—', appBuildNumber = '';
   String get versionLabel =>
       appBuildNumber.isEmpty ? appVersion : '$appVersion ($appBuildNumber)';
+  String get effectiveTheme {
+    if (theme != 'system') return theme;
+    final appearance = status['appearance'];
+    final brightness = appearance is Map ? appearance['brightness'] : null;
+    return brightness == 'light' || brightness == 'dark'
+        ? brightness as String
+        : 'system';
+  }
+
   Map<String, dynamic> get config => {
     'schema': 2,
     'adbEnabled': adbEnabled,
+    'autoSystemAdb': autoSystemAdb,
     'adbHost': adbHost,
     'adbPort': adbPort,
     'adbMode': adbMode,
@@ -136,9 +149,6 @@ class AppController extends ChangeNotifier {
     'fallbackPolling': fallbackPolling,
     'overlayFont': overlayFont,
     'overlayOpacity': overlayOpacity,
-    'overlayOffset': overlayOffset,
-    'overlayLeft': overlayLeft,
-    'overlayRight': overlayRight,
     'overlayX': overlayX,
     'overlayY': overlayY,
   };
@@ -247,6 +257,7 @@ class AppController extends ChangeNotifier {
   void restore(Map<String, dynamic> c) {
     if (c.isEmpty) return;
     adbEnabled = c['adbEnabled'] ?? false;
+    autoSystemAdb = c['autoSystemAdb'] ?? false;
     adbHost = c['adbHost'] ?? '127.0.0.1';
     adbPort = c['adbPort'] ?? 5555;
     adbMode = c['adbMode'] ?? 'tcp';
@@ -303,9 +314,6 @@ class AppController extends ChangeNotifier {
     entityMappings = Map<String, String>.from(c['entityMappings'] ?? {});
     overlayFont = (c['overlayFont'] as num? ?? 18).toDouble();
     overlayOpacity = (c['overlayOpacity'] as num? ?? 0.8).toDouble();
-    overlayOffset = (c['overlayOffset'] as num? ?? 0).toDouble();
-    overlayLeft = (c['overlayLeft'] as num? ?? 128).toDouble();
-    overlayRight = (c['overlayRight'] as num? ?? 320).toDouble();
     overlayX = (c['overlayX'] as num?)?.toDouble();
     overlayY = (c['overlayY'] as num?)?.toDouble();
   }
@@ -441,6 +449,7 @@ class AppController extends ChangeNotifier {
         if (mqttPassword != null && mqttPassword.isNotEmpty)
           'mqttPassword': mqttPassword,
       });
+      if (_disposed) return false;
       if (r['status'] is Map) status = Map<String, dynamic>.from(r['status']);
       if (r['config'] is Map) restore(Map<String, dynamic>.from(r['config']));
       if (r['haDirectory'] is Map) {
@@ -449,11 +458,11 @@ class AppController extends ChangeNotifier {
           notify: false,
         );
       }
-      notifyListeners();
+      _notify();
       return true;
     } catch (e) {
       error = Strings.text('text_40525a7328');
-      notifyListeners();
+      _notify();
       return false;
     }
   }
@@ -541,6 +550,7 @@ class AppController extends ChangeNotifier {
   @override
   void dispose() {
     _disposed = true;
+    overlayAppearance.dispose();
     _events?.cancel();
     for (final s in readings.values) {
       s.dispose();

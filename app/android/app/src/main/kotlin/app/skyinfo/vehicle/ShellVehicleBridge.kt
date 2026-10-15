@@ -56,7 +56,7 @@ class ShellVehicleBridge(private val context: Context, private val disconnected:
             val line = body.put("op",op).put("request",id).toString()
             require(line.length <= 512*1024) { "Bridge request too large" }
             synchronized(this) { check(!closed); val output = checkNotNull(writer); output.write(line); output.newLine(); output.flush() }
-            val response = future.get(if (op == "control") 4 else 3,TimeUnit.SECONDS)
+            val response = future.get(if (op == "restoreAdbSettings") 5 else if (op == "control") 4 else 3,TimeUnit.SECONDS)
             check(!response.has("error")) { response.optString("error") }
             return response.getJSONObject("result")
         } finally { pending.remove(id) }
@@ -74,7 +74,9 @@ class ShellVehicleBridge(private val context: Context, private val disconnected:
     fun overlay(config: JSONObject, samples: Map<String,JSONObject>): JSONObject {
         return request("overlay",overlayRequest(config,samples))
     }
+    fun resetOverlayPosition(): Boolean = request("overlayReset").optBoolean("reset")
     fun editOverlay(): Boolean = request("overlayEdit").optBoolean("editing")
+    fun restoreAdbSettings(): JSONObject = request("restoreAdbSettings")
     @Synchronized fun close() {
         if (closed) return
         closed = true; sink = null

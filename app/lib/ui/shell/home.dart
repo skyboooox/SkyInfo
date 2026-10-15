@@ -22,11 +22,14 @@ import '../motion.dart';
 import '../navigation.dart';
 import '../field_details.dart';
 import '../overlay_preview.dart';
+import '../overlay_settings.dart';
 import '../layout.dart';
 import '../confirmation.dart';
 import '../connection_confirmation.dart';
 import '../network_adb_settings.dart';
+import '../auto_adb_explanation.dart';
 import '../release_notice.dart';
+import '../laboratory.dart';
 
 part 'information.dart';
 part 'overlay.dart';
@@ -290,7 +293,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
           if (!didPop && editing) setState(() => editing = false);
         },
         child: TickerMode(
-          enabled: visible && !c.reduceMotion,
+          enabled: visible,
           child: IndustrialPaper(
             child: SafeArea(
               child: Stack(
@@ -353,7 +356,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                             ],
                           ),
                           SizedBox(height: 16),
-                          if (page == 3 && BuildChannel.isBeta) ...[
+                          if (page == 3 && BuildChannel.isTesting) ...[
                             ReleaseNotice(
                               version: c.appVersion,
                               onOpen: openProject,

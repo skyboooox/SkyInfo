@@ -31,7 +31,7 @@ catalog=read('app/assets/catalog.json')
 native=read('app/android/app/src/main/assets/catalog.json')
 entities=read('app/assets/entities.json')
 icons=read('app/assets/icon-manifest.json')['icons']
-require(len(catalog)==91,'catalog count')
+require(len(catalog)==92,'catalog count')
 require(len({e['id'] for e in catalog})==len(catalog),'duplicate metric IDs')
 require(len(entities)==173 and len({e['id'] for e in entities})==173,'control IDs')
 require(len(icons)==90 and len({e['id'] for e in icons})==90,'icon IDs')

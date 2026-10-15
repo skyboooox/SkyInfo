@@ -4,6 +4,7 @@ import '../l10n/strings.dart';
 import 'industrial.dart';
 import 'layout.dart';
 import 'design_dialog.dart';
+import '../domain/build_channel.dart';
 
 List<String> get pageTitles => [
   Strings.text('page_information'),
@@ -17,7 +18,9 @@ List<String> get settingsTitles => [
   Strings.text('page_overlay'),
   Strings.text('page_connection'),
   Strings.text('advanced'),
+  Strings.text('laboratory'),
 ];
+List<int> get settingsTabs => [0, 1, 2, 3, 4, if (BuildChannel.isTesting) 5];
 
 class NavigationHeading extends StatelessWidget {
   final String title;

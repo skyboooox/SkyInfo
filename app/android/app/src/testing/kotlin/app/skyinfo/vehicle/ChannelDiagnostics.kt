@@ -6,9 +6,9 @@ import java.util.concurrent.TimeUnit
 
 internal object ChannelDiagnostics {
     const val enabled = true
-    fun audit(fields: Map<String, JSONObject>, source: ThreadPoolExecutor, onTimeout: () -> Unit): JSONObject {
+    fun audit(fields: Map<String, JSONObject>, source: ThreadPoolExecutor, altitude: GnssAltitude? = null, onTimeout: () -> Unit): JSONObject {
         val auditId = java.util.UUID.randomUUID().toString()
-        val ordinary = ReadOnlyVehicle(fields)
+        val ordinary = ReadOnlyVehicle(fields,altitude)
         val counts = mutableMapOf<String,Int>()
         var blocked = false
         android.util.Log.i("SkyInfo.Adaptation",JSONObject().put("kind","start").put("audit_id",auditId).put("uid",android.os.Process.myUid()).put("count",fields.keys.count { !isDerived(it) }).put("at",System.currentTimeMillis()).toString())

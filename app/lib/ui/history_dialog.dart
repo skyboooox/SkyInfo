@@ -7,6 +7,8 @@ import 'industrial.dart';
 import 'metric_tile.dart';
 import 'history_chart.dart';
 import 'layout.dart';
+import 'data_activity.dart';
+import 'retained_history.dart';
 
 Future<int?> chooseHistoryWindow(
   BuildContext context,
@@ -142,6 +144,13 @@ class _HistoryDetails extends StatefulWidget {
 }
 
 class _HistoryDetailsState extends State<_HistoryDetails> {
+  final historyApplied = ValueNotifier<int>(0);
+  @override
+  void dispose() {
+    historyApplied.dispose();
+    super.dispose();
+  }
+
   late int minutes = widget.tile.historyMinutes;
   late Future<List<List<HistoryPoint>>> history = query();
   Future<List<List<HistoryPoint>>> query({bool refresh = false}) => Future.wait(
@@ -154,6 +163,10 @@ class _HistoryDetailsState extends State<_HistoryDetails> {
     final c = widget.c, tile = widget.tile, p = Palette.of(context);
     return DesignDialog(
       title: tile.title,
+      leading: DataActivityDot(
+        readings: [for (final id in tile.fields) c.reading(id)],
+        historyApplied: historyApplied,
+      ),
       footer: Align(
         alignment: Alignment.centerRight,
         child: SizedBox(
@@ -290,30 +303,15 @@ class _HistoryDetailsState extends State<_HistoryDetails> {
               ),
               SizedBox(height: 24),
               Expanded(
-                child: FutureBuilder<List<List<HistoryPoint>>>(
+                child: RetainedHistory(
+                  key: ValueKey((c, tile.fields.join('\u0000'), minutes)),
                   future: history,
-                  builder: (context, s) {
-                    if (s.connectionState != ConnectionState.done) {
-                      return Center(
-                        child: Text(Strings.text('text_3182341bcc')),
-                      );
-                    }
-                    if (s.hasError) {
-                      return Center(
-                        child: Text(
-                          s.error.toString().replaceFirst('Bad state: ', ''),
-                        ),
-                      );
-                    }
-                    if (s.data == null || s.data!.every((v) => v.isEmpty)) {
-                      return Center(
-                        child: Text(Strings.text('text_482a16ecfa')),
-                      );
-                    }
+                  onApplied: () => historyApplied.value++,
+                  builder: (data) {
                     return tile.kind == WidgetKind.timeline
-                        ? StateTimeline(points: s.data!.first, minutes: minutes)
+                        ? StateTimeline(points: data.first, minutes: minutes)
                         : HistoryChart(
-                            series: s.data!,
+                            series: data,
                             minutes: minutes,
                             minimum: tile.minimum,
                             maximum: tile.maximum,

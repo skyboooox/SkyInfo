@@ -14,12 +14,13 @@ import java.util.concurrent.TimeUnit
 @Config(sdk = [34], manifest = Config.NONE)
 class BuildChannelTest {
     @Test fun channelDoesNotDependOnDebugMode() {
-        assertEquals(BuildConfig.FLAVOR == "beta", ChannelDiagnostics.enabled)
+        assertEquals(BuildConfig.FLAVOR in listOf("alpha", "beta"), ChannelDiagnostics.enabled)
         assertEquals("app.skyinfo.vehicle", BuildConfig.APPLICATION_ID)
-        assertEquals(BuildConfig.FLAVOR == "beta", Regex("-beta[.][0-9]+$").containsMatchIn(BuildConfig.VERSION_NAME))
+        if (BuildConfig.FLAVOR == "stable") assertFalse(Regex("-(alpha|beta)[.][0-9]+$").containsMatchIn(BuildConfig.VERSION_NAME))
+        else assertTrue(Regex("-${BuildConfig.FLAVOR}[.][0-9]+$").containsMatchIn(BuildConfig.VERSION_NAME))
     }
 
-    @Test fun stableCannotInvokeAuditAndBetaCanCompleteAnEmptyOfflineAudit() {
+    @Test fun stableCannotInvokeAuditAndTestChannelsCanCompleteAnEmptyOfflineAudit() {
         val source = ThreadPoolExecutor(1, 1, 0, TimeUnit.SECONDS, ArrayBlockingQueue<Runnable>(1))
         var timedOut = false
         ShadowLog.clear()

@@ -24,6 +24,7 @@ class RuntimeCoordinator private constructor(context: Context) {
     private var readBlocked = false
     private var publishInFlight = false
     private val fields: Map<String, JSONObject>
+    private val altitude = GnssAltitude(this.context)
     private val reader: ReadOnlyVehicle
     private val session: VehicleSession
     private var callbackFlush: ScheduledFuture<*>? = null
@@ -37,6 +38,9 @@ class RuntimeCoordinator private constructor(context: Context) {
     private var networkCallback: android.net.ConnectivityManager.NetworkCallback? = null
     private val deviceIdentity = DeviceIdentity(this.context)
     private var config = deviceIdentity.defaults(store.load()).also(store::save)
+    private val systemAdbSettings = AutoAdbSettings(AndroidAdbSettings(this.context))
+    private val appearance = VehicleAppearance(this.context) { execute { appearanceChanged() } }
+    private var systemAdbResult = JSONObject().put("state", "disabled")
     private val haEntityUpdates = mutableMapOf<String,JSONObject>()
     private var haFlush: ScheduledFuture<*>? = null
     private var haDirectoryChanged = false
@@ -105,18 +109,23 @@ class RuntimeCoordinator private constructor(context: Context) {
         publisher.command = { data, nonce, retained -> execute { handleCommand(data, "mqtt", nonce, retained) } }
         fields = EntityCatalog.fields(this.context)
         if (migrateConvertedUnits(config, fields)) store.save(config)
-        reader = ReadOnlyVehicle(fields)
+        reader = ReadOnlyVehicle(fields, altitude)
         localHistory.configure(config)
         session = VehicleSession(this.context, reader, ::execute, { id, fresh ->
-            callbackChanged.addAll(accept(id, fresh))
-            if (callbackFlush == null) callbackFlush = worker.schedule({
-                callbackFlush = null; val batch = callbackChanged.toSet(); callbackChanged.clear()
-                emit(); publishControlEntities(); if (batch.isNotEmpty()) publishSelected(batch)
-            }, 100, TimeUnit.MILLISECONDS)
-        }, { previousDemand = emptySet(); readBlocked = false; reconfigure() }, { markDisconnected(); emit(); publishSelected() }, ::overlayChanged)
-
+            receiveSample(id, fresh)
+        }, { previousDemand = emptySet(); readBlocked = false; reconfigure() }, { markDisconnected(); emit(); publishSelected() }, ::overlayChanged,
+            { restoreSystemAdb() })
+        restoreSystemAdb()
     }
     fun execute(action: () -> Unit) { worker.execute(action) }
+    private fun receiveSample(id: String, fresh: JSONObject) {
+        callbackChanged.addAll(accept(id, fresh))
+        if (callbackFlush == null) callbackFlush = worker.schedule({
+            callbackFlush = null; val batch = callbackChanged.toSet(); callbackChanged.clear()
+            emit(); publishControlEntities(); if (batch.isNotEmpty()) publishSelected(batch)
+        }, 100, TimeUnit.MILLISECONDS)
+    }
+
     private fun handleCommand(event: JSONObject, transport: String = "ha", nonce: String = "", retained: Boolean = false) {
         val flag = if (transport == "ha") "haControlEnabled" else "mqttControlEnabled"
         if (store.stopped() || !config.optBoolean(flag) || config.optString("connection","ha") != transport) return
@@ -195,11 +204,15 @@ class RuntimeCoordinator private constructor(context: Context) {
         .put("vehicle", runtimeError ?: if (samples.values.any { it.optString("quality") in listOf("available", "unverified") && it.has("value") }) NativeStrings.text_c6f7c57883 else NativeStrings.text_38093d864b)
         .put("path", session.identity)
         .put("adb", session.adbState)
+        .put("systemAdb", systemAdbResult)
+        .put("appearance", appearance.current.json())
+        .put("overlayGranted", Settings.canDrawOverlays(context))
         .put("overlay", if (Settings.canDrawOverlays(context)) NativeStrings.text_284cc0bae1 else NativeStrings.text_86bddceb9d)
         .put("overlayInteraction",overlayInteraction).put("haImport",haSource.state)
         .put("subscription", session.state)
         .put("connection", if (config.optString("connection","ha") == "ha" && config.optBoolean("haControlEnabled") && haSession.sessionState == NativeStrings.text_09f11a24a6) NativeStrings.text_65fe35c45e else publisher.status)
     fun snapshot(): JSONObject = JSONObject().put("config", config).put("samples", JSONObject(samples as Map<*, *>)).put("status", status()).put("haDirectory",haDirectory())
+    private var positionResetTime = 0L
     private fun overlayChanged(state: JSONObject) {
         overlayInteraction = if (!state.optBoolean("visible")) NativeStrings.text_d62b59c59b else when (state.optString("state")) {
             "armed" -> NativeStrings.text_2452e4fd2d
@@ -207,7 +220,7 @@ class RuntimeCoordinator private constructor(context: Context) {
             else -> if (state.optBoolean("gesture")) NativeStrings.text_e3ada582bd else NativeStrings.text_ead919fb39
         }
         val payload = JSONObject().put("status",status())
-        if (state.has("x") && state.has("y") && config.optBoolean("overlayEnabled") && !store.stopped()) {
+        if (state.has("x") && state.has("y") && state.optLong("positionTime") > positionResetTime && config.optBoolean("overlayEnabled") && !store.stopped()) {
             val x = state.getDouble("x"); val y = state.getDouble("y")
             if (x.isFinite() && y.isFinite() && x in 0.0..1.0 && y in 0.0..1.0) {
                 config.put("overlayX",x).put("overlayY",y); store.save(config)
@@ -217,8 +230,38 @@ class RuntimeCoordinator private constructor(context: Context) {
         if (visible) main.post { sink?.success(jsonMap(payload)) }
     }
     fun editOverlay() {
-        require(config.optBoolean("overlayEnabled") && !store.stopped())
-        if (!session.editOverlay()) main.post { overlay?.arm() }
+        require(config.optBoolean("overlayEnabled") && !store.stopped() && (config.optJSONArray("overlays")?.length() ?: 0) > 0)
+        if (!session.editOverlay()) {
+            val result = java.util.concurrent.CompletableFuture<Boolean>()
+            main.post { result.complete(overlay?.arm() == true) }
+            check(result.get(2,TimeUnit.SECONDS))
+        }
+    }
+    fun resetOverlayPosition() {
+        session.resetOverlayPosition()
+        val result = java.util.concurrent.CompletableFuture<Boolean>()
+        main.post { overlay?.resetPosition(); result.complete(true) }
+        check(result.get(2,TimeUnit.SECONDS))
+        positionResetTime = android.os.SystemClock.elapsedRealtimeNanos()
+        val next = JSONObject(config.toString()).put("overlayX",JSONObject.NULL).put("overlayY",JSONObject.NULL)
+        try { store.save(next) } catch (error: Throwable) { drawOverlay(); throw error }
+        config = next
+        emit()
+    }
+    private var overlayStyleDraft: JSONObject? = null
+    fun saveOverlayAppearance(style: JSONObject) {
+        val patch = overlayAppearancePatch(style)
+        val next = JSONObject(config.toString())
+        patch.keys().forEach { next.put(it,patch.get(it)) }
+        store.save(next)
+        config = next
+        overlayStyleDraft = null
+        emit()
+    }
+    fun previewOverlayStyle(style: JSONObject?) {
+        if (!visible && style != null) return
+        overlayStyleDraft = style?.let(::overlayStylePatch)
+        drawOverlay()
     }
     private fun emit(directory: Boolean = false) {
         val message = JSONObject().put("samples", JSONObject(samples as Map<*, *>)).put("status", status())
@@ -228,7 +271,13 @@ class RuntimeCoordinator private constructor(context: Context) {
         haEntityUpdates.clear()
         val payload = jsonMap(message)
         if (visible) main.post { sink?.success(payload) }
-        val overlayConfig = if (Settings.canDrawOverlays(context)) config else JSONObject(config.toString()).put("overlayEnabled",false)
+        drawOverlay()
+    }
+    private fun drawOverlay() {
+        val preview = JSONObject(config.toString())
+        overlayStyleDraft?.let { patch -> patch.keys().forEach { preview.put(it,patch.get(it)) } }
+        val overlayConfig = appearance.current.overlayConfig(preview)
+        if (!Settings.canDrawOverlays(context) || store.stopped()) overlayConfig.put("overlayEnabled",false)
         val overlayIds = overlayFieldIds(overlayConfig)
         val overlaySamples = samples.filterKeys { it in overlayIds }.mapValues { JSONObject(it.value.toString()) }
         val overlayFields = if (overlayIds.any { HaBinding.parse(it) != null }) displayFields().filterKeys { it in overlayIds }
@@ -237,6 +286,7 @@ class RuntimeCoordinator private constructor(context: Context) {
         main.post { if (remoteOverlay) overlay?.close() else overlay?.update(overlayConfig, overlayFields, overlaySamples) }
     }
     fun save(next: JSONObject, secrets: Map<String, String>) {
+        val autoAdbWasEnabled = config.optBoolean("autoSystemAdb")
         val validated = ConfigValidator.validate(deviceIdentity.defaults(JSONObject(next.toString())), displayFields())
         if (HaEndpoint.identity(validated.optString("haUrl")) != HaEndpoint.identity(config.optString("haUrl"))) validated.put("haConnectionId",java.util.UUID.randomUUID().toString())
         secrets.forEach { (name, value) -> if (value.isNotEmpty()) store.setSecret(name, value) }
@@ -251,8 +301,10 @@ class RuntimeCoordinator private constructor(context: Context) {
         }
         validated.put("haFields",descriptors)
         if (AdbEndpoint.from(config) != AdbEndpoint.from(validated)) { session.close(); markDisconnected() }
+        overlayStyleDraft = null
         config = validated
         store.save(config)
+        if (!config.optBoolean("autoSystemAdb") || !autoAdbWasEnabled) restoreSystemAdb()
         localHistory.configure(config)
         store.stopped(false)
         generation++; retry?.cancel(false); retry = null; retrySeconds = 1; pendingFields.clear()
@@ -277,7 +329,9 @@ class RuntimeCoordinator private constructor(context: Context) {
         return expandDependencies(EntityCatalog.demand(context,ids),fields)
     }
     fun setVisible(value: Boolean, information: Boolean? = null) {
+        if (!value) overlayStyleDraft = null
         val resumed = value && !visible
+        if (resumed) appearance.refresh()
         visible = value; if (information != null) informationVisible = information
         reconfigure()
         if (resumed) emit(true)
@@ -295,8 +349,10 @@ class RuntimeCoordinator private constructor(context: Context) {
         catch (_: Exception) { runtimeError = if (fromBoot) NativeStrings.text_30caebe3f1 else NativeStrings.text_aa00745af5 }
     }
     fun attach(current: Service) { service = current; overlay = OverlayWindow(current,changed = { value -> execute { if (service === current) overlayChanged(value) } }); execute { network.execute { publisher.configure(config) }; reconfigure() } }
-    fun detach(current: Service) { if (service === current) { overlay?.close(); overlay = null; service = null; execute { poll?.cancel(false); poll = null } } }
+    fun detach(current: Service) { if (service === current) { overlay?.close(); overlay = null; service = null; execute { if (!visible) altitude.close(); poll?.cancel(false); poll = null } } }
+    private fun registeredFields() = session.registered + if (altitude.subscribed) setOf(GNSS_ALTITUDE) else emptySet()
     fun reconfigure() {
+        appearance.setActive(visible || (!store.stopped() && config.optBoolean("overlayEnabled")))
         val appOps = context.getSystemService(android.app.AppOpsManager::class.java)
         if (config.optBoolean("overlayEnabled") && overlayPermissionWatcher == null) {
             val listener = android.app.AppOpsManager.OnOpChangedListener { _, pkg -> if (pkg == context.packageName) execute { emit() } }
@@ -307,7 +363,12 @@ class RuntimeCoordinator private constructor(context: Context) {
         val added = demand - previousDemand
         previousDemand = demand
         val active = !store.stopped() && ((visible && (informationVisible || previewDemand.isNotEmpty())) || enabled())
-        session.configure(if (active) demand.filter { !isDerived(it) && HaBinding.parse(it) == null }.toSet() else emptySet(), config.optBoolean("adbEnabled"),
+        val locationWanted = active && GNSS_ALTITUDE in demand
+        val locationForeground = (service as? RuntimeService)?.setLocationActive(locationWanted && altitude.permitted) == true
+        altitude.configure(locationWanted, visible || locationForeground) { fresh -> execute {
+            if (!store.stopped() && GNSS_ALTITUDE in previousDemand) receiveSample(GNSS_ALTITUDE, fresh)
+        } }
+        session.configure(if (active) demand.filter { it != GNSS_ALTITUDE && !isDerived(it) && HaBinding.parse(it) == null }.toSet() else emptySet(), config.optBoolean("adbEnabled"),
             active && config.optBoolean("overlayEnabled") && (config.optJSONArray("overlays")?.length() ?: 0) > 0, visible && !store.stopped())
         haSource.configure(config, !store.stopped(), demand.filter { HaBinding.parse(it) != null }.toSet())
         haSession.configure(config, enabled() && (config.optBoolean("haImportEnabled") || config.optBoolean("haControlEnabled") || (config.optBoolean("publishEnabled") && list(config.optJSONArray("uploaded")).isNotEmpty())))
@@ -333,9 +394,9 @@ class RuntimeCoordinator private constructor(context: Context) {
         if (active) {
             added.filter { it.startsWith("system.") }.forEach { accept(it, reader.read(it)) }
             if (added.any { !it.startsWith("system.") }) readCurrent(added)
-            if (config.optBoolean("fallbackPolling") && demand.any { !isDerived(it) && !it.startsWith("system.") && HaBinding.parse(it) == null && it !in session.registered }) {
+            if (config.optBoolean("fallbackPolling") && demand.any { !isDerived(it) && !it.startsWith("system.") && HaBinding.parse(it) == null && it != GNSS_ALTITUDE && it !in registeredFields() }) {
                 val captured = generation
-                poll = worker.scheduleWithFixedDelay({ if (captured == generation && !store.stopped()) readCurrent(wanted() - session.registered) }, 0, 10, TimeUnit.SECONDS)
+                poll = worker.scheduleWithFixedDelay({ if (captured == generation && !store.stopped()) readCurrent(wanted() - registeredFields() - GNSS_ALTITUDE) }, 0, 10, TimeUnit.SECONDS)
             }
         }
         emit()
@@ -382,12 +443,13 @@ class RuntimeCoordinator private constructor(context: Context) {
     }
     private fun markDisconnected() {
         sourceEpoch++
-        samples.keys.filter { !it.startsWith("system.") && HaBinding.parse(it) == null }.toList().forEach { id -> accept(id, JSONObject().put("quality", "disconnected").put("source", id).put("receivedAt", System.currentTimeMillis())) }
+        samples.keys.filter { it != GNSS_ALTITUDE && !it.startsWith("system.") && HaBinding.parse(it) == null }.toList().forEach { id -> accept(id, JSONObject().put("quality", "disconnected").put("source", id).put("receivedAt", System.currentTimeMillis())) }
     }
     private fun readCurrent(ids: Set<String> = wanted()) {
         val before = samples.mapValues { semantic(it.value) }
         ids.filter { !isDerived(it) && HaBinding.parse(it) == null }.sortedBy { if (fields[it]?.has("unitField") == true) 1 else 0 }.forEach { id ->
-            val fresh = if (readBlocked && !id.startsWith("system.")) JSONObject().put("quality", "timeout").put("source", id)
+            val fresh = if (id == GNSS_ALTITUDE) altitude.read()
+            else if (readBlocked && !id.startsWith("system.")) JSONObject().put("quality", "timeout").put("source", id)
             else {
                 try {
                     val future = source.submit<JSONObject> { session.read(id) }
@@ -406,11 +468,11 @@ class RuntimeCoordinator private constructor(context: Context) {
         if (changed.isNotEmpty()) publishSelected(changed.keys)
     }
     fun auditFields(): JSONObject {
-        adaptationAudit = ChannelDiagnostics.audit(fields, source) { readBlocked = true }
+        adaptationAudit = ChannelDiagnostics.audit(fields, source, altitude) { readBlocked = true }
         return diagnostics()
     }
     fun refresh() { readBlocked = false; readCurrent() }
-    fun appearanceChanged() { emit() }
+    fun appearanceChanged() { appearance.refresh(); emit() }
     private fun semantic(s: JSONObject) = "${s.opt("value")}|${s.opt("unit")}|${s.optString("quality")}|${s.optString("source")}|${s.optString("transport")}|${s.opt("clientUid")}"
     private var entitiesPublishing = false
     private var entitiesDirty = false
@@ -514,7 +576,7 @@ class RuntimeCoordinator private constructor(context: Context) {
     fun diagnostics(): JSONObject = JSONObject().put("app_version", context.packageManager.getPackageInfo(context.packageName,0).versionName).put("android", android.os.Build.VERSION.RELEASE)
         .put("channel",BuildConfig.FLAVOR).put("build_type",BuildConfig.BUILD_TYPE)
         .put("uid",android.os.Process.myUid()).put("status",status()).put("demand_fields",wanted().size)
-        .put("registered_fields",session.registered.size).put("cached_fields",samples.size).put("local_history_storage",localHistory.storageStats())
+        .put("registered_fields",registeredFields().size).put("cached_fields",samples.size).put("local_history_storage",localHistory.storageStats())
         .put("quality_counts",JSONObject(samples.values.groupingBy { it.optString("quality") }.eachCount()))
         .put("adaptation_audit",adaptationAudit ?: JSONObject.NULL)
         .put("last_command",lastCommand ?: JSONObject.NULL)
@@ -529,10 +591,22 @@ class RuntimeCoordinator private constructor(context: Context) {
     fun clearCredentials() { store.clearSecrets(); save(JSONObject(config.toString()).put("publishEnabled",false).put("haImportEnabled",false).put("haControlEnabled",false).put("mqttControlEnabled",false), emptyMap()) }
     fun clearHistory() { localHistory.clear(); localHistory.configure(config) }
     fun applicationStarted() {
+        appearance.refresh()
         config = applicationStartConfig(config)
         store.save(config)
+        restoreSystemAdb()
         visible = true
         resume()
+    }
+    private fun restoreSystemAdb() {
+        systemAdbResult = systemAdbSettings.restore(config.optBoolean("autoSystemAdb"))
+        if (!config.optBoolean("autoSystemAdb") || session.adbState != "connected") return
+        if (systemAdbResult.optString("state") == "enabled" && systemAdbResult.optBoolean("appPermission")) return
+        try { session.restoreAdbSettings()?.let { systemAdbResult = it } }
+        catch (_: Exception) { systemAdbResult.put("bridgeFailure", true) }
+    }
+    fun setOverlayEnabled(enabled: Boolean) {
+        save(JSONObject(config.toString()).put("overlayEnabled", enabled && Settings.canDrawOverlays(context)), emptyMap())
     }
     fun resume() {
         store.stopped(false); readBlocked = false; previousDemand = emptySet(); generation++
@@ -540,8 +614,9 @@ class RuntimeCoordinator private constructor(context: Context) {
         ensureRunning(); reconfigure(); publishSelected()
     }
     fun stop() {
+        appearance.setActive(visible)
         controlRestoreGeneration++; controlRestoreKey = null; controlRestoreRetry?.cancel(false); controlRestoreRetry = null
-        store.stopped(true); publishControlEntities(); receipts.clear(); receiptRetry?.cancel(false); receiptRetry = null; haSession.close(); releaseOverlayWatcher(); releaseNetworkMonitor(); heartbeat?.cancel(false); heartbeat = null; session.close(); callbackFlush?.cancel(false); callbackFlush = null; callbackChanged.clear(); generation++; poll?.cancel(false); poll = null; retry?.cancel(false); retry = null; pendingFields.clear()
+        store.stopped(true); altitude.close(); (service as? RuntimeService)?.setLocationActive(false); publishControlEntities(); receipts.clear(); receiptRetry?.cancel(false); receiptRetry = null; haSession.close(); releaseOverlayWatcher(); releaseNetworkMonitor(); heartbeat?.cancel(false); heartbeat = null; session.close(); callbackFlush?.cancel(false); callbackFlush = null; callbackChanged.clear(); generation++; poll?.cancel(false); poll = null; retry?.cancel(false); retry = null; pendingFields.clear()
         markDisconnected()
         val captured = generation
         val settings = JSONObject(config.toString())

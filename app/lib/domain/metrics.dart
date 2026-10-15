@@ -139,7 +139,7 @@ class Sample {
     this.changedAt,
   });
   factory Sample.fromJson(Map<String, dynamic> j) => Sample(
-    value: j['value'],
+    value: j['quality'] == 'stale' ? null : j['value'],
     raw: j['raw'],
     quality: j['quality'] ?? 'unverified',
     source: j['source'] ?? '',
@@ -155,6 +155,7 @@ class Sample {
   String get qualityLabel => switch (quality) {
     'available' => Strings.text('available'),
     'invalid' => Strings.text('invalid'),
+    'stale' => Strings.text('quality_stale'),
     'error' => Strings.text('text_d9f607a200'),
     'timeout' => Strings.text('text_ff06c243d7'),
     'permission' => Strings.text('text_c664b782cd'),

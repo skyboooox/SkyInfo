@@ -34,7 +34,7 @@ class SkyInfo extends StatelessWidget {
       themeAnimationCurve: Curves.easeOutCubic,
       theme: industrialTheme(Brightness.light),
       darkTheme: industrialTheme(Brightness.dark),
-      themeMode: switch (controller.theme) {
+      themeMode: switch (controller.effectiveTheme) {
         'light' => ThemeMode.light,
         'dark' => ThemeMode.dark,
         _ => ThemeMode.system,
