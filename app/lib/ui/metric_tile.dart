@@ -35,11 +35,37 @@ class MetricTile extends StatefulWidget {
   State<MetricTile> createState() => _MetricTileState();
 }
 
-class _MetricTileState extends State<MetricTile> {
+class _MetricTileState extends State<MetricTile> with WidgetsBindingObserver {
   final historyApplied = ValueNotifier<int>(0);
   DateTime get displayNow => widget.clock?.call() ?? widget.now;
   Future<List<List<HistoryPoint>>>? _history;
   Timer? _historyRefresh;
+  bool _historyDirty = false;
+  bool _foreground =
+      WidgetsBinding.instance.lifecycleState == null ||
+      WidgetsBinding.instance.lifecycleState == AppLifecycleState.resumed;
+  void _scheduleHistoryRefresh() {
+    if (!_foreground || !_historyDirty) return;
+    _historyRefresh ??= Timer(const Duration(seconds: 5), () {
+      _historyRefresh = null;
+      if (mounted) {
+        _historyDirty = false;
+        setState(() => _query(refresh: true));
+      }
+    });
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    _foreground = state == AppLifecycleState.resumed;
+    if (_foreground) {
+      _scheduleHistoryRefresh();
+    } else {
+      _historyRefresh?.cancel();
+      _historyRefresh = null;
+    }
+  }
+
   final _historyListeners = <(ValueNotifier<Sample>, VoidCallback)>[];
   void _bindHistory() {
     for (final listener in _historyListeners) {
@@ -48,6 +74,7 @@ class _MetricTileState extends State<MetricTile> {
     _historyListeners.clear();
     _historyRefresh?.cancel();
     _historyRefresh = null;
+    _historyDirty = false;
     if (!widget.tile.kind.history) return;
     for (final id in widget.tile.fields) {
       final reading = widget.controller.reading(id);
@@ -58,10 +85,8 @@ class _MetricTileState extends State<MetricTile> {
         final next = signature(reading.value);
         if (next == previous) return;
         previous = next;
-        _historyRefresh ??= Timer(Duration(seconds: 5), () {
-          _historyRefresh = null;
-          if (mounted) setState(() => _query(refresh: true));
-        });
+        _historyDirty = true;
+        _scheduleHistoryRefresh();
       }
 
       reading.addListener(changed);
@@ -71,6 +96,7 @@ class _MetricTileState extends State<MetricTile> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _historyRefresh?.cancel();
     for (final listener in _historyListeners) {
       listener.$1.removeListener(listener.$2);
@@ -82,6 +108,7 @@ class _MetricTileState extends State<MetricTile> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _bindHistory();
     _query();
   }
@@ -395,8 +422,9 @@ class _MetricTileState extends State<MetricTile> {
       );
     }
     return switch (t.kind) {
-      WidgetKind.list || WidgetKind.availability => ListView(
-        children: t.fields.map(listEntry).toList(),
+      WidgetKind.list || WidgetKind.availability => ListView.builder(
+        itemCount: t.fields.length,
+        itemBuilder: (context, index) => listEntry(t.fields[index]),
       ),
       WidgetKind.pair =>
         t.columns == 1
@@ -417,23 +445,24 @@ class _MetricTileState extends State<MetricTile> {
                     ),
                 ],
               ),
-      WidgetKind.glance => GridView(
+      WidgetKind.glance => GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: t.glanceColumns,
           mainAxisExtent: t.time != TimeDisplay.none ? 164 : 140,
         ),
-        children: [
-          for (final id in t.fields)
-            Container(
-              padding: EdgeInsets.all(8),
-              margin: EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                color: Palette.of(context).surface,
-                border: Border.all(color: Palette.of(context).grid),
-              ),
-              child: reading(id, mini: true, named: true),
+        itemCount: t.fields.length,
+        itemBuilder: (context, index) {
+          final id = t.fields[index];
+          return Container(
+            padding: EdgeInsets.all(8),
+            margin: EdgeInsets.all(4),
+            decoration: BoxDecoration(
+              color: Palette.of(context).surface,
+              border: Border.all(color: Palette.of(context).grid),
             ),
-        ],
+            child: reading(id, mini: true, named: true),
+          );
+        },
       ),
       WidgetKind.trend ||
       WidgetKind.comparison ||

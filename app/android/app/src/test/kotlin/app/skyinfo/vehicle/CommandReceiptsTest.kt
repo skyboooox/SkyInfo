@@ -18,9 +18,12 @@ class CommandReceiptsTest {
         assertEquals(16,queue.size)
         assertEquals("id_4",queue.next(config)!!.result.getString("id"))
         queue.delivered("id_4"); assertEquals("id_5",queue.next(config)!!.result.getString("id"))
+        val queued = queue.next(config)!!
+        assertTrue(queue.isCurrent(queued,config))
+        assertFalse(queue.isCurrent(queued,JSONObject(config.toString()).put("mqttHost","two")))
         assertNotNull(queue.next(JSONObject(config.toString()).put("publishEnabled",false)))
         assertNull(queue.next(JSONObject(config.toString()).put("mqttHost","two")))
         queue.add(config,JSONObject().put("id","late"))
-        now += 120001; assertNull(queue.next(config)); assertEquals(0,queue.size)
+        now += 120001; assertFalse(queue.isCurrent(queued,config)); assertNull(queue.next(config)); assertEquals(0,queue.size)
     }
 }

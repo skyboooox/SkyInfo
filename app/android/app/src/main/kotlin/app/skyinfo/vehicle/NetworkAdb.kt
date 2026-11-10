@@ -11,23 +11,33 @@ import java.security.cert.Certificate
 import java.util.concurrent.TimeUnit
 
 internal class NetworkAdb(private val context: Context, private val endpoint: AdbEndpoint,
-    private val identity: () -> AdbIdentity = { AdbIdentity.load(context) }) {
-    private fun manager(): AbsAdbConnectionManager {
+    private val identity: () -> AdbIdentity = { AdbIdentity.load(context) },
+    private val authorization: AdbAuthorization = AdbAuthorization(context)) {
+    private fun manager(required: () -> Unit = {}): AbsAdbConnectionManager {
         val identity = identity()
         return object : AbsAdbConnectionManager() {
             override fun getPrivateKey() = identity.privateKey
             override fun getCertificate(): Certificate = identity.certificate
             override fun getDeviceName() = "SkyInfo"
+            override fun onAuthorizationRequired() { authorization.pause(); required() }
         }.apply { setApi(Build.VERSION.SDK_INT); setTimeout(8, TimeUnit.SECONDS) }
     }
     fun launch(command: Array<String>, environment: Array<String>): Process {
         check(endpoint.enabled)
         requireLocalHost(endpoint.host)
-        val client = manager()
+        val needsAuthorization = java.util.concurrent.atomic.AtomicBoolean()
+        val client = manager { needsAuthorization.set(true) }
         try {
-            check(client.connect(endpoint.host, endpoint.port)) { "adb_authorization_required" }
+            if (!client.connect(endpoint.host, endpoint.port)) throw java.net.SocketTimeoutException("ADB handshake timeout")
+            authorization.authorized()
+            needsAuthorization.set(false)
             return AdbShellProcess(client, client.openStream("shell:" + bridgeShell(command, environment)))
-        } catch (error: Throwable) { client.disconnect(); throw error }
+        } catch (error: Throwable) {
+            if (error is io.github.muntashirakon.adb.AdbPairingRequiredException) authorization.pause("pair_required")
+            client.disconnect()
+            if (needsAuthorization.get()) throw AdbAuthorizationRequiredException(error)
+            throw error
+        }
     }
     fun pair(port: Int, code: String) {
         require(port in 1..65535 && Regex("^[0-9]{6}$").matches(code))

@@ -34,7 +34,10 @@ class AppController extends ChangeNotifier {
   final Map<String, ValueNotifier<String?>> commandResults = {};
   final Set<String> pendingCommands = {};
   final Map<Object, Set<String>> _previewLeases = {};
-  Future<void>? _previewQueue;
+  Set<String> _previewDemand = {};
+  Set<String> _previewSent = {};
+  bool _previewSending = false;
+  bool _previewUnknown = false;
   bool _disposed = false;
   List<Map<String, dynamic>> iconCatalog = [];
   List<TileSpec> tiles = [];
@@ -75,6 +78,8 @@ class AppController extends ChangeNotifier {
   Map<String, String> entityMappings = {};
   final Map<String, (DateTime, Future<List<HistoryPoint>>)> _historyRequests =
       {};
+  final Map<String, Future<List<HistoryPoint>>> _historyInFlight = {};
+  int _historyEpoch = 0;
   double overlayFont = 18, overlayOpacity = 0.8;
   double? overlayX, overlayY;
   StreamSubscription<Map<String, dynamic>>? _events;
@@ -237,7 +242,7 @@ class AppController extends ChangeNotifier {
           }
           if (e['status'] is Map) {
             final next = Map<String, dynamic>.from(e['status']);
-            if (!mapEquals(status, next)) {
+            if (!_sameJson(status, next)) {
               status = next;
               notifyListeners();
             }
@@ -420,28 +425,52 @@ class AppController extends ChangeNotifier {
   }
 
   void _updatePreview(Object owner, Iterable<String>? fields) {
+    if (_disposed) return;
     if (fields == null) {
       _previewLeases.remove(owner);
     } else {
       _previewLeases[owner] = fields.toSet();
     }
-    final demand = _previewLeases.values.expand((e) => e).toSet().toList();
-    _previewQueue = _previewQueue == null
-        ? _sendPreview(demand)
-        : _previewQueue!.then((_) => _sendPreview(demand));
+    final demand = _previewLeases.values.expand((e) => e).toSet();
+    if (setEquals(_previewDemand, demand) && !_previewUnknown) return;
+    _previewDemand = demand;
+    _sendPreview();
   }
 
-  Future<void> _sendPreview(List<String> fields) async {
-    if (_disposed) return;
+  Future<void> _sendPreview() async {
+    if (_previewSending) return;
+    _previewSending = true;
     try {
-      final r = await bridge.call('previewFields', {'fields': fields});
-      applySamples(Map<String, dynamic>.from(r['samples'] ?? {}));
-    } catch (_) {}
+      while (_previewUnknown || !setEquals(_previewSent, _previewDemand)) {
+        final fields = Set<String>.from(_previewDemand);
+        try {
+          final r = await bridge.call('previewFields', {
+            'fields': fields.toList(),
+          });
+          if (!_disposed) {
+            applySamples(Map<String, dynamic>.from(r['samples'] ?? {}));
+          }
+          _previewSent = fields;
+          _previewUnknown = false;
+        } catch (_) {
+          _previewUnknown = true;
+          if (setEquals(fields, _previewDemand)) break;
+        }
+      }
+    } finally {
+      _previewSending = false;
+    }
+  }
+
+  void _clearHistoryRequests() {
+    _historyEpoch++;
+    _historyRequests.clear();
+    _historyInFlight.clear();
   }
 
   Future<bool> save({String? haToken, String? mqttPassword}) async {
     error = null;
-    _historyRequests.clear();
+    _clearHistoryRequests();
     try {
       final r = await bridge.call('save', {
         'config': config,
@@ -473,7 +502,7 @@ class AppController extends ChangeNotifier {
       if (config is! Map<String, dynamic>) throw FormatException();
       final result = await bridge.call('importConfig', {'config': config});
       restore(Map<String, dynamic>.from(result['config']));
-      _historyRequests.clear();
+      _clearHistoryRequests();
       notifyListeners();
       return true;
     } catch (_) {
@@ -483,10 +512,10 @@ class AppController extends ChangeNotifier {
     }
   }
 
-  void releaseHistoryViews() => _historyRequests.clear();
+  void releaseHistoryViews() => _clearHistoryRequests();
   String exportConfig() => JsonEncoder.withIndent('  ').convert(config);
   Future<void> action(String name) async {
-    if (name == 'clearHistory') _historyRequests.clear();
+    if (name == 'clearHistory') _clearHistoryRequests();
     try {
       final r = await bridge.call(name);
       if (r['config'] is Map) restore(Map<String, dynamic>.from(r['config']));
@@ -505,17 +534,37 @@ class AppController extends ChangeNotifier {
     bool refresh = false,
   }) {
     final key = 'local|$field|$minutes';
+    final running = _historyInFlight[key];
+    if (running != null) return running;
     final old = _historyRequests[key];
     if (!refresh &&
         old != null &&
         DateTime.now().difference(old.$1).inSeconds < 30) {
       return old.$2;
     }
-    final future = _fetchHistory(field, minutes);
-    _historyRequests[key] = (DateTime.now(), future);
-    if (_historyRequests.length > 32) {
-      _historyRequests.remove(_historyRequests.keys.first);
-    }
+    final epoch = _historyEpoch;
+    late final Future<List<HistoryPoint>> future;
+    future = _fetchHistory(field, minutes).then(
+      (points) {
+        if (!_disposed &&
+            epoch == _historyEpoch &&
+            identical(_historyInFlight[key], future)) {
+          _historyInFlight.remove(key);
+          _historyRequests[key] = (DateTime.now(), future);
+          if (_historyRequests.length > 32) {
+            _historyRequests.remove(_historyRequests.keys.first);
+          }
+        }
+        return points;
+      },
+      onError: (Object error, StackTrace stack) {
+        if (identical(_historyInFlight[key], future)) {
+          _historyInFlight.remove(key);
+        }
+        Error.throwWithStackTrace(error, stack);
+      },
+    );
+    _historyInFlight[key] = future;
     return future;
   }
 
@@ -525,31 +574,34 @@ class AppController extends ChangeNotifier {
       'minutes': minutes,
     });
     if (r['error'] != null) throw StateError(r['error']);
-    return (r['points'] as List? ?? [])
-        .map(
-          (j) => HistoryPoint(
-            DateTime.parse(j['at']),
-            (j['value'] as num?)?.toDouble(),
-            segment: j['segment'] ?? '',
-            state: j['state'],
-            observedUntil: j['observedUntil'] is num
-                ? DateTime.fromMillisecondsSinceEpoch(
-                    (j['observedUntil'] as num).toInt(),
-                  )
-                : null,
-            snapshotAt: r['queriedAt'] is num
-                ? DateTime.fromMillisecondsSinceEpoch(
-                    (r['queriedAt'] as num).toInt(),
-                  )
-                : null,
-          ),
-        )
-        .toList();
+    final snapshotAt = r['queriedAt'] is num
+        ? DateTime.fromMillisecondsSinceEpoch((r['queriedAt'] as num).toInt())
+        : null;
+    return List<HistoryPoint>.unmodifiable(
+      (r['points'] as List? ?? []).map(
+        (j) => HistoryPoint(
+          DateTime.parse(j['at']),
+          (j['value'] as num?)?.toDouble(),
+          segment: j['segment'] ?? '',
+          state: j['state'],
+          observedUntil: j['observedUntil'] is num
+              ? DateTime.fromMillisecondsSinceEpoch(
+                  (j['observedUntil'] as num).toInt(),
+                )
+              : null,
+          snapshotAt: snapshotAt,
+        ),
+      ),
+    );
   }
 
   @override
   void dispose() {
     _disposed = true;
+    _previewLeases.clear();
+    _previewDemand = {};
+    _sendPreview();
+    _clearHistoryRequests();
     overlayAppearance.dispose();
     _events?.cancel();
     for (final s in readings.values) {
@@ -575,4 +627,17 @@ class PreviewLease {
     _closed = true;
     _controller._updatePreview(this, null);
   }
+}
+
+bool _sameJson(Object? a, Object? b) {
+  if (identical(a, b)) return true;
+  if (a is Map && b is Map) {
+    return a.length == b.length &&
+        a.keys.every((key) => b.containsKey(key) && _sameJson(a[key], b[key]));
+  }
+  if (a is List && b is List) {
+    return a.length == b.length &&
+        List.generate(a.length, (i) => i).every((i) => _sameJson(a[i], b[i]));
+  }
+  return a == b;
 }

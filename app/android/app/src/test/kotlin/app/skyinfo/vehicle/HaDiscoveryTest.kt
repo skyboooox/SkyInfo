@@ -138,6 +138,28 @@ class HaDiscoveryTest {
         messages.clear();publisher.publishControlEntities(settings,emptyMap(),"current/command",true)
         assertTrue(messages.isEmpty())
     }
+    @Test fun controlPublicationKeepsSampleTimestampsWhileIgnoringTimestampOnlyRefreshes() {
+        val messages=mutableListOf<JSONObject>()
+        val http=OkHttpClient.Builder().addInterceptor { chain ->
+            val request=chain.request();val body=okio.Buffer();request.body!!.writeTo(body);messages.add(JSONObject(body.readUtf8()))
+            Response.Builder().request(request).protocol(Protocol.HTTP_1_1).code(200).message("OK").body("[]".toResponseBody()).build()
+        }.build()
+        val publisher=ConnectionClient(RuntimeEnvironment.getApplication(),secret,http)
+        val settings=JSONObject(config.toString()).put("haControlEnabled",true)
+        val entity=EntityCatalog.controls(RuntimeEnvironment.getApplication()).first { it.getString("id")=="wireless_charging" }
+        val options=entity.getJSONArray("options")
+        val reading=JSONObject().put("quality","available").put("raw",options.getJSONObject(0).get("expected")).put("updatedAt",10)
+        val samples=mapOf(entity.getString("readField") to reading)
+        publisher.publishControlEntities(settings,samples,"current/command",true)
+        val first=messages.first { it.getString("topic").endsWith("/wireless_charging/state") }
+        assertEquals(10,JSONObject(first.getString("payload")).getInt("updatedAt"))
+        messages.clear();reading.put("updatedAt",20)
+        publisher.publishControlEntities(settings,samples,"current/command",true)
+        assertTrue(messages.isEmpty());assertEquals(20,reading.getInt("updatedAt"))
+        reading.put("raw",options.getJSONObject(1).get("expected"))
+        publisher.publishControlEntities(settings,samples,"current/command",true)
+        assertEquals(1,messages.size);assertEquals(20,JSONObject(messages.single().getString("payload")).getInt("updatedAt"))
+    }
     @Test fun recoveryNeverMarksOfflineOrInvalidFeedbackAvailable() {
         val messages=mutableListOf<JSONObject>()
         val http=OkHttpClient.Builder().addInterceptor { chain ->
@@ -168,6 +190,7 @@ class HaDiscoveryTest {
         messages.clear();publisher.invalidateControlStates();failPublish=true
         try { publisher.publishControlEntities(settings,emptyMap(),"current/command",true);fail("publish failure ignored") } catch (_:java.io.IOException) { }
         assertEquals(5,messages.size)
+        publisher.retryPublication()
         publisher.publishControlEntities(settings,emptyMap(),"current/command",true)
         assertEquals(173,messages.size);assertEquals(173,messages.map { it.getString("topic") }.toSet().size)
         assertTrue(messages.all { !it.getBoolean("retain") })

@@ -48,6 +48,7 @@ class NetworkAdbTest {
     }
     @Test fun launchesOwnedProcessWithAuthenticatedAdbAndBidirectionalShell() {
         val identity = AdbIdentity.generate()
+        AdbAuthorization(context).pause()
         FakeAdbd(identity).use { server ->
             val client = NetworkAdb(context,AdbEndpoint("127.0.0.1",server.port,true,"tcp"),{identity})
             val process = client.launch(arrayOf("/system/bin/app_process","/system/bin","app.skyinfo.vehicle.ShellVehicleMain","10","1234"), arrayOf("CLASSPATH=/data/app/a'b/base.apk","LD_LIBRARY_PATH=ignored"))
@@ -59,6 +60,7 @@ class NetworkAdbTest {
             process.destroy(); assertTrue(process.waitFor(2,TimeUnit.SECONDS))
             server.done.get(2,TimeUnit.SECONDS)
             assertTrue(server.signatureVerified)
+            assertNull(AdbAuthorization(context).required)
         }
     }
     @Test fun rejectsAnotherDeviceBeforeLaunchingBridge() {
@@ -71,23 +73,61 @@ class NetworkAdbTest {
         assertThrows(IllegalArgumentException::class.java) { client.pair(0,"123456") }
         assertThrows(IllegalArgumentException::class.java) { client.pair(40000,"12x456") }
     }
-    private class FakeAdbd(private val identity: AdbIdentity) : AutoCloseable {
+    @Test fun missingSystemAuthorizationPersistsPauseAndSendsOnePublicKeyPerAttempt() {
+        for (declined in listOf(false, true)) {
+            val identity = AdbIdentity.generate()
+            FakeAdbd(identity, trusted = false, declined = declined).use { server ->
+                val client = NetworkAdb(context, AdbEndpoint("127.0.0.1", server.port, true, "tcp"), { identity })
+                assertThrows(AdbAuthorizationRequiredException::class.java) {
+                    client.launch(arrayOf("app_process"), emptyArray())
+                }
+                assertEquals(1, server.publicKeys)
+                assertEquals("authorization", AdbAuthorization(context).required)
+                assertTrue(server.pauseBeforePublicKey)
+            }
+        }
+    }
+    @Test fun handshakeWithoutAuthTimesOutAsTransportFailureAndDoesNotPauseAuthorization() {
+        val identity = AdbIdentity.generate()
+        FakeAdbd(identity, quiet = true).use { server ->
+            val client = NetworkAdb(context, AdbEndpoint("127.0.0.1", server.port, true, "tcp"), { identity })
+            val error = assertThrows(Exception::class.java) { client.launch(arrayOf("app_process"), emptyArray()) }
+            assertFalse(error is AdbAuthorizationRequiredException)
+            assertNull(AdbAuthorization(context).required)
+        }
+    }
+    private class FakeAdbd(private val identity: AdbIdentity, private val trusted: Boolean = true,
+        private val declined: Boolean = false, private val quiet: Boolean = false) : AutoCloseable {
         val listener=ServerSocket(0)
         val port=listener.localPort
         val launch=CompletableFuture<String>()
         val done=CompletableFuture<Unit>()
         var signatureVerified=false
+        var publicKeys=0
+        var pauseBeforePublicKey=false
         var socket: Socket?=null
         init { Thread {
             try {
                 socket=listener.accept().apply { soTimeout=5000 }
                 val socket=socket!!
                 val cnxn=read(socket);check(cnxn.op=="CNXN")
+                if (quiet) { Thread.sleep(10000); return@Thread }
                 val challenge=ByteArray(20) { (it+7).toByte() }
                 send(socket,"AUTH",1,0,challenge)
                 val auth=read(socket);check(auth.op=="AUTH"&&auth.a==2)
                 val decoded=Cipher.getInstance("RSA/ECB/NoPadding").apply { init(Cipher.DECRYPT_MODE,identity.certificate.publicKey) }.doFinal(auth.data)
                 check(decoded.takeLast(20).toByteArray().contentEquals(challenge));signatureVerified=true
+                if (!trusted) {
+                    send(socket,"AUTH",1,0,challenge)
+                    val publicKey=read(socket);check(publicKey.op=="AUTH"&&publicKey.a==3)
+                    publicKeys++
+                    pauseBeforePublicKey=AdbAuthorization(RuntimeEnvironment.getApplication()).required=="authorization"
+                    if (declined) return@Thread
+                    send(socket,"AUTH",1,0,challenge)
+                    socket.soTimeout=9000
+                    try { val extra=read(socket); if(extra.op=="AUTH"&&extra.a==3)publicKeys++ } catch (_: Exception) {}
+                    return@Thread
+                }
                 send(socket,"CNXN",0x01000001,4096,"device::\u0000".toByteArray())
                 val next=read(socket);check(next.op=="OPEN")
                 launch.complete(String(next.data).trimEnd('\u0000'))

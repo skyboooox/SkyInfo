@@ -196,11 +196,13 @@ class _FieldSelectorState extends State<FieldSelector> {
     listenable: widget.controller,
     builder: (context, _) {
       final c = widget.controller, p = Palette.of(context);
+      final selected = widget.selected, selectedIds = selected.toSet();
+      final query = search.toLowerCase();
       final catalog = [
         ...c.metrics.where((m) => m.displayAllowed),
         if (widget.entities) ...c.controlEntities.map((e) => e.metric),
         ...c.haFields.values.where(
-          (m) => m.id.split('|').length == 3 || widget.selected.contains(m.id),
+          (m) => m.id.split('|').length == 3 || selectedIds.contains(m.id),
         ),
       ];
       final sourced = catalog
@@ -209,17 +211,23 @@ class _FieldSelectorState extends State<FieldSelector> {
                 source == 'all' || (source == 'ha') == m.id.startsWith('ha|'),
           )
           .toList();
-      final categories = {...sourced.map(group)}.toList();
-      final selected = widget.selected;
+      final groups = <String, String>{};
+      final counts = <String, int>{};
+      for (final metric in sourced) {
+        final category = group(metric);
+        groups[metric.id] = category;
+        counts.update(category, (count) => count + 1, ifAbsent: () => 1);
+      }
+      final categories = counts.keys.toList();
       final list = sourced
           .where(
             (m) =>
-                (!selectedOnly || selected.contains(m.id)) &&
+                (!selectedOnly || selectedIds.contains(m.id)) &&
                 (search.isNotEmpty ||
                     category.isEmpty ||
-                    group(m) == category) &&
-                (m.name.toLowerCase().contains(search.toLowerCase()) ||
-                    m.id.toLowerCase().contains(search.toLowerCase()) ||
+                    groups[m.id] == category) &&
+                (m.name.toLowerCase().contains(query) ||
+                    m.id.toLowerCase().contains(query) ||
                     c.haEntity(m.id)?.matches(search) == true),
           )
           .toList();
@@ -328,9 +336,8 @@ class _FieldSelectorState extends State<FieldSelector> {
                   selected: category,
                   label: (value) =>
                       value.isEmpty ? Strings.text('all_sources') : value,
-                  count: (value) => value.isEmpty
-                      ? sourced.length
-                      : sourced.where((m) => group(m) == value).length,
+                  count: (value) =>
+                      value.isEmpty ? sourced.length : counts[value] ?? 0,
                   onChanged: (value) => setState(() => category = value),
                   child: DecoratedBox(
                     decoration: BoxDecoration(
@@ -361,7 +368,7 @@ class _FieldSelectorState extends State<FieldSelector> {
                                 key: ValueKey(m.id),
                                 controller: c,
                                 metric: m,
-                                selected: selected.contains(m.id),
+                                selected: selectedIds.contains(m.id),
                                 readOnly: widget.readOnly,
                                 onSelect: () => widget.readOnly
                                     ? showFieldDetails(context, c, m.id)

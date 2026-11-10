@@ -274,6 +274,7 @@ class RuntimeDataTest {
         history.configure(cfg)
         history.append(id,JSONObject().put("value",13.6).put("quality","available"))
         cfg.put("retainHistory",true); history.configure(cfg)
+        history.flush()
         val resumed=LocalHistory(context); resumed.configure(cfg)
         resumed.append(id,JSONObject().put("value",13.7).put("quality","available"))
         val points=resumed.query(id,30).getJSONArray("points")
@@ -465,6 +466,7 @@ class RuntimeDataTest {
         val context=RuntimeEnvironment.getApplication(); context.deleteDatabase("mqtt-history.db")
         val history=LocalHistory(context); val cfg=config("ha",true).put("retainHistory",true); history.configure(cfg)
         history.append(id,JSONObject().put("value",13.6).put("quality","available"))
+        history.flush()
         val resumed=LocalHistory(context); resumed.configure(cfg)
         assertFalse(resumed.query(id,30).getJSONArray("points").getJSONObject(0).has("observedUntil"))
         resumed.append(id,JSONObject().put("value",13.7).put("quality","available"))
@@ -487,6 +489,7 @@ class RuntimeDataTest {
         db.beginTransaction()
         try { repeat(12100) { n -> db.execSQL("INSERT INTO samples(id,at,value,state,segment) VALUES(?,?,?,?,?)",arrayOf<Any>(second,System.currentTimeMillis(),43+n%2,"43","test")) }; db.setTransactionSuccessful() }
         finally { db.endTransaction() }
+        history.configure(cfg)
         val baseline=history.query(id,30).getJSONArray("points")
         assertEquals(1,baseline.length()); assertEquals(13.7,baseline.getJSONObject(0).getDouble("value"),0.0)
         db.rawQuery("SELECT COUNT(*) FROM samples",null).use { c -> c.moveToFirst(); assertEquals(12101,c.getInt(0)) }

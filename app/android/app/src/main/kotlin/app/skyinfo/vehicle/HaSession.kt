@@ -84,7 +84,7 @@ class HaSession(private val secrets: SecretStore, private val restored: () -> Un
     @Synchronized private fun connect() {
         val captured = ++epoch
         entitySubscription = false
-        entityCommandTopic = "skyinfo/ha/control/$prefix/${java.util.UUID.randomUUID()}/command"
+        entityCommandTopic = if (controlEnabled) "skyinfo/ha/control/$prefix/${java.util.UUID.randomUUID()}/command" else ""
         try {
             val uri = HaEndpoint.validate(target)
             val path = (uri.path ?: "/").trimEnd('/') + "/api/websocket"

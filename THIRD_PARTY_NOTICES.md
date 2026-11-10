@@ -23,7 +23,7 @@ SkyInfo 自有代码许可不覆盖下列资源。原版权、许可正文和来
 | IBM Plex Mono | [IBM Plex](https://github.com/IBM/plex) | [SIL OFL 1.1](app/assets/fonts/LICENSE-IBM.txt) |
 | Fluorite Design | [固定子模块](https://github.com/skyboooox/fluorite-design)，0b250aab289b5db07263dcd3f81bfcce66eb2963 | 规范引用；固定提交无仓库级 LICENSE，不将其归为 SkyInfo 自有许可、不复制其 Web 代码；字体保留独立许可 |
 
-LibADB 的超时/通知竞态补丁完整源码与说明位于 [third_party/libadb](app/android/third_party/libadb/README.md)。网络 ADB 打包许可位于 APK 的 `assets/flutter_assets/assets/licenses/`；其中同时保留直接原生依赖及 Okio 的上游许可/NOTICE，来源与版本见本表及 Gradle 依赖；完整依赖清单随公开源码提供。
+LibADB 的超时、通知竞态及RSA授权回调补丁完整源码与说明位于 [third_party/libadb](app/android/third_party/libadb/README.md)。网络 ADB 打包许可位于 APK 的 `assets/flutter_assets/assets/licenses/`；其中同时保留直接原生依赖及 Okio 的上游许可/NOTICE，来源与版本见本表及 Gradle 依赖；完整依赖清单随公开源码提供。
 
 SPAKE2 使用未修改的公开 Android 依赖。重新构建：克隆上述 2.2.1 标签及其子模块，遵循上游 Gradle/CMake 配置；使用本项目公开工程替换该依赖并构建自己的 APK，安装前需卸载证书不同的包。APK Release 随附对应 SPAKE2 Java/C 源码、上游构建配置及重建说明；自有应用源码独立附包。不得只用远程链接替代对应源码材料。
 

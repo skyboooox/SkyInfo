@@ -98,6 +98,13 @@ public class AdbConnection implements Closeable {
      * Whether the connection thread should give up if the first authentication attempt fails.
      */
     private volatile boolean mAbortOnUnauthorised;
+    private Runnable mAuthorizationRequiredListener;
+    private boolean mSentPublicKey;
+
+    /** Called before sending a public key that requires user confirmation. */
+    public void setAuthorizationRequiredListener(Runnable listener) {
+        mAuthorizationRequiredListener = listener;
+    }
 
     /**
      * Whether the first authentication attempt failed and {@link #mAbortOnUnauthorised} was {@code true}.
@@ -314,6 +321,9 @@ public class AdbConnection implements Closeable {
                                     break loop;
                                 }
 
+                                if (mSentPublicKey) break;
+                                mSentPublicKey = true;
+                                if (mAuthorizationRequiredListener != null) mAuthorizationRequiredListener.run();
                                 // We've already tried our signature, so send our public key
                                 packet = AdbProtocol.generateAuth(AdbProtocol.ADB_AUTH_RSAPUBLICKEY, AndroidPubkey
                                         .encodeWithName((RSAPublicKey) mKeyPair.getPublicKey(), mDeviceName));

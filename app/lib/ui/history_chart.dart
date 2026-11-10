@@ -1,6 +1,7 @@
 import '../l10n/strings.dart';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show listEquals;
 import '../domain/models.dart';
 import 'industrial.dart';
 
@@ -23,25 +24,46 @@ class HistoryChart extends StatefulWidget {
 
 class _HistoryChartState extends State<HistoryChart> {
   double? selection;
+  List<List<HistoryPoint>>? _snapshot;
+  DateTime? _snapshotEnd;
+  _ChartProjection? _projection;
+
+  _ChartProjection project(int buckets, DateTime start, DateTime end) {
+    final previous = _projection;
+    if (previous != null &&
+        previous.buckets == buckets &&
+        previous.start == start &&
+        previous.end == end) {
+      return previous;
+    }
+    return _projection = _ChartProjection(widget.series, buckets, start, end);
+  }
+
   @override
   Widget build(BuildContext context) {
+    // History results are immutable snapshots; only the small outer list is
+    // compared because Future.wait may recreate it for the same cached results.
+    if (!listEquals(_snapshot, widget.series)) {
+      _snapshot = List.of(widget.series);
+      _snapshotEnd = null;
+      _projection = null;
+    }
     final p = Palette.of(context),
         end =
             widget.windowEnd ??
-            historySnapshotEnd(widget.series, DateTime.now());
+            (_snapshotEnd ??= historySnapshotEnd(
+              widget.series,
+              DateTime.now(),
+            ));
     final start = end.subtract(Duration(minutes: widget.minutes));
     return LayoutBuilder(
       builder: (context, box) {
-        final groups = widget.series
-            .map(
-              (s) => aggregateHistory(
-                s,
-                math.max(1, (box.maxWidth / 3).floor()),
-                start,
-                end,
-              ),
-            )
-            .toList();
+        final projection = project(
+          math.max(1, (box.maxWidth / 3).floor()),
+          start,
+          end,
+        );
+        final groups = projection.groups;
         if (groups.every((g) => g.isEmpty)) {
           return Center(child: Text(Strings.text('text_482a16ecfa')));
         }
@@ -91,15 +113,15 @@ class _HistoryChartState extends State<HistoryChart> {
           child: Stack(
             children: [
               Positioned.fill(
-                child: CustomPaint(
-                  size: Size(box.maxWidth, box.maxHeight),
-                  painter: _ChartPainter(
-                    groups,
-                    start,
-                    end,
-                    p,
-                    widget.minimum,
-                    widget.maximum,
+                child: RepaintBoundary(
+                  child: CustomPaint(
+                    size: Size(box.maxWidth, box.maxHeight),
+                    painter: _ChartPainter(
+                      projection,
+                      p,
+                      widget.minimum,
+                      widget.maximum,
+                    ),
                   ),
                 ),
               ),
@@ -138,19 +160,53 @@ class _HistoryChartState extends State<HistoryChart> {
   }
 }
 
-class _ChartPainter extends CustomPainter {
-  final List<List<List<HistoryBucket>>> series;
+class _ChartProjection {
+  final int buckets;
   final DateTime start, end;
-  final Palette p;
-  final double? minimum, maximum;
-  _ChartPainter(
-    this.series,
+  final List<List<List<HistoryBucket>>> groups;
+  // Geometry is independent of theme and is retained only for the current
+  // viewport/axis. Resizing replaces it rather than growing a cache.
+  _ChartGeometry? geometry;
+  _ChartProjection(
+    List<List<HistoryPoint>> series,
+    this.buckets,
     this.start,
     this.end,
-    this.p,
+  ) : groups = [
+        for (final points in series)
+          aggregateHistory(points, buckets, start, end),
+      ];
+}
+
+class _ChartGeometry {
+  final Size size;
+  final double? minimum, maximum;
+  final Rect plot;
+  final double low, high;
+  final List<List<_ChartStroke>> series;
+  _ChartGeometry(
+    this.size,
     this.minimum,
     this.maximum,
+    this.plot,
+    this.low,
+    this.high,
+    this.series,
   );
+}
+
+class _ChartStroke {
+  final List<Rect> ranges;
+  final Path line;
+  final Offset? dot;
+  _ChartStroke(this.ranges, this.line, this.dot);
+}
+
+class _ChartPainter extends CustomPainter {
+  final _ChartProjection projection;
+  final Palette p;
+  final double? minimum, maximum;
+  _ChartPainter(this.projection, this.p, this.minimum, this.maximum);
   void label(Canvas c, String s, Offset at) {
     final tp = TextPainter(
       text: TextSpan(
@@ -160,20 +216,32 @@ class _ChartPainter extends CustomPainter {
       textDirection: TextDirection.ltr,
     )..layout();
     tp.paint(c, at);
+    tp.dispose();
   }
 
-  @override
-  void paint(Canvas c, Size size) {
+  _ChartGeometry geometry(Size size) {
+    final old = projection.geometry;
+    if (old != null &&
+        old.size == size &&
+        old.minimum == minimum &&
+        old.maximum == maximum) {
+      return old;
+    }
     final plot = Rect.fromLTWH(
       40,
       12,
       math.max(1, size.width - 48),
       math.max(1, size.height - 44),
     );
-    final all = series.expand((s) => s).expand((s) => s).toList();
-    if (all.isEmpty) return;
-    var low = all.map((b) => b.min).reduce(math.min),
-        high = all.map((b) => b.max).reduce(math.max);
+    var low = double.infinity, high = double.negativeInfinity;
+    for (final series in projection.groups) {
+      for (final segment in series) {
+        for (final bucket in segment) {
+          low = math.min(low, bucket.min);
+          high = math.max(high, bucket.max);
+        }
+      }
+    }
     if (high == low) {
       high += 1;
       low -= 1;
@@ -185,6 +253,61 @@ class _ChartPainter extends CustomPainter {
       low = minimum!;
       high = maximum!;
     }
+    double x(DateTime t) =>
+        plot.left +
+        plot.width *
+            t.difference(projection.start).inMilliseconds /
+            projection.end.difference(projection.start).inMilliseconds;
+    double y(double value) =>
+        plot.bottom - (value - low) / (high - low) * plot.height;
+    final series = <List<_ChartStroke>>[];
+    for (var s = 0; s < projection.groups.length; s++) {
+      final strokes = <_ChartStroke>[];
+      for (var i = 0; i < projection.groups[s].length; i++) {
+        final segment = projection.groups[s][i];
+        final band = <Rect>[];
+        for (final b in segment) {
+          if (b.min == b.max ||
+              b.rangeStart == null ||
+              b.rangeEnd == null ||
+              !b.rangeEnd!.isAfter(b.rangeStart!)) {
+            continue;
+          }
+          band.add(
+            Rect.fromLTRB(x(b.rangeStart!), y(b.max), x(b.rangeEnd!), y(b.min)),
+          );
+        }
+        final vertices = historyLineVertices(segment);
+        final line = Path()..moveTo(x(vertices.first.$1), y(vertices.first.$2));
+        for (final vertex in vertices.skip(1)) {
+          line.lineTo(x(vertex.$1), y(vertex.$2));
+        }
+        strokes.add(
+          _ChartStroke(
+            band,
+            line,
+            vertices.length == 1
+                ? Offset(x(segment.first.at), y(segment.first.representative))
+                : null,
+          ),
+        );
+      }
+      series.add(strokes);
+    }
+    return projection.geometry = _ChartGeometry(
+      size,
+      minimum,
+      maximum,
+      plot,
+      low,
+      high,
+      series,
+    );
+  }
+
+  @override
+  void paint(Canvas c, Size size) {
+    final data = geometry(size), plot = data.plot;
     final grid = Paint()
       ..color = p.grid
       ..strokeWidth = 1;
@@ -195,79 +318,83 @@ class _ChartPainter extends CustomPainter {
       c.drawLine(Offset(x, plot.top), Offset(x, plot.bottom), grid);
       label(
         c,
-        (low + (high - low) * i / 4).toStringAsFixed(1),
+        (data.low + (data.high - data.low) * i / 4).toStringAsFixed(1),
         Offset(0, y - 8),
       );
     }
-    double x(DateTime t) =>
-        plot.left +
-        plot.width *
-            t.difference(start).inMilliseconds /
-            end.difference(start).inMilliseconds;
-    double y(double value) =>
-        plot.bottom - (value - low) / (high - low) * plot.height;
     c.save();
     c.clipRect(plot);
     final colors = [p.ink, p.blue, p.rose, p.green];
-    for (var s = 0; s < series.length; s++) {
+    for (var s = 0; s < data.series.length; s++) {
       final color = colors[s % colors.length];
-      for (final segment in series[s]) {
-        if (segment.isEmpty) continue;
-        for (final b in segment) {
-          if (b.min == b.max ||
-              b.rangeStart == null ||
-              b.rangeEnd == null ||
-              !b.rangeEnd!.isAfter(b.rangeStart!)) {
-            continue;
-          }
-          c.drawRect(
-            Rect.fromLTRB(x(b.rangeStart!), y(b.max), x(b.rangeEnd!), y(b.min)),
-            Paint()
-              ..color = color.withValues(
-                alpha: p == Palette.dark ? 0.16 : 0.12,
-              ),
-          );
+      final fill = Paint()
+        ..color = color.withValues(alpha: p == Palette.dark ? 0.16 : 0.12);
+      final stroke = Paint()
+        ..color = color
+        ..strokeWidth = 2
+        ..style = PaintingStyle.stroke;
+      for (final segment in data.series[s]) {
+        for (final range in segment.ranges) {
+          c.drawRect(range, fill);
         }
-        final vertices = historyLineVertices(segment);
-        final line = Path()..moveTo(x(vertices.first.$1), y(vertices.first.$2));
-        for (final vertex in vertices.skip(1)) {
-          line.lineTo(x(vertex.$1), y(vertex.$2));
-        }
-        c.drawPath(
-          line,
-          Paint()
-            ..color = color
-            ..strokeWidth = 2
-            ..style = PaintingStyle.stroke,
-        );
-        if (vertices.length == 1) {
-          c.drawCircle(
-            Offset(x(segment.first.at), y(segment.first.representative)),
-            2,
-            Paint()..color = color,
-          );
+        c.drawPath(segment.line, stroke);
+        if (segment.dot != null) {
+          c.drawCircle(segment.dot!, 2, Paint()..color = color);
         }
       }
     }
     c.restore();
     String time(DateTime d) =>
         '${d.hour.toString().padLeft(2, '0')}:${d.minute.toString().padLeft(2, '0')}';
-    label(c, time(start), Offset(plot.left, plot.bottom + 8));
+    label(c, time(projection.start), Offset(plot.left, plot.bottom + 8));
     label(
       c,
-      time(end),
+      time(projection.end),
       Offset(math.max(plot.left, plot.right - 40), plot.bottom + 8),
     );
   }
 
   @override
-  bool shouldRepaint(_ChartPainter old) => true;
+  bool shouldRepaint(_ChartPainter old) =>
+      old.projection != projection ||
+      old.p != p ||
+      old.minimum != minimum ||
+      old.maximum != maximum;
 }
 
-class StateTimeline extends StatelessWidget {
+class StateTimeline extends StatefulWidget {
   final List<HistoryPoint> points;
   final int minutes;
   const StateTimeline({super.key, required this.points, required this.minutes});
+  @override
+  State<StateTimeline> createState() => _StateTimelineState();
+}
+
+class _StateTimelineState extends State<StateTimeline> {
+  late List<HistoryPoint> ordered;
+  late List<String> states;
+  late DateTime end;
+  void snapshot() {
+    ordered = [...widget.points]..sort((a, b) => a.at.compareTo(b.at));
+    states = widget.points
+        .map((p) => p.state ?? Strings.text('text_beff4a1cd1'))
+        .toSet()
+        .toList();
+    end = historySnapshotEnd([widget.points], DateTime.now());
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    snapshot();
+  }
+
+  @override
+  void didUpdateWidget(StateTimeline old) {
+    super.didUpdateWidget(old);
+    if (old.points != widget.points) snapshot();
+  }
+
   @override
   Widget build(BuildContext context) {
     final colors = [
@@ -276,21 +403,20 @@ class StateTimeline extends StatelessWidget {
       Palette.of(context).acid,
       Palette.of(context).rose,
     ];
-    final states = points
-        .map((p) => p.state ?? Strings.text('text_beff4a1cd1'))
-        .toSet()
-        .toList();
     return Column(
       children: [
         Expanded(
-          child: CustomPaint(
-            size: Size.infinite,
-            painter: _TimelinePainter(
-              points,
-              minutes,
-              Palette.of(context),
-              states,
-              colors,
+          child: RepaintBoundary(
+            child: CustomPaint(
+              size: Size.infinite,
+              painter: _TimelinePainter(
+                ordered,
+                widget.minutes,
+                Palette.of(context),
+                states,
+                colors,
+                end,
+              ),
             ),
           ),
         ),
@@ -324,18 +450,19 @@ class _TimelinePainter extends CustomPainter {
   final Palette palette;
   final List<String> states;
   final List<Color> colors;
+  final DateTime end;
   _TimelinePainter(
     this.points,
     this.minutes,
     this.palette,
     this.states,
     this.colors,
+    this.end,
   );
   @override
   void paint(Canvas canvas, Size size) {
-    final end = DateTime.now(),
-        start = DateTime.now().subtract(Duration(minutes: minutes));
-    final ordered = [...points]..sort((a, b) => a.at.compareTo(b.at));
+    final start = end.subtract(Duration(minutes: minutes));
+    final ordered = points;
     final area = Rect.fromLTWH(0, size.height / 2 - 20, size.width, 40);
     canvas.drawRect(area, Paint()..color = palette.grid);
     for (var i = 0; i < ordered.length; i++) {
@@ -385,10 +512,14 @@ class _TimelinePainter extends CustomPainter {
         textDirection: TextDirection.ltr,
       )..layout();
       text.paint(canvas, Offset(item.$2, area.bottom + 12));
+      text.dispose();
     }
   }
 
   @override
   bool shouldRepaint(_TimelinePainter old) =>
-      old.points != points || old.palette != palette;
+      old.points != points ||
+      old.palette != palette ||
+      old.minutes != minutes ||
+      old.end != end;
 }

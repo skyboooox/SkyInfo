@@ -2,12 +2,14 @@ part of 'home.dart';
 
 extension _StartupAuthorization on _HomeState {
   void checkStartupAuthorization() {
-    if (!mounted || startupAuthorizationChecked || !visible) return;
+    if (!mounted) return;
     final state = c.status['adb'];
     if (state == 'connected') {
+      authorizationPrompted = false;
       startupAuthorizationChecked = true;
       return;
     }
+    if (!visible) return;
     if (![
       'authorization',
       'pair_required',
@@ -20,10 +22,26 @@ extension _StartupAuthorization on _HomeState {
     ].contains(state)) {
       return;
     }
-    startupAuthorizationChecked = true;
+    final needsAuthorization = [
+      'authorization',
+      'pair_required',
+    ].contains(state);
+    if (needsAuthorization
+        ? authorizationPrompted
+        : startupAuthorizationChecked) {
+      return;
+    }
+    if (authorizationPromptScheduled) return;
+    authorizationPromptScheduled = true;
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if (!mounted) return;
-      if (c.status['adb'] == 'connected') return;
+      authorizationPromptScheduled = false;
+      if (!mounted || !visible) return;
+      if (c.status['adb'] != state) {
+        checkStartupAuthorization();
+        return;
+      }
+      startupAuthorizationChecked = true;
+      if (needsAuthorization) authorizationPrompted = true;
       final authorization = [
         'authorization',
         'pair_required',

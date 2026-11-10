@@ -14,6 +14,7 @@ class CommandReceipts(private val now: () -> Long = android.os.SystemClock::elap
         pending.entries.removeAll { it.value.deadline < now() || target(it.value.config) != target(config) }
         return pending.values.firstOrNull()
     }
+    fun isCurrent(entry: Entry, config: JSONObject) = entry.deadline >= now() && target(entry.config) == target(config)
     fun delivered(id: String) { pending.remove(id) }
     fun clear() { pending.clear() }
     val size: Int get() = pending.size

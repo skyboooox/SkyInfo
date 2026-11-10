@@ -24,17 +24,19 @@ class RuntimeCoordinator private constructor(context: Context) {
     private var readBlocked = false
     private var publishInFlight = false
     private val fields: Map<String, JSONObject>
+    private val unitDependents: Map<String,List<String>>
     private val altitude = GnssAltitude(this.context)
     private val reader: ReadOnlyVehicle
     private val session: VehicleSession
     private var callbackFlush: ScheduledFuture<*>? = null
     private val callbackChanged = mutableSetOf<String>()
     private val samples = mutableMapOf<String, JSONObject>()
-    private val localHistory = LocalHistory(this.context)
+    private val localHistory = LocalHistory(this.context, scheduleFlush = { delay, task -> worker.schedule(task,delay,TimeUnit.SECONDS) })
     private val publisher = ConnectionClient(this.context, store)
     private val haSession = HaSession(store, { execute { publishControlEntities(); if (enabled() && config.optBoolean("publishEnabled")) { readCurrent(); publishSelected() } } }, { state -> execute { publisher.connectionState(state); publishControlEntities(); emit() } })
     private var overlayPermissionWatcher: android.app.AppOpsManager.OnOpChangedListener? = null
     private var activeNetwork: android.net.Network? = null
+    private var publicationNetworkLost = false
     private var networkCallback: android.net.ConnectivityManager.NetworkCallback? = null
     private val deviceIdentity = DeviceIdentity(this.context)
     private var config = deviceIdentity.defaults(store.load()).also(store::save)
@@ -74,8 +76,8 @@ class RuntimeCoordinator private constructor(context: Context) {
     private var retry: ScheduledFuture<*>? = null
     private var retrySeconds = 1L
     private val pendingFields = mutableSetOf<String>()
-    private var sink: EventChannel.EventSink? = null
-    private var visible = false
+    @Volatile private var sink: EventChannel.EventSink? = null
+    @Volatile private var visible = false
     private var informationVisible = true
     private var heartbeat: ScheduledFuture<*>? = null
     private var heartbeatInFlight = false
@@ -108,6 +110,8 @@ class RuntimeCoordinator private constructor(context: Context) {
         haSession.controlPublicationRestored = { execute { restoreControlPublication() } }
         publisher.command = { data, nonce, retained -> execute { handleCommand(data, "mqtt", nonce, retained) } }
         fields = EntityCatalog.fields(this.context)
+        unitDependents = fields.entries.filter { it.value.has("unitField") }
+            .groupBy({ it.value.getString("unitField") }, { it.key })
         if (migrateConvertedUnits(config, fields)) store.save(config)
         reader = ReadOnlyVehicle(fields, altitude)
         localHistory.configure(config)
@@ -173,15 +177,19 @@ class RuntimeCoordinator private constructor(context: Context) {
     private fun flushReceipts() {
         if (store.stopped() || receiptInFlight || receiptRetry != null) return
         val entry = receipts.next(config) ?: return
+        val captured = generation
         receiptInFlight = true
         network.execute {
+            if (captured != generation || store.stopped() || !receipts.isCurrent(entry,config)) {
+                execute { receiptInFlight = false; flushReceipts() }; return@execute
+            }
             val error = try { publisher.controlResult(entry.config,entry.result); null } catch (failure: Throwable) { failure.javaClass.simpleName }
             execute {
                 receiptInFlight = false
                 if (error == null) { receipts.delivered(entry.result.getString("id")); receiptSeconds = 1; commandError = null; flushReceipts() }
                 else {
                     commandError = NativeStrings.text("native_receipt_error",mapOf("error" to error))
-                    if (!store.stopped() && receipts.next(config) != null) {
+                    if (!store.stopped() && publisher.publicationWaitMillis() != null && receipts.next(config) != null) {
                         receiptRetry = worker.schedule({ receiptRetry = null; flushReceipts() },receiptSeconds,TimeUnit.SECONDS)
                         receiptSeconds = (receiptSeconds*2).coerceAtMost(30)
                     }
@@ -191,7 +199,7 @@ class RuntimeCoordinator private constructor(context: Context) {
         }
     }
     fun controls(): JSONObject = session.controls()
-    fun reconnectAdb() { session.close(); markDisconnected(); readBlocked = false; previousDemand = emptySet(); reconfigure(); emit() }
+    fun reconnectAdb() { session.close(); session.retryAuthorization(); markDisconnected(); readBlocked = false; previousDemand = emptySet(); reconfigure(); emit() }
     fun pairAdb(host: String, port: Int, code: String, callback: (JSONObject) -> Unit) {
         val endpoint = AdbEndpoint.from(JSONObject().put("adbHost",host).put("adbPort",5555).put("adbMode","pair"))
         NetworkAdb.operations.execute {
@@ -264,17 +272,21 @@ class RuntimeCoordinator private constructor(context: Context) {
         drawOverlay()
     }
     private fun emit(directory: Boolean = false) {
-        val message = JSONObject().put("samples", JSONObject(samples as Map<*, *>)).put("status", status())
-            .put("overlayPosition",JSONObject().put("x",config.opt("overlayX") ?: JSONObject.NULL).put("y",config.opt("overlayY") ?: JSONObject.NULL))
-        if (directory) message.put("haDirectory",haDirectory())
-        else if (haEntityUpdates.isNotEmpty()) message.put("haEntityUpdates",JSONArray(haEntityUpdates.values.toList()))
+        val consumer = sink
+        if (visible && consumer != null) {
+            val message = JSONObject().put("samples", JSONObject(samples as Map<*, *>)).put("status", status())
+                .put("overlayPosition",JSONObject().put("x",config.opt("overlayX") ?: JSONObject.NULL).put("y",config.opt("overlayY") ?: JSONObject.NULL))
+            if (directory) message.put("haDirectory",haDirectory())
+            else if (haEntityUpdates.isNotEmpty()) message.put("haEntityUpdates",JSONArray(haEntityUpdates.values.toList()))
+            val payload = jsonMap(message)
+            main.post { if (visible && sink === consumer) consumer.success(payload) }
+        }
         haEntityUpdates.clear()
-        val payload = jsonMap(message)
-        if (visible) main.post { sink?.success(payload) }
         drawOverlay()
     }
+    @Volatile private var lastOverlayPayload: String? = null
     private fun drawOverlay() {
-        val preview = JSONObject(config.toString())
+        val preview = overlayRequest(config,emptyMap()).getJSONObject("config")
         overlayStyleDraft?.let { patch -> patch.keys().forEach { preview.put(it,patch.get(it)) } }
         val overlayConfig = appearance.current.overlayConfig(preview)
         if (!Settings.canDrawOverlays(context) || store.stopped()) overlayConfig.put("overlayEnabled",false)
@@ -282,8 +294,16 @@ class RuntimeCoordinator private constructor(context: Context) {
         val overlaySamples = samples.filterKeys { it in overlayIds }.mapValues { JSONObject(it.value.toString()) }
         val overlayFields = if (overlayIds.any { HaBinding.parse(it) != null }) displayFields().filterKeys { it in overlayIds }
             else fields.filterKeys { it in overlayIds }
+        val signature = overlayRenderKey(overlayConfig,overlayFields,overlaySamples) + "|" + session.adbState + "|" + context.resources.configuration.toString()
+        if (signature == lastOverlayPayload) return
+        lastOverlayPayload = signature
         val remoteOverlay = session.overlay(JSONObject(overlayConfig.toString()).put("haFields",JSONObject(overlayFields.filterKeys { HaBinding.parse(it) != null } as Map<*,*>)),overlaySamples)
-        main.post { if (remoteOverlay) overlay?.close() else overlay?.update(overlayConfig, overlayFields, overlaySamples) }
+        val target = overlay
+        main.post {
+            if (overlay !== target) return@post
+            if (remoteOverlay) target?.close() else target?.update(overlayConfig, overlayFields, overlaySamples)
+            if (!remoteOverlay && (target?.failure != null || session.adbState == "connected")) lastOverlayPayload = null
+        }
     }
     fun save(next: JSONObject, secrets: Map<String, String>) {
         val autoAdbWasEnabled = config.optBoolean("autoSystemAdb")
@@ -308,8 +328,8 @@ class RuntimeCoordinator private constructor(context: Context) {
         localHistory.configure(config)
         store.stopped(false)
         generation++; retry?.cancel(false); retry = null; retrySeconds = 1; pendingFields.clear()
-        network.execute { if (secrets.values.any { it.isNotEmpty() }) publisher.close(); publisher.configure(config) }
-        ensureRunning(); reconfigure(); publishSelected(); emit()
+        network.execute { if (secrets.values.any { it.isNotEmpty() }) publisher.close(); publisher.configure(config); publisher.retryPublication() }
+        ensureRunning(); reconfigure(); publishSelected(); flushReceipts(); emit()
     }
     private fun wanted(): Set<String> {
         val ids = mutableSetOf<String>()
@@ -338,6 +358,7 @@ class RuntimeCoordinator private constructor(context: Context) {
     }
     fun preview(ids: Set<String>) {
         require(ids.size <= 2048 && ids.all { fields[it]?.optBoolean("displayAllowed") == true || HaBinding.parse(it)?.connection == config.optString("haConnectionId") || EntityCatalog.controls(context).any { entity -> "control."+entity.getString("id") == it } })
+        if (previewDemand == ids) return
         previewDemand = ids
         reconfigure()
     }
@@ -348,8 +369,8 @@ class RuntimeCoordinator private constructor(context: Context) {
         try { context.startForegroundService(Intent(context, RuntimeService::class.java)); runtimeError = null }
         catch (_: Exception) { runtimeError = if (fromBoot) NativeStrings.text_30caebe3f1 else NativeStrings.text_aa00745af5 }
     }
-    fun attach(current: Service) { service = current; overlay = OverlayWindow(current,changed = { value -> execute { if (service === current) overlayChanged(value) } }); execute { network.execute { publisher.configure(config) }; reconfigure() } }
-    fun detach(current: Service) { if (service === current) { overlay?.close(); overlay = null; service = null; execute { if (!visible) altitude.close(); poll?.cancel(false); poll = null } } }
+    fun attach(current: Service) { lastOverlayPayload = null; service = current; overlay = OverlayWindow(current,changed = { value -> execute { if (service === current) overlayChanged(value) } }); execute { network.execute { publisher.configure(config) }; reconfigure() } }
+    fun detach(current: Service) { if (service === current) { overlay?.close(); overlay = null; service = null; execute { if (!visible) { altitude.close(); session.close(); markDisconnected(); previousDemand = emptySet() }; poll?.cancel(false); poll = null; try { localHistory.flush() } catch (_: android.database.sqlite.SQLiteException) { } } } }
     private fun registeredFields() = session.registered + if (altitude.subscribed) setOf(GNSS_ALTITUDE) else emptySet()
     fun reconfigure() {
         appearance.setActive(visible || (!store.stopped() && config.optBoolean("overlayEnabled")))
@@ -376,6 +397,11 @@ class RuntimeCoordinator private constructor(context: Context) {
             val monitor = object : android.net.ConnectivityManager.NetworkCallback() {
                 override fun onAvailable(network: android.net.Network) { execute {
                     activeNetwork = network
+                    if (publicationNetworkLost) {
+                        publicationNetworkLost = false
+                        val captured = generation
+                        networkExecutorRecovery(captured)
+                    }
                     if (enabled()) {
                         haSession.networkAvailable()
                         if (config.optBoolean("publishEnabled")) { readCurrent(); publishSelected() }
@@ -383,7 +409,7 @@ class RuntimeCoordinator private constructor(context: Context) {
                     }
                 } }
                 override fun onLost(lostNetwork: android.net.Network) { execute {
-                    if (activeNetwork == lostNetwork) { activeNetwork = null; haSession.networkLost(); network.execute { publisher.close() }; emit() }
+                    if (activeNetwork == lostNetwork) { activeNetwork = null; publicationNetworkLost = true; haSession.networkLost(); network.execute { publisher.close() }; emit() }
                 } }
             }
             try { context.getSystemService(android.net.ConnectivityManager::class.java).registerDefaultNetworkCallback(monitor); networkCallback = monitor } catch (_: Throwable) { }
@@ -401,8 +427,20 @@ class RuntimeCoordinator private constructor(context: Context) {
         }
         emit()
     }
+    private fun networkExecutorRecovery(captured: Long) {
+        network.execute {
+            if (captured != generation || store.stopped()) return@execute
+            publisher.retryPublication()
+            execute {
+                if (captured != generation || store.stopped()) return@execute
+                publishSelected(); flushReceipts(); publishControlEntities()
+                heartbeat?.cancel(false); heartbeat = null; scheduleHeartbeat(0)
+            }
+        }
+    }
     private fun scheduleHeartbeat(delay: Long) {
         if (!enabled() || config.optString("connection") != "mqtt" || (!config.optBoolean("publishEnabled") && !config.optBoolean("mqttControlEnabled")) || heartbeatInFlight) return
+        val publicationWait = publisher.publicationWaitMillis() ?: return
         heartbeat = worker.schedule({
             heartbeat = null
             heartbeatInFlight = true
@@ -422,7 +460,7 @@ class RuntimeCoordinator private constructor(context: Context) {
                     }
                 }
             }
-        }, delay, TimeUnit.SECONDS)
+        }, maxOf(delay*1000,publicationWait), TimeUnit.MILLISECONDS)
     }
     private fun accept(id: String, fresh: JSONObject): Set<String> {
         val before = samples[id]?.let(::semantic)
@@ -432,12 +470,12 @@ class RuntimeCoordinator private constructor(context: Context) {
         samples[id] = fresh
         if (before != semantic(fresh)) changed.add(id)
         localHistory.append(id, fresh)
-        fields.filterValues { it.optString("unitField") == id }.keys.forEach { dependent ->
+        unitDependents[id].orEmpty().forEach { dependent ->
             samples[dependent]?.takeIf { it.optString("quality") in listOf("available","unverified") && it.has("raw") }?.let {
                 changed.addAll(accept(dependent,JSONObject(it.toString()).put("interpretationChangedAt",fresh.optLong("receivedAt",System.currentTimeMillis()))))
             }
         }
-        if (id in listOf(BATTERY_VOLTAGE, BATTERY_CURRENT) && BATTERY_POWER in wanted())
+        if ((id == BATTERY_VOLTAGE || id == BATTERY_CURRENT) && BATTERY_POWER in previousDemand)
             changed.addAll(accept(BATTERY_POWER, batteryPower(samples, sourceEpoch)))
         return changed
     }
@@ -503,8 +541,11 @@ class RuntimeCoordinator private constructor(context: Context) {
             if (captured == controlRestoreGeneration && controlRestoreKey == controlConnectionKey() && canRestoreControlPublication()) publishControlEntities()
         }, delay, TimeUnit.SECONDS)
     }
+    private var entityRetry: ScheduledFuture<*>? = null
     private fun publishControlEntities() {
-        if (config.optString("connection","ha") != "ha" || haSession.entityCommandTopic.isEmpty()) return
+        if (config.optString("connection","ha") != "ha" || (!config.optBoolean("haControlEnabled") && !publisher.controlAvailabilityPending(config))) return
+        if (config.optBoolean("haControlEnabled") && haSession.entityCommandTopic.isEmpty()) return
+        if (entityRetry != null || (publisher.publicationWaitMillis() ?: return) > 0) return
         if (entitiesPublishing) { entitiesDirty = true; return }
         val settings = JSONObject(config.toString())
         val snapshot = samples.mapValues { JSONObject(it.value.toString()) }
@@ -513,12 +554,19 @@ class RuntimeCoordinator private constructor(context: Context) {
         val restoration = controlRestoreGeneration
         val key = controlConnectionKey()
         entitiesPublishing = true
+        val captured = generation
         network.execute {
+            if ((online && (store.stopped() || captured != generation)) || key != controlConnectionKey()) {
+                execute { entitiesPublishing = false; publishControlEntities() }; return@execute
+            }
             val error = try { publisher.publishControlEntities(settings,snapshot,topic,online); null } catch (error: Throwable) { error.javaClass.simpleName }
             execute {
                 entitiesPublishing = false
                 if (error != null) commandError = error
                 finishControlRestore(restoration,key,error)
+                if (error != null && entityRetry == null) publisher.publicationWaitMillis()?.let { delay ->
+                    entityRetry = worker.schedule({ entityRetry = null; publishControlEntities() },delay.coerceAtLeast(1000),TimeUnit.MILLISECONDS)
+                }
                 if (entitiesDirty) { entitiesDirty = false; publishControlEntities() }
             }
         }
@@ -528,7 +576,12 @@ class RuntimeCoordinator private constructor(context: Context) {
         val selected = list(config.optJSONArray("uploaded")).toSet()
         if (changed != null) pendingFields.addAll(changed.intersect(selected))
         else pendingFields.addAll(selected)
-        if (publishInFlight) return
+        if (publishInFlight || retry != null) return
+        val wait = publisher.publicationWaitMillis() ?: return
+        if (wait > 0) {
+            retry = worker.schedule({ retry = null; publishSelected(emptySet()) },wait,TimeUnit.MILLISECONDS)
+            return
+        }
         val batch = samples.filterKeys { it in selected && it in pendingFields }.mapValues { JSONObject(it.value.toString()) }
         if (batch.isEmpty()) return
         val captured = generation
@@ -558,7 +611,7 @@ class RuntimeCoordinator private constructor(context: Context) {
         }
     }
     fun checkConnection(callback: (JSONObject) -> Unit) {
-        network.execute { publisher.configure(config); publisher.check(); execute { callback(status()); emit() } }
+        network.execute { publisher.configure(config); publisher.check(); execute { callback(status()); publishSelected(); flushReceipts(); publishControlEntities(); emit() } }
     }
     fun history(id: String, minutes: Int, callback: (JSONObject) -> Unit) {
         require(displayFields().containsKey(id))
@@ -609,15 +662,17 @@ class RuntimeCoordinator private constructor(context: Context) {
         save(JSONObject(config.toString()).put("overlayEnabled", enabled && Settings.canDrawOverlays(context)), emptyMap())
     }
     fun resume() {
+        localHistory.configure(config)
         store.stopped(false); readBlocked = false; previousDemand = emptySet(); generation++
         retry?.cancel(false); retry = null; retrySeconds = 1; pendingFields.clear()
         ensureRunning(); reconfigure(); publishSelected()
     }
     fun stop() {
         appearance.setActive(visible)
-        controlRestoreGeneration++; controlRestoreKey = null; controlRestoreRetry?.cancel(false); controlRestoreRetry = null
+        controlRestoreGeneration++; controlRestoreKey = null; controlRestoreRetry?.cancel(false); controlRestoreRetry = null; entityRetry?.cancel(false); entityRetry = null
         store.stopped(true); altitude.close(); (service as? RuntimeService)?.setLocationActive(false); publishControlEntities(); receipts.clear(); receiptRetry?.cancel(false); receiptRetry = null; haSession.close(); releaseOverlayWatcher(); releaseNetworkMonitor(); heartbeat?.cancel(false); heartbeat = null; session.close(); callbackFlush?.cancel(false); callbackFlush = null; callbackChanged.clear(); generation++; poll?.cancel(false); poll = null; retry?.cancel(false); retry = null; pendingFields.clear()
         markDisconnected()
+        localHistory.pause()
         val captured = generation
         val settings = JSONObject(config.toString())
         val selected = list(settings.optJSONArray("uploaded")).toSet()

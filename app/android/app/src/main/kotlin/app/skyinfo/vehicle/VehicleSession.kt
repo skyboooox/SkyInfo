@@ -14,8 +14,12 @@ class VehicleSession(
     private val changed: () -> Unit,
     private val lost: () -> Unit,
     private val overlayChanged: (JSONObject) -> Unit = {},
-    private val authorized: () -> Unit = {}
+    private val authorized: () -> Unit = {},
+    private val bridgeFactory: (() -> Unit, (JSONObject) -> Unit) -> ShellVehicleBridge = { disconnected, overlay ->
+        ShellVehicleBridge(context, disconnected, overlayChanged = overlay)
+    }
 ) {
+    private val authorization = AdbAuthorization(context)
     private val main = Handler(Looper.getMainLooper())
     private val ordinary = VehicleSubscription(context, reader)
     private var remote: IVehicleSource? = null
@@ -40,7 +44,7 @@ class VehicleSession(
         private set
     var identity = NativeStrings.text("native_app_identity",mapOf("uid" to android.os.Process.myUid()))
         private set
-    var adbState = "disabled"
+    var adbState = authorization.required ?: "disabled"
         private set
     private fun connected(created: ShellVehicleBridge) {
         dispatch {
@@ -70,16 +74,21 @@ class VehicleSession(
         if (!granted && (remote != null || binding)) close()
         keepOverlay = overlayRequired && granted
         wanted = ids.filter { !it.startsWith("system.") }.toSet()
-        if (granted && remote == null && !binding && SystemClock.elapsedRealtime() >= retryAt) {
+        val authorizationRequired = authorization.required
+        if (granted && remote == null && !binding && authorizationRequired != null) {
+            adbState = authorizationRequired
+            bindingState = NativeStrings.text("adb_status_" + adbState)
+        }
+        if (granted && remote == null && !binding && SystemClock.elapsedRealtime() >= retryAt && authorization.takeAttempt()) {
             binding = true; bindingState = NativeStrings.text("adb_status_connecting"); state = bindingState
             retryTask?.let(main::removeCallbacks)
             retryTask = Runnable { dispatch { retryTask = null; if (binding) { adbState = "timeout"; failed(NativeStrings.text_4e0a818e1c) } } }
             main.postDelayed(retryTask!!, 15000)
             adbState = "connecting"
             lateinit var created: ShellVehicleBridge
-            created = ShellVehicleBridge(context, disconnected = { dispatch { if (bridge === created) {
+            created = bridgeFactory({ dispatch { if (bridge === created) {
                 adbState = "disconnected"; failed(NativeStrings.text_e4a0178fb2); lost()
-            } } }, overlayChanged = { state -> dispatch { if (bridge === created && remote === created) overlayChanged(state) } })
+            } } }, { state -> dispatch { if (bridge === created && remote === created) overlayChanged(state) } })
             bridge = created
             created.start({ connected(created) }, { error -> dispatch { if (bridge === created) {
                 adbState = adbFailure(error); failed(NativeStrings.text("adb_status_" + adbState))
@@ -113,7 +122,16 @@ class VehicleSession(
     private fun failed(message: String) {
         bridge?.close(); bridge = null
         remote = null; binding = false; configured = emptySet(); callbacks.clear(); registered = emptySet(); sequence++
+        ordinary.close()
         state = message; bindingState = message
+        val authorizationRequired = authorization.required
+        if (authorizationRequired != null) {
+            retryTask?.let(main::removeCallbacks); retryTask = null
+            adbState = authorizationRequired
+            state = NativeStrings.text("adb_status_" + adbState); bindingState = state
+            changed()
+            return
+        }
         retryAt = SystemClock.elapsedRealtime() + retryDelay
         retryTask?.let(main::removeCallbacks)
         retryTask = Runnable { dispatch { retryTask = null; if (wanted.isNotEmpty() || keepOverlay || keepConnection) changed() } }
@@ -133,19 +151,20 @@ class VehicleSession(
             !config.optBoolean("overlayEnabled") || result.optBoolean("visible")
         } catch (error: Throwable) { overlayState = error.javaClass.simpleName; false }
     }
+    fun retryAuthorization() { authorization.retry() }
     fun close() {
         retryTask?.let(main::removeCallbacks); retryTask = null; retryAt = 0; retryDelay = 1000; bindingState = NativeStrings.text_8bb38ef00c
         sequence++; ordinary.close()
         try { remote?.cancel() } catch (_: Throwable) { }
         bridge?.close(); bridge = null
-        adbState = "disabled"
+        adbState = authorization.required ?: "disabled"
         remote = null; binding = false; keepOverlay = false; keepConnection = false; wanted = emptySet(); configured = emptySet(); registered = emptySet(); callbacks.clear(); state = NativeStrings.text_8bb38ef00c
     }
 }
 
 internal fun adbFailure(error: Throwable): String = when {
     error is io.github.muntashirakon.adb.AdbPairingRequiredException -> "pair_required"
-    error.message == "adb_authorization_required" -> "authorization"
+    error is AdbAuthorizationRequiredException -> "authorization"
     error.message == "adb_other_device" -> "other_device"
     error is java.net.SocketTimeoutException -> "timeout"
     error is java.net.ConnectException || error is java.net.UnknownHostException -> "unreachable"

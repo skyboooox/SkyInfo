@@ -31,7 +31,7 @@ android {
     productFlavors {
         create("alpha") {
             dimension = "channel"
-            versionNameSuffix = "-alpha.6"
+            versionNameSuffix = "-alpha.7"
         }
         create("beta") {
             dimension = "channel"

@@ -22,7 +22,7 @@ class StartupBridge extends VehicleBridge {
   ]) async {
     calls.add(method);
     return {
-      'config': {},
+      'config': args?['config'] ?? {},
       'status': {'adb': state},
       'samples': {},
     };
@@ -123,6 +123,114 @@ void main() {
   });
 
   testWidgets(
+    'authorization after a successful session prompts once and stays paused',
+    (t) async {
+      final b = StartupBridge('connected');
+      await show(t, b);
+      b.updates.add({
+        'status': {'adb': 'authorization'},
+      });
+      await t.pumpAndSettle();
+      expect(find.text('需要网络ADB授权'), findsOneWidget);
+      await t.tap(find.text('稍后'));
+      await t.pumpAndSettle();
+      b.updates.add({
+        'status': {'adb': 'authorization'},
+      });
+      await t.pumpAndSettle();
+      expect(find.text('需要网络ADB授权'), findsNothing);
+      expect(b.calls, ['load']);
+      b.updates.add({
+        'status': {'adb': 'connected'},
+      });
+      await t.pumpAndSettle();
+      b.updates.add({
+        'status': {'adb': 'authorization'},
+      });
+      await t.pumpAndSettle();
+      expect(find.text('需要网络ADB授权'), findsOneWidget);
+    },
+  );
+
+  testWidgets('background authorization appears on return to the app', (
+    t,
+  ) async {
+    final b = StartupBridge('connected');
+    await show(t, b);
+    t.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
+    await t.pumpAndSettle();
+    b.updates.add({
+      'status': {'adb': 'authorization'},
+    });
+    await t.pumpAndSettle();
+    expect(find.text('需要网络ADB授权'), findsNothing);
+    t.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+    await t.pumpAndSettle();
+    expect(find.text('需要网络ADB授权'), findsOneWidget);
+    expect(b.calls.where((v) => v == 'reconnectAdb'), isEmpty);
+  });
+
+  testWidgets(
+    'scheduled authorization waits when the app leaves the foreground',
+    (t) async {
+      final b = StartupBridge('connected');
+      await show(t, b);
+      b.updates.add({
+        'status': {'adb': 'authorization'},
+      });
+      await t.idle();
+      t.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
+      await t.pumpAndSettle();
+      expect(find.text('需要网络ADB授权'), findsNothing);
+      t.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+      await t.pumpAndSettle();
+      expect(find.text('需要网络ADB授权'), findsOneWidget);
+    },
+  );
+
+  testWidgets('scheduled authorization follows the latest connection state', (
+    t,
+  ) async {
+    final b = StartupBridge('connected');
+    await show(t, b);
+    b.updates.add({
+      'status': {'adb': 'authorization'},
+    });
+    await t.idle();
+    b.updates.add({
+      'status': {'adb': 'connecting'},
+    });
+    await t.idle();
+    await t.pumpAndSettle();
+    expect(find.text('需要网络ADB授权'), findsNothing);
+    b.updates.add({
+      'status': {'adb': 'authorization'},
+    });
+    await t.pumpAndSettle();
+    expect(find.text('需要网络ADB授权'), findsOneWidget);
+  });
+
+  testWidgets('saving an enabled connection explicitly requests one attempt', (
+    t,
+  ) async {
+    final b = StartupBridge('authorization');
+    final c = await show(t, b);
+    c.adbEnabled = true;
+    await t.tap(find.text('授权连接'));
+    await t.pumpAndSettle();
+    expect(b.calls.where((v) => v == 'reconnectAdb'), isEmpty);
+    await t.tap(find.text('保存并连接'));
+    await t.pumpAndSettle();
+    expect(b.calls.where((v) => v == 'save'), hasLength(1));
+    expect(b.calls.where((v) => v == 'reconnectAdb'), hasLength(1));
+    b.updates.add({
+      'status': {'adb': 'authorization'},
+    });
+    await t.pumpAndSettle();
+    expect(b.calls.where((v) => v == 'reconnectAdb'), hasLength(1));
+  });
+
+  testWidgets(
     'confirmation opens configured connection settings, without claiming authorization',
     (t) async {
       final b = StartupBridge('authorization');
@@ -131,7 +239,7 @@ void main() {
       await t.pumpAndSettle();
       expect(find.byType(NetworkAdbSettings), findsOneWidget);
       expect(b.calls, ['load']);
-      expect(find.text('请在系统中接受SkyInfo的ADB授权'), findsOneWidget);
+      expect(find.text('需要ADB授权，请在连接设置中授权连接'), findsOneWidget);
     },
   );
 

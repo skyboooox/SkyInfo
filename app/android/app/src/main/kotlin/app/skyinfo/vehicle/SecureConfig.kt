@@ -14,9 +14,13 @@ import javax.crypto.spec.GCMParameterSpec
 interface SecretStore { fun secret(name: String): String }
 
 class SecureConfig(context: Context) : SecretStore {
+    private val contextForPublication = context.applicationContext
     private val prefs = context.getSharedPreferences("skyinfo", Context.MODE_PRIVATE)
-    fun load(): JSONObject = JSONObject(prefs.getString("config", "{}") ?: "{}").also {
+    fun load(): JSONObject {
+        if (!prefs.contains("config")) check(contextForPublication.getSharedPreferences("skyinfo.ha.control-publication",Context.MODE_PRIVATE).edit().putBoolean("initialized",true).commit())
+        return JSONObject(prefs.getString("config", "{}") ?: "{}").also {
         if (migrateLocalHistory(it)) save(it)
+        }
     }
     fun save(config: JSONObject) { check(prefs.edit().putString("config", config.toString()).commit()) }
     fun stopped(): Boolean = prefs.getBoolean("stopped", false)

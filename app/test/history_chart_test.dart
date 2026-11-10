@@ -63,6 +63,22 @@ void main() {
     expect(range.minimumAt, at(842));
     expect(groups.single.skip(1).every((b) => b.min == b.max), isTrue);
   });
+  test('unordered history keeps chronological vertices and bucket extrema', () {
+    for (final bins in [1, 100, 600]) {
+      final ordered = aggregateHistory(high, bins, start, end).single;
+      final reversed = aggregateHistory(
+        high.reversed.toList(),
+        bins,
+        start,
+        end,
+      ).single;
+      expect(historyLineVertices(reversed), historyLineVertices(ordered));
+      expect(
+        reversed.map((b) => (b.min, b.max, b.minimumAt, b.maximumAt)),
+        ordered.map((b) => (b.min, b.max, b.minimumAt, b.maximumAt)),
+      );
+    }
+  });
   for (final hz in [1, 4]) {
     test('30分钟每秒$hz个样本全部保留，不被像素桶降成十秒阶梯', () {
       final points = List.generate(

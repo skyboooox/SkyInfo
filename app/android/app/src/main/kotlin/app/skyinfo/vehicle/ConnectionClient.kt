@@ -21,6 +21,13 @@ import javax.net.ssl.SSLSocketFactory
 
 class ConnectionClient(private val context: Context, private val store: SecretStore, private val client: OkHttpClient = OkHttpClient.Builder().callTimeout(12, TimeUnit.SECONDS)
         .connectTimeout(5, TimeUnit.SECONDS).followRedirects(false).followSslRedirects(false).build(), private val mqttSocketFactory: javax.net.SocketFactory = SSLSocketFactory.getDefault()) {
+    private val gate = PublicationGate()
+    fun retryPublication() { gate.reset(); publicationFailure = null }
+    fun publicationWaitMillis(): Long? = gate.waitMillis()
+    @Volatile private var publicationFailure: String? = null
+    private fun requirePublication() {
+        if (!gate.allowed()) { publicationFailure?.let { status = it }; throw PublicationDeferredException() }
+    }
     private val device = DeviceIdentity(context)
     private val deviceId = device.id
     private val sessionId = UUID.randomUUID().toString()
@@ -36,20 +43,28 @@ class ConnectionClient(private val context: Context, private val store: SecretSt
     private val haDefinitions = mutableMapOf<String,String>()
     @Volatile var status: String = NativeStrings.text_f2f3e9803c
         private set
-    fun connectionState(value: String) { status = value }
+    fun connectionState(value: String) { if (gate.allowed()) status = value }
     fun controlResult(config: JSONObject, result: JSONObject) {
+        try {
+        requirePublication()
         if (config.optString("connection", "ha") == "mqtt") {
             mqttConnection(config)
             send("${config.getString("mqttTopic").trimEnd('/')}/command_result", envelope("command_result").put("result",result).toString().toByteArray(), 1)
+            retryPublication()
             return
         }
         val field = JSONObject().put("id","system.command_result").put("entityKey","command_result").put("name",NativeStrings.text_9e15c20007).put("encoding",NativeStrings.text_f1926e9b33)
         val payload = JSONObject(result.toString()).put("value",result.optString("status","error")).put("quality","available").put("skyinfo_device",deviceId)
         publishHa(config,field,"sensor.skyinfo_${config.optString("prefix",device.prefix)}_command_result",payload)
+        retryPublication()
+            } catch (error: Throwable) { failure(error); throw error }
     }
+    private var credential = ""
     fun configure(config: JSONObject) {
+        val nextCredential = store.secret(if (config.optString("connection","ha") == "ha") "haToken" else "mqttPassword")
         val keys = listOf("connection", "haUrl", "prefix", "mqttHost", "mqttPort", "mqttUser", "mqttTopic", "mqttProtocol", "mqttTransport", "mqttControlEnabled")
-        if (keys.any { config.opt(it)?.toString() != settings.opt(it)?.toString() }) close()
+        if (keys.any { config.opt(it)?.toString() != settings.opt(it)?.toString() } || credential != nextCredential) { close(); retryPublication() }
+        credential = nextCredential
         if (config.optJSONArray("uploaded")?.toString() != settings.optJSONArray("uploaded")?.toString()) metaSent = false
         settings = JSONObject(config.toString())
     }
@@ -65,15 +80,18 @@ class ConnectionClient(private val context: Context, private val store: SecretSt
         return Request.Builder().url(haUrl(config, path)).header("Authorization", "Bearer $token")
     }
     fun check() {
+        gate.reset()
         try {
             if (settings.optString("connection", "ha") == "mqtt") { mqttConnection(settings); status = NativeStrings.text_65fe35c45e }
-            else client.newCall(haRequest(settings, "api/").build()).execute().use { response ->
+            else executeRequest(haRequest(settings, "api/").build()).use { response ->
                 status = if (response.isSuccessful) NativeStrings.text_65fe35c45e else if (response.code in listOf(401, 403)) NativeStrings.text_dda97ab7aa else NativeStrings.text_2c056f182f
             }
-        } catch (_: IllegalArgumentException) { status = NativeStrings.text_2ee717f092 }
+            if (status == NativeStrings.text_65fe35c45e) retryPublication()
+        } catch (e: IllegalArgumentException) { failure(e) }
         catch (e: Throwable) { failure(e) }
     }
     private fun mqttConnection(config: JSONObject) {
+        requirePublication()
         if (mqtt?.isConnected == true || mqtt5?.isConnected == true) return
         close()
         commandSession = UUID.randomUUID().toString()
@@ -158,17 +176,32 @@ class ConnectionClient(private val context: Context, private val store: SecretSt
                 send("$topic/meta", envelope("meta").put("app_version", context.packageManager.getPackageInfo(context.packageName,0).versionName).put("fields", definitions).put("command_target",config.optString("prefix",device.prefix)).put("control_enabled",config.optBoolean("mqttControlEnabled")).put("controls",JSONArray(if (config.optBoolean("mqttControlEnabled")) VehicleControls.definitions.map { JSONObject().put("action",it.id).put("name",it.name).put("minimum",it.min).put("maximum",it.max).put("options",VehicleControls.metadata(it).getJSONArray("options")).put("validation",if (it.inferred) "inferred" else "verified") } + RemoteCommands.appActions.map { JSONObject().put("action",it).put("minimum",0).put("maximum",1) } else emptyList<JSONObject>())).toString().toByteArray(), 1, true)
                 metaSent = true
             }
-            status = NativeStrings.text_65fe35c45e
+            status = NativeStrings.text_65fe35c45e; retryPublication()
         } catch (e: Throwable) { failure(e) }
     }
     private fun failure(e: Throwable) {
+        if (e is PublicationDeferredException) return
         status = when {
+            e is HaAuthorizationException -> NativeStrings.text_dda97ab7aa
             e is IllegalArgumentException -> NativeStrings.text_2ee717f092
             e is javax.net.ssl.SSLException || e.cause is javax.net.ssl.SSLException -> NativeStrings.text_9e94379c10
             e is org.eclipse.paho.client.mqttv3.MqttException && e.reasonCode in listOf(4, 5) -> NativeStrings.text_dda97ab7aa
             e is org.eclipse.paho.mqttv5.common.MqttException && e.reasonCode in listOf(134, 135) -> NativeStrings.text_dda97ab7aa
             else -> NativeStrings.text_f2f3e9803c
         }
+        publicationFailure = status
+        gate.fail(status in listOf(NativeStrings.text_2ee717f092,NativeStrings.text_9e94379c10,NativeStrings.text_dda97ab7aa))
+    }
+    private fun executeRequest(request: Request): Response {
+        requirePublication()
+        try {
+            val response = client.newCall(request).execute()
+            if (!response.isSuccessful && !(response.code == 404 && request.url.encodedPath.contains("/api/states/"))) {
+                val error = if (response.code in listOf(401,403)) HaAuthorizationException() else java.io.IOException("HA HTTP ${response.code}")
+                response.close(); throw error
+            }
+            return response
+        } catch (error: Throwable) { failure(error); throw error }
     }
     fun publish(config: JSONObject, samples: Map<String, JSONObject>, fields: Map<String, JSONObject>, stillCurrent: () -> Boolean = { true }) {
         try {
@@ -192,18 +225,18 @@ class ConnectionClient(private val context: Context, private val store: SecretSt
                     publishHa(config,definition,entity(config,field),payload)
                 }
             }
-            status = NativeStrings.text_65fe35c45e
-        } catch (_: IllegalArgumentException) { status = NativeStrings.text_2ee717f092 }
+            status = NativeStrings.text_65fe35c45e; retryPublication()
+        } catch (e: IllegalArgumentException) { failure(e) }
         catch (e: Throwable) { failure(e) }
     }
     private fun mqttViaHa(config: JSONObject, topic: String, payload: String, retained: Boolean) {
         val body = JSONObject().put("topic",topic).put("payload",payload).put("qos",1).put("retain",retained)
-        client.newCall(haRequest(config,"api/services/mqtt/publish").post(body.toString().toRequestBody("application/json".toMediaType())).build()).execute().use { response ->
+        executeRequest(haRequest(config,"api/services/mqtt/publish").post(body.toString().toRequestBody("application/json".toMediaType())).build()).use { response ->
             check(response.isSuccessful) { "HA MQTT publish HTTP ${response.code}" }
         }
     }
     private fun migrateHaState(config: JSONObject, field: JSONObject, entityId: String) {
-        client.newCall(haRequest(config,"api/states/$entityId").build()).execute().use { response ->
+        executeRequest(haRequest(config,"api/states/$entityId").build()).use { response ->
             if (response.code == 404) return
             check(response.isSuccessful) { "HA state read HTTP ${response.code}" }
             val state = JSONObject(limitedBody(response))
@@ -218,7 +251,7 @@ class ConnectionClient(private val context: Context, private val store: SecretSt
             if (!owned) {
                 val template = "{{ (device_attr(${JSONObject.quote(entityId)}, 'identifiers') or []) | list | tojson }}"
                 val body = JSONObject().put("template",template)
-                client.newCall(haRequest(config,"api/template").post(body.toString().toRequestBody("application/json".toMediaType())).build()).execute().use { registry ->
+                executeRequest(haRequest(config,"api/template").post(body.toString().toRequestBody("application/json".toMediaType())).build()).use { registry ->
                     check(registry.isSuccessful) { "HA device lookup HTTP ${registry.code}" }
                     val identifiers = JSONArray(limitedBody(registry))
                     for (i in 0 until identifiers.length()) {
@@ -229,12 +262,12 @@ class ConnectionClient(private val context: Context, private val store: SecretSt
                 error("HA entity is not managed by SkyInfo")
             }
         }
-        client.newCall(haRequest(config,"api/states/$entityId").delete().build()).execute().use { response ->
+        executeRequest(haRequest(config,"api/states/$entityId").delete().build()).use { response ->
             check(response.isSuccessful || response.code == 404) { "HA legacy state migration HTTP ${response.code}" }
         }
     }
     private fun publishHa(config: JSONObject, field: JSONObject, entityId: String, payload: JSONObject) {
-        val version = context.packageManager.getPackageInfo(context.packageName,0).versionName ?: ""
+        val version = appVersion
         val definition = haSensorDiscovery(deviceId,config.optString("prefix",device.prefix),version,field,entityId)
         val key = config.getString("haUrl") + "|" + field.getString("id")
         if (haDefinitions[key] != definition.toString()) {
@@ -244,28 +277,63 @@ class ConnectionClient(private val context: Context, private val store: SecretSt
         }
         mqttViaHa(config,definition.getString("state_topic"),payload.toString(),false)
     }
+    private val appVersion by lazy { context.packageManager.getPackageInfo(context.packageName,0).versionName ?: "" }
     private val controlDefinitions = EntityCatalog.controls(context)
     private val controlStates = mutableMapOf<String,String>()
     private var controlTopic = ""
+    private var controlStateTarget = ""
+    private val controlPublication = context.getSharedPreferences("skyinfo.ha.control-publication",Context.MODE_PRIVATE)
+    init {
+        if (!controlPublication.getBoolean("initialized",false)) {
+            val legacy = context.getSharedPreferences("skyinfo",Context.MODE_PRIVATE).getString("config",null)?.let { JSONObject(it) }
+            val edit = controlPublication.edit().putBoolean("initialized",true)
+            if (legacy != null && legacy.optString("connection","ha") == "ha" && legacy.optString("haUrl").isNotBlank())
+                edit.putString(controlPublicationKey(legacy),"active")
+            check(edit.commit())
+        }
+    }
+    private fun controlPublicationKey(config: JSONObject): String {
+        val target = HaEndpoint.identity(config.optString("haUrl"))+"|"+deviceId+"|"+config.optString("prefix",device.prefix)
+        return java.security.MessageDigest.getInstance("SHA-256").digest(target.toByteArray()).joinToString("") { "%02x".format(it) }
+    }
+    fun controlAvailabilityPending(config: JSONObject) = controlPublication.getString(controlPublicationKey(config),null) == "active"
+    private fun controlPublicationState(config: JSONObject, state: String) {
+        val key = controlPublicationKey(config)
+        if (controlPublication.getString(key,null) != state) check(controlPublication.edit().putString(key,state).commit())
+    }
     fun invalidateControlStates() { controlStates.clear() }
     fun publishControlEntities(config: JSONObject, samples: Map<String, JSONObject>, commandTopic: String, online: Boolean) {
-        if (config.optString("connection","ha") != "ha" || commandTopic.isEmpty()) return
-        val version = context.packageManager.getPackageInfo(context.packageName,0).versionName ?: ""
+        if (config.optString("connection","ha") != "ha") return
+        val enabled = config.optBoolean("haControlEnabled")
+        if (enabled && commandTopic.isEmpty() || !enabled && !controlAvailabilityPending(config)) return
+        requirePublication()
+        val stateTarget = controlPublicationKey(config)
+        if (controlStateTarget != stateTarget) {
+            controlStateTarget = stateTarget; controlStates.clear(); controlTopic = ""
+        }
+        val version = appVersion
         val ready = online && config.optBoolean("haControlEnabled")
         val connectionKey = config.optString("haUrl")+"|"+commandTopic
-        if (controlTopic != connectionKey) {
+        if (enabled && controlTopic != connectionKey) {
             val definitions = controlDefinitions.flatMap { haControlDefinitions(deviceId,config.optString("prefix",device.prefix),version,it,commandTopic) }
             mqttViaHa(config,"homeassistant/device/skyinfo_${deviceId}_controls/config",haControlDeviceDiscovery(definitions,version).toString(),true)
+            controlTopic = connectionKey
+            controlPublicationState(config,"active")
         }
+        if (enabled) controlPublicationState(config,"active")
         for (entity in controlDefinitions) {
-            val state = haControlState(entity,samples,ready).toString()
+            val state = haControlState(entity,samples,ready)
+            val updatedAt = state.remove("updatedAt") ?: JSONObject.NULL
+            val semantic = state.toString()
             val topic = "skyinfo/ha/$deviceId/control/${entity.getString("id")}/state"
-            if (controlTopic != connectionKey || controlStates[topic] != JSONObject(state).apply { remove("updatedAt") }.toString()) {
-                mqttViaHa(config,topic,state,false)
-                controlStates[topic] = JSONObject(state).apply { remove("updatedAt") }.toString()
+            if (controlStates[topic] != semantic) {
+                state.put("updatedAt",updatedAt)
+                mqttViaHa(config,topic,state.toString(),false)
+                controlStates[topic] = semantic
             }
         }
-        controlTopic = connectionKey
+        if (!enabled) controlPublicationState(config,"offline")
+        retryPublication()
     }
     fun publishState(config: JSONObject, samples: Map<String, JSONObject>, fields: Map<String, JSONObject>) {
         if (config.optString("connection", "ha") != "mqtt" || !config.optBoolean("mqttState")) return
@@ -273,6 +341,7 @@ class ConnectionClient(private val context: Context, private val store: SecretSt
             mqttConnection(config)
             val metrics = JSONObject(); samples.forEach { (id, s) -> metrics.put(id, attributes(s, fields.getValue(id))) }
             send("${config.getString("mqttTopic").trimEnd('/')}/state", envelope("state").put("metrics", metrics).toString().toByteArray(), 1, true, 180)
+            retryPublication()
         } catch (e: Throwable) { failure(e) }
     }
     private fun attributes(sample: JSONObject, field: JSONObject) = JSONObject(sample.toString())

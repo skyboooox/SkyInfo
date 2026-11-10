@@ -24,7 +24,6 @@ import android.view.WindowManager
 import android.view.WindowInsets
 import com.caverock.androidsvg.SVG
 import org.json.JSONObject
-import java.util.Locale
 import kotlin.math.roundToInt
 import android.os.SystemClock
 
@@ -126,7 +125,11 @@ class OverlayWindow(private val context: Context, private val privileged: Boolea
         parameters = next; configuredX = fractionX; configuredY = fractionY
         if (armed || unlocked) next.flags = next.flags and WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE.inv()
         try {
-            if (attached) windows.updateViewLayout(view,next) else {
+            if (attached) {
+                if (previous == null || previous.width != next.width || previous.height != next.height ||
+                    previous.x != next.x || previous.y != next.y || previous.flags != next.flags || previous.alpha != next.alpha)
+                    windows.updateViewLayout(view,next)
+            } else {
                 windows.addView(view,next); attached = true
                 report()
             }
@@ -213,40 +216,27 @@ private class StripView(context: Context) : View(context) {
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val icons = mutableMapOf<String, SVG>()
     private var config = JSONObject()
-    private var samples = emptyMap<String, JSONObject>()
-    private var definitions = emptyMap<String, JSONObject>()
+    private var groups = emptyList<StripGroup>()
     private var windowOpacity = 1f
+    private val iconPattern = Regex("^[a-z0-9-]+$")
+    private val iconBounds = RectF(0f,0f,24f,24f)
+    private val iconPaint = Paint()
     var editing = false
-    private fun reading(module: JSONObject): String {
-        val sample = samples[module.optString("field")]
-        val raw = sample?.opt("value")
-        return if (sample?.optString("quality") !in listOf("available","unverified") || raw == null) "—"
-            else if (raw is Number) String.format(Locale.ROOT,"%.${module.optInt("digits",1).coerceIn(0,4)}f",raw.toDouble()) else raw.toString()
-    }
-    private fun span(module: JSONObject, font: Float): Float {
+    private fun span(module: StripModule, font: Float): Float {
         val density = resources.displayMetrics.density
         paint.typeface = mono; paint.textSize = font
-        val valueWidth = paint.measureText(reading(module))
+        val valueWidth = paint.measureText(module.text)
         paint.typeface = chinese; paint.textSize = font*0.75f
-        return (if(module.optString("icon").isEmpty()) 0f else font+8*density)+valueWidth+(if(unit(module).isEmpty()) 0f else 4*density)+paint.measureText(unit(module))+16*density
-    }
-    private fun unit(module: JSONObject): String {
-        val id = module.optString("field"); val field = definitions[id]
-        val custom = module.optString("unit")
-        if(module.optBoolean("unitAuto")) return samples[id]?.optString("unit") ?: field?.optString("unit") ?: ""
-        return if (field?.has("unitField") == true && (custom == NativeStrings.raw_value || custom == field.optString("unit")))
-            samples[id]?.optString("unit")?.takeIf(String::isNotEmpty) ?: NativeStrings.raw_value else custom
+        return (if(module.icon.isEmpty()) 0f else font+8*density)+valueWidth+(if(module.unit.isEmpty()) 0f else 4*density)+paint.measureText(module.unit)+16*density
     }
     fun contentWidth(maximum: Int, height: Int): Int {
         val font = (config.optDouble("overlayFont",18.0)*resources.displayMetrics.density).toFloat().coerceAtMost(height*0.65f)
-        val modules = config.optJSONArray("overlays") ?: return maximum
-        val widths = listOf("left","center","right").map { alignment ->
-            (0 until modules.length()).map(modules::getJSONObject).filter { it.optString("alignment") == alignment }.sumOf { span(it,font).toDouble() }
-        }.filter { it > 0 }
+        if (!config.has("overlays")) return maximum
+        val widths = groups.map { group -> group.modules.sumOf { span(it,font).toDouble() } }.filter { it > 0 }
         return ((widths.maxOrNull() ?: 0.0)*widths.size+24*resources.displayMetrics.density).toInt().coerceIn(1,maximum)
     }
     fun configure(value: JSONObject, fields: Map<String, JSONObject>, readings: Map<String, JSONObject>, opacity: Float) {
-        config = JSONObject(value.toString()); samples = readings.filterKeys(fields::containsKey); definitions = fields; windowOpacity = opacity; invalidate()
+        config = JSONObject(value.toString()); groups = prepareStripGroups(config,fields,readings); windowOpacity = opacity; invalidate()
     }
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
@@ -256,12 +246,13 @@ private class StripView(context: Context) : View(context) {
         val ink = if (dark) Color.rgb(239,239,239) else Color.rgb(32,32,32)
         val density = resources.displayMetrics.density
         val requestedFont = config.optDouble("overlayFont",18.0).toFloat() * density
-        val modules = config.optJSONArray("overlays") ?: return
-        val alignments = listOf("left","center","right").filter { alignment -> (0 until modules.length()).any { modules.getJSONObject(it).optString("alignment") == alignment } }
-        for ((index, alignment) in alignments.withIndex()) {
+        if (!config.has("overlays")) return
+        iconPaint.colorFilter = PorterDuffColorFilter(ink,PorterDuff.Mode.SRC_IN)
+        for ((index, prepared) in groups.withIndex()) {
+            val alignment = prepared.alignment
             var font = requestedFont.coerceAtMost(height * 0.65f)
-            val group = (0 until modules.length()).map(modules::getJSONObject).filter { it.optString("alignment") == alignment }
-            val region = width / alignments.size.toFloat()
+            val group = prepared.modules
+            val region = width / groups.size.toFloat()
             val initial = group.sumOf { span(it,font).toDouble() }.toFloat()
             if (initial > region-24*density && initial > 0) font *= ((region-24*density)/initial).coerceAtLeast(0.1f)
             val total = group.sumOf { span(it,font).toDouble() }.toFloat()
@@ -271,21 +262,20 @@ private class StripView(context: Context) : View(context) {
                 paint.color = stripBackgroundColor(background,config.optDouble("overlayOpacity",0.8),windowOpacity)
                 val target = RectF(x-4*density,(height-font)/2-4*density,x+block-8*density,(height+font)/2+4*density)
                 canvas.drawRect(target,paint)
-                val iconId = module.optString("icon")
-                if (Regex("^[a-z0-9-]+$").matches(iconId)) {
+                val iconId = module.icon
+                if (iconPattern.matches(iconId)) {
                     try {
                         val icon = icons.getOrPut(iconId) { SVG.getFromAsset(context.assets,"flutter_assets/assets/icons/$iconId.svg") }
                         canvas.save(); canvas.translate(x,(height-font)/2); canvas.scale(font/24,font/24)
-                        val filter = Paint().apply { colorFilter = PorterDuffColorFilter(ink,PorterDuff.Mode.SRC_IN) }
-                        canvas.saveLayer(0f,0f,24f,24f,filter); icon.renderToCanvas(canvas, RectF(0f,0f,24f,24f)); canvas.restore(); canvas.restore()
+                        canvas.saveLayer(0f,0f,24f,24f,iconPaint); icon.renderToCanvas(canvas, iconBounds); canvas.restore(); canvas.restore()
                     } catch (_: Throwable) { }
                 }
                 if(iconId.isNotEmpty()) x+=font+8*density
                 paint.color=ink; paint.typeface=mono; paint.textSize=font
                 val baseline = (height-paint.fontMetrics.ascent-paint.fontMetrics.descent)/2
-                val text=reading(module); canvas.drawText(text,x,baseline,paint); x+=paint.measureText(text)+(if(unit(module).isEmpty()) 0f else 4*density)
+                val text=module.text; canvas.drawText(text,x,baseline,paint); x+=paint.measureText(text)+(if(module.unit.isEmpty()) 0f else 4*density)
                 paint.typeface=chinese; paint.textSize=font*0.75f
-                val unit=unit(module); canvas.drawText(unit,x,baseline,paint); x+=paint.measureText(unit)+16*density
+                val unit=module.unit; canvas.drawText(unit,x,baseline,paint); x+=paint.measureText(unit)+16*density
             }
         }
         if (editing) {

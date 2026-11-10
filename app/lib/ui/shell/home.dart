@@ -62,6 +62,8 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   final Set<ValueNotifier<Sample>> ageSources = {};
   bool visible = true;
   bool startupAuthorizationChecked = false;
+  bool authorizationPrompted = false;
+  bool authorizationPromptScheduled = false;
   @override
   void initState() {
     super.initState();

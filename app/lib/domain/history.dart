@@ -67,8 +67,17 @@ List<List<HistoryBucket>> aggregateHistory(
   DateTime end,
 ) {
   if (buckets < 1 || !end.isAfter(start)) return [];
-  final ordered = input.where((p) => !p.at.isAfter(end)).toList()
-    ..sort((a, b) => a.at.compareTo(b.at));
+  final ordered = input.where((p) => !p.at.isAfter(end)).toList();
+  // SQLite snapshots are chronological. Preserve the general unordered input
+  // contract without sorting the usual already ordered history again.
+  for (var i = 1; i < ordered.length; i++) {
+    if (ordered[i].at.isBefore(ordered[i - 1].at)) {
+      ordered.sort((a, b) => a.at.compareTo(b.at));
+      break;
+    }
+  }
+  final spanMilliseconds = end.difference(start).inMilliseconds;
+  final startMilliseconds = start.millisecondsSinceEpoch;
   final visible = ordered.where((p) => !p.at.isBefore(start)).toList();
   final preceding = ordered.where((p) => p.at.isBefore(start)).lastOrNull;
   bool valid(HistoryPoint p) => p.value != null && p.value!.isFinite;
@@ -107,29 +116,32 @@ List<List<HistoryBucket>> aggregateHistory(
     for (final p in segment) {
       final key = math.min(
         buckets - 1,
-        ((p.at.millisecondsSinceEpoch - start.millisecondsSinceEpoch) *
+        ((p.at.millisecondsSinceEpoch - startMilliseconds) *
                 buckets /
-                end.difference(start).inMilliseconds)
+                spanMilliseconds)
             .floor(),
       );
       groups.putIfAbsent(key, () => []).add(p);
     }
     final current = <HistoryBucket>[];
+    final lastGroup = groups.keys.last;
     for (final entry in groups.entries) {
-      final g = entry.value, values = g.map((p) => p.value!).toList();
-      final low = values.reduce(math.min), high = values.reduce(math.max);
+      final g = entry.value;
+      var minimum = g.first, maximum = g.first;
+      var low = minimum.value!, high = maximum.value!;
+      for (var i = 1; i < g.length; i++) {
+        final point = g[i], value = point.value!;
+        if (value < low) minimum = point;
+        if (value > high) maximum = point;
+        low = math.min(low, value);
+        high = math.max(high, value);
+      }
       final left = start.add(
-        Duration(
-          milliseconds:
-              (end.difference(start).inMilliseconds * entry.key / buckets)
-                  .ceil(),
-        ),
+        Duration(milliseconds: (spanMilliseconds * entry.key / buckets).ceil()),
       );
       final right = start.add(
         Duration(
-          milliseconds:
-              (end.difference(start).inMilliseconds * (entry.key + 1) / buckets)
-                  .ceil(),
+          milliseconds: (spanMilliseconds * (entry.key + 1) / buckets).ceil(),
         ),
       );
       current.add(
@@ -137,19 +149,16 @@ List<List<HistoryBucket>> aggregateHistory(
           g.last.at,
           low,
           high,
-          values.last,
-          firstValue: values.first,
+          g.last.value!,
+          firstValue: g.first.value!,
           points: List.unmodifiable(g),
           startAt: g.first.at,
           representativeAt: g.last.sourceAt ?? g.last.at,
-          minimumAt:
-              g[values.indexOf(low)].sourceAt ?? g[values.indexOf(low)].at,
-          maximumAt:
-              g[values.indexOf(high)].sourceAt ?? g[values.indexOf(high)].at,
+          minimumAt: minimum.sourceAt ?? minimum.at,
+          maximumAt: maximum.sourceAt ?? maximum.at,
           rangeStart: left.isBefore(segment.first.at) ? segment.first.at : left,
           rangeEnd: right.isAfter(until) ? until : right,
-          observedUntil:
-              entry.key == groups.keys.last && until.isAfter(g.last.at)
+          observedUntil: entry.key == lastGroup && until.isAfter(g.last.at)
               ? until
               : null,
         ),

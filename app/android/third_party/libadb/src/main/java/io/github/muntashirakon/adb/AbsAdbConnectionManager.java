@@ -88,6 +88,9 @@ public abstract class AbsAdbConnectionManager implements Closeable {
         return mApi;
     }
 
+    /** Called when RSA authentication requires system user confirmation. */
+    protected void onAuthorizationRequired() {}
+
     /**
      * Set time to wait for the connection to be made.
      *
@@ -274,6 +277,7 @@ public abstract class AbsAdbConnectionManager implements Closeable {
                     .setKeyPair(getAdbKeyPair())
                     .setDeviceName(Objects.requireNonNull(getDeviceName()))
                     .build();
+            mAdbConnection.setAuthorizationRequiredListener(this::onAuthorizationRequired);
             return mAdbConnection.connect(mTimeout, mTimeoutUnit, mThrowOnUnauthorised);
         }
     }
@@ -317,6 +321,7 @@ public abstract class AbsAdbConnectionManager implements Closeable {
                     .setKeyPair(getAdbKeyPair())
                     .setDeviceName(Objects.requireNonNull(getDeviceName()))
                     .build();
+            mAdbConnection.setAuthorizationRequiredListener(this::onAuthorizationRequired);
             return mAdbConnection.connect(mTimeout, mTimeoutUnit, mThrowOnUnauthorised);
         }
     }
@@ -345,6 +350,7 @@ public abstract class AbsAdbConnectionManager implements Closeable {
                     .setKeyPair(getAdbKeyPair())
                     .setDeviceName(Objects.requireNonNull(getDeviceName()))
                     .build();
+            mAdbConnection.setAuthorizationRequiredListener(this::onAuthorizationRequired);
             return mAdbConnection.connect(mTimeout, mTimeoutUnit, mThrowOnUnauthorised);
         }
     }
@@ -377,6 +383,7 @@ public abstract class AbsAdbConnectionManager implements Closeable {
                     .setKeyPair(getAdbKeyPair())
                     .setDeviceName(Objects.requireNonNull(getDeviceName()))
                     .build();
+            mAdbConnection.setAuthorizationRequiredListener(this::onAuthorizationRequired);
             return mAdbConnection.connect(mTimeout, mTimeoutUnit, mThrowOnUnauthorised);
         }
     }
