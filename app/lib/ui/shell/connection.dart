@@ -120,16 +120,16 @@ extension _Connection on _HomeState {
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Column(
                     children: [
-                      SizedBox(
-                        height: 64,
-                        child: Row(
+                      Container(
+                        constraints: const BoxConstraints(minHeight: 64),
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        child: ResponsiveToolbar(
                           children: [
-                            Expanded(
-                              child: Text(
-                                Strings.text('text_fdb4bf21fa'),
-                                style: const TextStyle(fontSize: 24),
-                              ),
+                            Text(
+                              Strings.text('text_fdb4bf21fa'),
+                              style: const TextStyle(fontSize: 24),
                             ),
+                            const Spacer(),
                             Text(
                               Strings.text('follow_vehicle_updates'),
                               style: TextStyle(fontSize: 18, color: p.muted),
@@ -144,11 +144,12 @@ extension _Connection on _HomeState {
                       ),
                       Expanded(
                         child: ListView.builder(
+                          scrollCacheExtent: ScrollCacheExtent.pixels(0),
                           itemCount: filtered.length,
                           itemBuilder: (context, index) {
                             final m = filtered[index];
                             return Container(
-                              height: 80,
+                              constraints: const BoxConstraints(minHeight: 80),
                               decoration: BoxDecoration(
                                 border: Border(
                                   bottom: BorderSide(color: p.grid),
@@ -172,22 +173,49 @@ extension _Connection on _HomeState {
                                             ? selected.remove(m.id)
                                             : selected.add(m.id),
                                       ),
-                                      child: Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Text(
-                                          m.name,
-                                          style: const TextStyle(fontSize: 20),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 12,
                                         ),
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: compact ? 64 : 200,
-                                    child: Text(
-                                      m.displayUnit,
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        color: p.muted,
+                                        child: compact
+                                            ? Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    m.name,
+                                                    style: const TextStyle(
+                                                      fontSize: 20,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 4),
+                                                  LiveFieldReading(
+                                                    key: ValueKey(m.id),
+                                                    controller: c,
+                                                    metric: m,
+                                                  ),
+                                                ],
+                                              )
+                                            : Row(
+                                                children: [
+                                                  Expanded(
+                                                    child: Text(
+                                                      m.name,
+                                                      style: const TextStyle(
+                                                        fontSize: 20,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 240,
+                                                    child: LiveFieldReading(
+                                                      key: ValueKey(m.id),
+                                                      controller: c,
+                                                      metric: m,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
                                       ),
                                     ),
                                   ),

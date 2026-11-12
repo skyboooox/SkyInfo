@@ -888,7 +888,7 @@
   },
   {
     "id": "1005/5/1031798840",
-    "name": "压缩机功耗",
+    "name": "空调系统功耗",
     "category": "空调与热管理",
     "icon": "vehicle-compressor",
     "unit": "W",

@@ -8,12 +8,15 @@ import '../domain/models.dart';
 import '../domain/control_entity.dart';
 import '../domain/ha_entity.dart';
 import '../domain/dashboard_layout.dart';
+import '../domain/split_screen.dart';
 import 'vehicle_bridge.dart';
+import 'runtime_performance.dart';
 
 part 'ha_controller.dart';
 part 'permissions_controller.dart';
 part 'overlay_appearance.dart';
 part 'overlay_preferences.dart';
+part 'split_preferences.dart';
 
 class AppController extends ChangeNotifier {
   void _notify() {
@@ -21,9 +24,26 @@ class AppController extends ChangeNotifier {
   }
 
   final VehicleBridge bridge;
+  final RuntimePerformance? _performanceOverride;
+  late final runtimePerformance =
+      _performanceOverride ??
+      RuntimePerformance(
+        report: (session, report) {
+          unawaited(
+            bridge
+                .call('performanceReport', {
+                  'session': session,
+                  'report': report,
+                })
+                .catchError((Object _) => <String, dynamic>{}),
+          );
+        },
+      );
   late final overlayAppearance = OverlayAppearance(this);
   bool overlayPositionPending = false;
-  AppController({VehicleBridge? bridge}) : bridge = bridge ?? VehicleBridge();
+  AppController({VehicleBridge? bridge, RuntimePerformance? performance})
+    : bridge = bridge ?? VehicleBridge(),
+      _performanceOverride = performance;
   List<Metric> metrics = [];
   List<HaEntity> haEntities = [];
   final Map<String, int> _haEntityIndices = {};
@@ -50,6 +70,12 @@ class AppController extends ChangeNotifier {
       haUrl = '',
       prefix = 'skyinfo',
       mqttHost = '';
+  String startupPage = 'information';
+  List<SplitCombo> splitCombos = [];
+  final SplitDraft splitQuickDraft = SplitDraft();
+  bool splitSaving = false,
+      splitLaunching = false,
+      splitCompatibilityAcknowledged = false;
   DashboardSize dashboardSize = DashboardSize.standard;
   bool adbEnabled = false;
   bool autoSystemAdb = false;
@@ -98,6 +124,8 @@ class AppController extends ChangeNotifier {
 
   Map<String, dynamic> get config => {
     'schema': 2,
+    'startupPage': startupPage,
+    'splitCombos': splitCombos.map((e) => e.toJson()).toList(),
     'adbEnabled': adbEnabled,
     'autoSystemAdb': autoSystemAdb,
     'adbHost': adbHost,
@@ -212,6 +240,10 @@ class AppController extends ChangeNotifier {
       applySamples(Map<String, dynamic>.from(loaded['samples'] ?? {}));
       _events = bridge.events.listen(
         (e) {
+          if (e['performanceControl'] is Map) {
+            runtimePerformance.control(e['performanceControl'] as Map);
+          }
+          runtimePerformance.add('events');
           if (e['overlayPosition'] is Map) {
             final position = e['overlayPosition'] as Map;
             final x = (position['x'] as num?)?.toDouble();
@@ -261,6 +293,12 @@ class AppController extends ChangeNotifier {
 
   void restore(Map<String, dynamic> c) {
     if (c.isEmpty) return;
+    startupPage = startupPages.contains(c['startupPage'])
+        ? c['startupPage'] as String
+        : 'information';
+    splitCombos = (c['splitCombos'] as List? ?? [])
+        .map((e) => SplitCombo.fromJson(e as Map))
+        .toList();
     adbEnabled = c['adbEnabled'] ?? false;
     autoSystemAdb = c['autoSystemAdb'] ?? false;
     adbHost = c['adbHost'] ?? '127.0.0.1';
@@ -342,13 +380,34 @@ class AppController extends ChangeNotifier {
       controlEntities.firstWhere((e) => e.id == id);
   ValueNotifier<Sample> reading(String id) =>
       readings.putIfAbsent(id, () => ValueNotifier(Sample()));
+  void _assignSample(ValueNotifier<Sample> target, Sample next) {
+    final old = target.value;
+    if (_sameSampleData(old.value, next.value) &&
+        _sameSampleData(old.raw, next.raw) &&
+        old.quality == next.quality &&
+        old.source == next.source &&
+        old.unit == next.unit &&
+        old.stateLabel == next.stateLabel &&
+        old.updatedAt == next.updatedAt &&
+        old.changedAt == next.changedAt) {
+      return;
+    }
+    target.value = next;
+    runtimePerformance.add('sampleNotifications');
+  }
+
   void applySamples(Map<String, dynamic> batch) {
     if (_disposed) return;
+    final measured = runtimePerformance.begin();
     for (final entry in batch.entries) {
       if (entry.key.startsWith('ha|')) reading(entry.key);
-      readings[entry.key]?.value = Sample.fromJson(
-        Map<String, dynamic>.from(entry.value),
-      );
+      final target = readings[entry.key];
+      if (target != null) {
+        _assignSample(
+          target,
+          Sample.fromJson(Map<String, dynamic>.from(entry.value)),
+        );
+      }
     }
     for (final entity in controlEntities) {
       if (entity.readField == null ||
@@ -371,23 +430,27 @@ class AppController extends ChangeNotifier {
                 reading(id).value.value == source.value &&
                 ['available', 'unverified'].contains(reading(id).value.quality),
           );
-      reading(entity.id).value = Sample(
-        value: known && coherent ? source.value : null,
-        raw: source.raw,
-        unit: entity.unit,
-        source: source.source,
-        stateLabel:
-            entity.unit.isEmpty &&
-                entity.capability != EntityCapability.number &&
-                known &&
-                coherent
-            ? entity.states[source.raw.toString()]
-            : null,
-        quality: known && coherent ? source.quality : 'invalid',
-        updatedAt: source.updatedAt,
-        changedAt: source.changedAt,
+      _assignSample(
+        reading(entity.id),
+        Sample(
+          value: known && coherent ? source.value : null,
+          raw: source.raw,
+          unit: entity.unit,
+          source: source.source,
+          stateLabel:
+              entity.unit.isEmpty &&
+                  entity.capability != EntityCapability.number &&
+                  known &&
+                  coherent
+              ? entity.states[source.raw.toString()]
+              : null,
+          quality: known && coherent ? source.quality : 'invalid',
+          updatedAt: source.updatedAt,
+          changedAt: source.changedAt,
+        ),
       );
     }
+    runtimePerformance.applied(measured, batch.length);
   }
 
   Future<Map<String, dynamic>> command(String id, int value) async {
@@ -572,6 +635,7 @@ class AppController extends ChangeNotifier {
     final r = await bridge.call('history', {
       'field': field,
       'minutes': minutes,
+      'includeSample': false,
     });
     if (r['error'] != null) throw StateError(r['error']);
     final snapshotAt = r['queriedAt'] is num
@@ -598,6 +662,7 @@ class AppController extends ChangeNotifier {
   @override
   void dispose() {
     _disposed = true;
+    runtimePerformance.dispose();
     _previewLeases.clear();
     _previewDemand = {};
     _sendPreview();
@@ -627,6 +692,30 @@ class PreviewLease {
     _closed = true;
     _controller._updatePreview(this, null);
   }
+}
+
+bool _sameSampleData(Object? a, Object? b) {
+  if (a is double && b is double && a == 0 && b == 0) {
+    return a.isNegative == b.isNegative;
+  }
+  if (identical(a, b)) return true;
+  if (a is num || b is num) {
+    return a.runtimeType == b.runtimeType && a == b;
+  }
+  if (a is Map && b is Map) {
+    return a.length == b.length &&
+        a.keys.every(
+          (key) => b.containsKey(key) && _sameSampleData(a[key], b[key]),
+        );
+  }
+  if (a is List && b is List) {
+    return a.length == b.length &&
+        List.generate(
+          a.length,
+          (i) => i,
+        ).every((i) => _sameSampleData(a[i], b[i]));
+  }
+  return a == b;
 }
 
 bool _sameJson(Object? a, Object? b) {

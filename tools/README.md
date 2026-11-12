@@ -1,6 +1,6 @@
 # 工具
 
-从仓库根目录执行。构建、测试与签名命令见[构建指南](../docs/构建与发布.md)。Docker 复用固定镜像及依赖缓存，只挂载 APP 工程；不要同时运行共用 Gradle 缓存的多个构建容器。分发包使用 `release-build.sh` 清理项目生成缓存并校验 ARM64 运行库；快速增量构建用于开发，不直接作为分发产物。
+从仓库根目录执行。构建、测试与签名命令见[构建指南](../docs/构建与发布.md)。Docker 复用固定镜像及依赖缓存，只挂载 APP 工程；不要同时运行共用 Gradle 缓存的多个构建容器。分发与增量构建的边界见构建指南。
 
 ## 资源生成
 
@@ -9,7 +9,7 @@
 | 分类、适配结果、图标 manifest | `generate_catalog.py` → Flutter/Android 字段目录 |
 | `app/assets/controls.json`、`inferred-controls.json` | `generate_plans.py` → 固定计划 Kotlin 镜像 |
 | 原生定义、计划、推荐映射 | `generate_entities.py` → 实体与图标资源 |
-| `app/assets/i18n/zh_CN.json` | `generate_language.py` → Dart/Kotlin 默认表及 Android 语言副本 |
+| `app/assets/i18n/zh_CN.json` | `generate_language.py` → Dart/Kotlin 默认表 |
 
 ```sh
 python3 tools/generate_catalog.py
@@ -34,12 +34,7 @@ python3 tools/check_project.py
 
 ## Figma Desktop Bridge
 
-1. 更新需求及宿主说明，读取固定 Fluorite 规范。
-2. 在 Figma 打开[目标文件](../docs/Figma设计.md)，启动已有 Bridge，核对 fileKey、Page 和节点。
-3. 保留文字、组件、向量及原型目标，用 `exportAsync` 导出受影响浅深画板。
-4. 核对设计后修改 APP，完成行为/视觉回归；节点和操作记录留本机 QA。
-
-Figma 所有读取、修改和导出仅用 Desktop Bridge。断开先恢复，不回退官方 MCP/REST；超时先读取实际节点状态，避免重复修改。临时连接脚本不成为产品依赖。
+操作步骤、目标文件、Page 与节点统一见[Figma 设计资源](../docs/Figma设计.md#desktop-bridge)。
 
 ## Fluorite Design
 

@@ -59,6 +59,14 @@ extension _Settings on _HomeState {
               ),
             ),
             settingHeading('runtime'),
+            ParameterRow(
+              Strings.text('startup_page'),
+              trailing: IndustrialButton(
+                pageTitles[startupPageIndices[c.startupPage] ?? 0],
+                width: 240,
+                onPressed: () => showStartupPagePicker(context, c),
+              ),
+            ),
             toggle(
               Strings.text('text_4b0ba84503'),
               c.autoStart,
@@ -142,12 +150,17 @@ extension _Settings on _HomeState {
               c.publishEnabled,
               (v) => c.publishEnabled = v,
             ),
-            if (c.connection == 'ha')
+            if (c.connection == 'ha') ...[
               toggle(
                 Strings.text('text_5033b61a3f'),
                 c.haControlEnabled,
                 (v) => c.haControlEnabled = v,
               ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(8, 4, 8, 12),
+                child: HaControlStatus(controller: c),
+              ),
+            ],
             if (c.connection == 'mqtt')
               toggle(
                 Strings.text('text_846f8d4fb3'),

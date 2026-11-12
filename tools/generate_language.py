@@ -23,9 +23,6 @@ def generate():
 '''
     kotlin += ',\n'.join(f'        "{key}" to {key}' for key in resources) + '\n    ) }\n}\n'
     (ROOT / 'app/android/app/src/main/kotlin/app/skyinfo/vehicle/NativeStrings.kt').write_text(kotlin)
-    destination = ROOT / 'app/android/app/src/main/assets/i18n/zh_CN.json'
-    destination.parent.mkdir(exist_ok=True)
-    destination.write_text(SOURCE.read_text())
     print(f'{len(resources)} language entries generated')
 
 

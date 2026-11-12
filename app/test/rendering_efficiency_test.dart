@@ -122,15 +122,19 @@ void main() {
   );
 
   test(
-    'long history aggregation and vertices preserve every recorded sample',
+    'long history aggregation retains actual extrema with bounded vertices',
     () {
       final input = points(28801);
       final watch = Stopwatch()..start();
       for (var i = 0; i < 12; i++) {
         final groups = aggregateHistory(input, 233, start, end);
         final vertices = historyLineVertices(groups.single);
-        expect(vertices.length, input.length);
-        expect(vertices[1000], (input[1000].at, input[1000].value));
+        expect(vertices.length, lessThanOrEqualTo(234));
+        expect(
+          groups.single.fold(0, (n, b) => n + b.sampleCount),
+          input.length,
+        );
+        expect(historyEnvelopeRuns(groups.single).single.length, 233);
       }
       watch.stop();
       // ignore: avoid_print

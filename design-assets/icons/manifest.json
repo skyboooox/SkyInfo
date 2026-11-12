@@ -1751,7 +1751,7 @@
       "field_id": "1039/5/1178624032"
     },
     {
-      "name": "压缩机功耗",
+      "name": "空调系统功耗",
       "source": "1005/5/1031798840",
       "category": "空调与热管理",
       "icon_id": "vehicle-compressor",

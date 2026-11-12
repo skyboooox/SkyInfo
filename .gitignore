@@ -1,22 +1,45 @@
+# Editor and OS files
 .DS_Store
 .idea/
 .vscode/
+
+# Local configuration and QA
 .local/
 .env
 .env.*
 !.env.example
-__pycache__/
-*.py[cod]
-node_modules/
+app/qa/
+
+# Certificates and signing material
 *.jks
 *.keystore
 *.p12
 *.pfx
 *.pem
 *.key
+app/android/signing/
+app/android/**/key.properties
+
+# Release artifacts and logs
 *.apk
 *.aab
 *.log
-app/qa/
-app/android/key.properties
-app/android/signing/
+
+# Python and Node caches
+__pycache__/
+*.py[cod]
+node_modules/
+
+# Flutter and shared build output
+app/**/.dart_tool/
+app/**/.flutter-plugins-dependencies
+app/**/build/
+app/test/failures/
+
+# Android generated files and local settings
+app/android/.gradle
+app/android/local.properties
+app/android/.kotlin/
+app/android/captures/
+app/android/**/GeneratedPluginRegistrant.java
+app/android/**/.cxx/

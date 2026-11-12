@@ -37,7 +37,6 @@ require(len(entities)==173 and len({e['id'] for e in entities})==173,'control ID
 require(len(icons)==90 and len({e['id'] for e in icons})==90,'icon IDs')
 require(native[:len(catalog)]==catalog,'native metric mirror')
 require((ROOT/'app/android/app/src/main/assets/entities.json').read_bytes()==(assets/'entities.json').read_bytes(),'native entity mirror')
-require((ROOT/'app/android/app/src/main/assets/i18n/zh_CN.json').read_bytes()==(assets/'i18n/zh_CN.json').read_bytes(),'native language mirror')
 icon_ids={e['id'] for e in icons}
 for e in catalog+entities+icons:
     for key in ['nameKey','categoryKey']:

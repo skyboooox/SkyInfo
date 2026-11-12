@@ -29,5 +29,5 @@
         </receiver>
         <meta-data android:name="flutterEmbedding" android:value="2" />
     </application>
-    <queries><package android:name="com.byd.appstartmanagement" /><provider android:authorities="carsettings" /></queries>
+    <queries><intent><action android:name="android.intent.action.MAIN" /><category android:name="android.intent.category.LAUNCHER" /></intent><package android:name="com.byd.appstartmanagement" /><provider android:authorities="carsettings" /></queries>
 </manifest>

@@ -71,7 +71,7 @@ void main() {
   testWidgets('用户确认单位与原始编码展示并保留待充电验证项', (tester) async {
     final c = (await tester.runAsync(load))!;
     for (final entry in {
-      '1005/5/1031798840': ('压缩机功耗', 'W'),
+      '1005/5/1031798840': ('空调系统功耗', 'W'),
       '1005/5/1320169504': ('PTC功耗', 'W'),
       '1012/5/339738656': ('动力功率', 'kW'),
       '1000/5/1031798832': ('车内温度', '°C'),
@@ -375,7 +375,7 @@ void main() {
     await tester.pumpWidget(const SizedBox());
     c.dispose();
   });
-  testWidgets('四页导航、分类列表和主题切换可操作', (tester) async {
+  testWidgets('五页导航、分类列表和主题切换可操作', (tester) async {
     tester.view.physicalSize = const Size(1600, 900);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
@@ -385,7 +385,7 @@ void main() {
     await tester.pumpWidget(SkyInfo(controller: c));
     await tester.pump();
     expect(find.text('尚未添加组件'), findsOneWidget);
-    for (final title in ['悬浮窗', '连接', '设置']) {
+    for (final title in ['悬浮窗', '自定义分屏', '连接', '设置']) {
       await tester.tap(find.byIcon(Icons.menu));
       await tester.pumpAndSettle();
       await tester.tap(find.text(title).last);
@@ -444,7 +444,7 @@ void main() {
     await tester.pumpWidget(const SizedBox());
     c.dispose();
   });
-  testWidgets('四页浅色和深色预览', (tester) async {
+  testWidgets('主页面浅色和深色预览', (tester) async {
     tester.view.physicalSize = const Size(1600, 900);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);

@@ -75,7 +75,7 @@ extension _Overlay on _HomeState {
                                       m.unitAuto ? null : m.unit,
                                     );
                                 return Text(
-                                  '${sample.formatted(m.digits)}${unit.isEmpty ? '' : ' $unit'}',
+                                  '${m.formatted(sample)}${unit.isEmpty ? '' : ' $unit'}',
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(

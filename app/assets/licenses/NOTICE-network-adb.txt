@@ -4,3 +4,5 @@ Source and SkyInfo timeout/OPEN patches: android/third_party/libadb in the SkyIn
 SPAKE2 Android 2.2.1 · GNU LGPL-3.0. Unmodified dependency. Source: https://github.com/MuntashirAkon/spake2-java/tree/2.2.1 (including submodules), build with the upstream Android Gradle/CMake configuration.
 Conscrypt Android 2.5.3 · Apache-2.0. https://github.com/google/conscrypt
 Bouncy Castle 1.81 · MIT-style Bouncy Castle License. https://www.bouncycastle.org/about/license/
+
+Conscrypt (including Apache Harmony and Netty), Kotlin, OkHttp and Okio use the Apache-2.0 text in LICENSE-Apache-2.0.txt. Component copyright and attribution notices remain in their source and accompanying NOTICE files; Conscrypt third-party notices are in NOTICE-Conscrypt.txt.

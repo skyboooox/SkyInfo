@@ -13,6 +13,8 @@ internal class DeviceIdentity(context: Context) {
     val topic = "skyinfo/$id"
     fun defaults(config: JSONObject): JSONObject = config.apply {
         put("deviceId", id)
+        if (!has("startupPage")) put("startupPage", "information")
+        if (!has("splitCombos")) put("splitCombos", org.json.JSONArray())
         if (!has("dashboardSize")) put("dashboardSize", "standard")
         if (!has("collect")) put("collect", true)
         if (optString("prefix").isBlank()) put("prefix", prefix)

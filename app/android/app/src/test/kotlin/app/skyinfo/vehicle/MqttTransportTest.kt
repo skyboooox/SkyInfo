@@ -20,6 +20,7 @@ import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.TimeUnit
 import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManagerFactory
+import javax.net.ssl.X509TrustManager
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [34], manifest = Config.NONE)
@@ -35,7 +36,8 @@ class MqttTransportTest {
         val fields = mapOf("voltage" to JSONObject().put("id","voltage").put("name","电压").put("unit","V"))
         val messages = LinkedBlockingQueue<Pair<String,String>>()
         val observer = MqttClient("${if (secure) "ssl" else "tcp"}://host.docker.internal:${if (secure) 18884 else 18885}","observer-${UUID.randomUUID()}",MemoryPersistence())
-        val client = ConnectionClient(RuntimeEnvironment.getApplication(),object : SecretStore { override fun secret(name: String) = "" },OkHttpClient(),ssl)
+        val http = OkHttpClient.Builder().sslSocketFactory(ssl,factory.trustManagers.filterIsInstance<X509TrustManager>().single()).build()
+        val client = ConnectionClient(RuntimeEnvironment.getApplication(),object : SecretStore { override fun secret(name: String) = "" },http)
         val commands = LinkedBlockingQueue<Triple<JSONObject,String,Boolean>>()
         client.command = { data, nonce, retained -> commands.offer(Triple(data,nonce,retained)) }
         try {
@@ -52,6 +54,8 @@ class MqttTransportTest {
             client.heartbeat(config,JSONObject().put("vehicle","已取得读数"),fields)
             client.publishState(config,mapOf("voltage" to JSONObject().put("value",13.6).put("quality","disconnected").put("updatedAt",1000)),fields)
             assertEquals("已连接",client.status)
+            val tls = ConnectionClient::class.java.getDeclaredField("mqttTlsFactory\$delegate").apply { isAccessible = true }.get(client) as Lazy<*>
+            assertEquals(secure,tls.isInitialized())
             val collected = mutableMapOf<String,String>()
             repeat(5) { val item = messages.poll(10,TimeUnit.SECONDS); assertNotNull(item); collected[item!!.first.substringAfterLast('/')] = item.second }
             assertEquals("online",collected["availability"])

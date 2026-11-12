@@ -11,6 +11,7 @@ List<String> get pageTitles => [
   Strings.text('page_overlay'),
   Strings.text('page_connection'),
   Strings.text('settings'),
+  Strings.text('page_split'),
 ];
 List<String> get settingsTitles => [
   Strings.text('text_f1484fa78b'),
@@ -170,7 +171,7 @@ class NavigationMenu extends StatelessWidget {
       shrinkWrap: true,
       padding: const EdgeInsets.all(16),
       children: [
-        for (var i = 0; i < 4; i++)
+        for (final i in const [0, 1, 4, 2, 3])
           SelectionRow(
             pageTitles[i],
             selected: i == selected,

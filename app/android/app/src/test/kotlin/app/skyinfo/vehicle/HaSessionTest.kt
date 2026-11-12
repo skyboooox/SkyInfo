@@ -94,7 +94,7 @@ class HaSessionTest {
             }
         }))
         val session = HaSession(secrets,{}, {},http)
-        session.command = { result.offer(RemoteCommands({true}) { session.currentTime() }.validate(it,"skyinfo_demo")) }
+        session.command = { event, _ -> result.offer(RemoteCommands({true}) { session.currentTime() }.validate(event,"skyinfo_demo")) }
         try {
             session.configure(JSONObject().put("haUrl",server.url("/").toString()).put("haControlEnabled",true),true)
             assertEquals(0,result.poll(5,TimeUnit.SECONDS)!!.getInt("value"))
@@ -111,11 +111,11 @@ class HaSessionTest {
             override fun onMessage(webSocket: WebSocket, text: String) {
                 val message=JSONObject(text)
                 if(message.optString("type")=="auth") webSocket.send("{\"type\":\"auth_ok\"}")
-                if(message.optString("type")=="mqtt/subscribe" && message.optInt("id")==3) {
+                if(message.optString("type")=="mqtt/subscribe" && message.optString("topic").endsWith("/command")) {
                     val topic=message.getString("topic");topics.offer(topic)
                     assertEquals(0,message.getInt("qos"))
-                    webSocket.send(JSONObject().put("type","result").put("id",3).put("success",true).toString())
-                    fun event(target:String,retained:Boolean,value:Int) = JSONObject().put("id",3).put("type","event").put("event",JSONObject().put("topic",target).put("retain",retained).put("payload",JSONObject().put("action","ac_cycle").put("value",value).toString())).toString()
+                    webSocket.send(JSONObject().put("type","result").put("id",message.getInt("id")).put("success",true).toString())
+                    fun event(target:String,retained:Boolean,value:Int) = JSONObject().put("id",message.getInt("id")).put("type","event").put("event",JSONObject().put("topic",target).put("retain",retained).put("payload",JSONObject().put("action","ac_cycle").put("value",value).toString())).toString()
                     webSocket.send(event(topic,true,7))
                     webSocket.send(event(old.get() ?: "other/session",false,8))
                     webSocket.send(event(topic,false,1))
@@ -124,7 +124,7 @@ class HaSessionTest {
             }
         })
         server.enqueue(response());server.enqueue(response())
-        val session=HaSession(secrets,{}, {},http);session.entityCommand={events.offer(it)}
+        val session=HaSession(secrets,{}, {},http);session.entityCommand={ data, _ -> events.offer(data) }
         try {
             val config=JSONObject().put("haUrl",server.url("/").toString()).put("haControlEnabled",true)
             session.configure(config,true)
@@ -136,31 +136,72 @@ class HaSessionTest {
             assertNull(events.poll(300,TimeUnit.MILLISECONDS))
         } finally { session.close() }
     }
+    @Test fun queuedEntityAndScriptCommandsKeepTheirReceivingSession() = withServer { server, http ->
+        val pending = LinkedBlockingQueue<HaCommandContext>()
+        fun response() = MockResponse().withWebSocketUpgrade(object : WebSocketListener() {
+            override fun onOpen(ws: WebSocket, response: Response) { ws.send("{\"type\":\"auth_required\"}") }
+            override fun onMessage(ws: WebSocket, text: String) {
+                val message = JSONObject(text)
+                if (message.optString("type") == "auth") ws.send("{\"type\":\"auth_ok\"}")
+                if (message.optInt("id") == 2) ws.send(JSONObject().put("type","event").put("id",2)
+                    .put("event",JSONObject().put("event_type","skyinfo_command")).toString())
+                if (message.optString("type") == "mqtt/subscribe" && message.optString("topic").endsWith("/command")) {
+                    ws.send(JSONObject().put("type","result").put("id",message.getInt("id")).put("success",true).toString())
+                    ws.send(JSONObject().put("type","event").put("id",message.getInt("id"))
+                        .put("event",JSONObject().put("topic",message.getString("topic")).put("retain",false)
+                            .put("payload","{\"action\":\"ac_cycle\",\"value\":1}")).toString())
+                }
+            }
+        })
+        server.enqueue(response()); server.enqueue(response())
+        val session = HaSession(secrets,{},{},http)
+        session.command = { _, context -> pending.offer(context) }
+        session.entityCommand = { _, context -> pending.offer(context) }
+        val config = JSONObject().put("haUrl",server.url("/").toString()).put("haControlEnabled",true).put("haBirthTopic","")
+        try {
+            session.configure(config,true)
+            val old = List(2) { pending.poll(5,TimeUnit.SECONDS)!! }
+            assertEquals(1,old.count { it.topic == null }); assertEquals(1,old.count { it.topic != null })
+            assertTrue(old.all(session::acceptsCommand))
+            session.networkLost()
+            assertTrue(old.none(session::acceptsCommand))
+            session.networkAvailable()
+            val current = List(2) { pending.poll(5,TimeUnit.SECONDS)!! }
+            assertEquals("ready",session.controlState())
+            assertTrue(old.none(session::acceptsCommand)); assertTrue(current.all(session::acceptsCommand))
+            val entity = current.single { it.topic != null }
+            assertFalse(session.acceptsCommand(entity.copy(topic = "other/session")))
+            session.configure(JSONObject(config.toString()).put("haControlEnabled",false),false)
+            assertTrue(current.none(session::acceptsCommand))
+        } finally { session.close() }
+    }
     @Test fun mqttBirthAndHaStartRestorePublicationWithoutSendingCommandsAndCoalesce() = withServer { server, http ->
         val restored = LinkedBlockingQueue<Boolean>()
         val subscriptions = LinkedBlockingQueue<JSONObject>()
         val commands = LinkedBlockingQueue<JSONObject>()
         val currentSocket = AtomicReference<WebSocket>()
+        val birthId=java.util.concurrent.atomic.AtomicInteger()
         server.enqueue(MockResponse().withWebSocketUpgrade(object : WebSocketListener() {
             override fun onOpen(ws: WebSocket, response: Response) { currentSocket.set(ws); ws.send("{\"type\":\"auth_required\"}") }
             override fun onMessage(ws: WebSocket, text: String) {
                 val message=JSONObject(text)
                 if (message.optString("type")=="auth") ws.send("{\"type\":\"auth_ok\"}")
                 if (message.optString("type")=="mqtt/subscribe") {
+                    if(!message.getString("topic").endsWith("/command")) birthId.set(message.getInt("id"))
                     subscriptions.offer(message)
                     ws.send(JSONObject().put("id",message.getInt("id")).put("type","result").put("success",true).toString())
                 }
             }
         }))
         val session=HaSession(secrets,{}, {},http)
-        session.controlPublicationRestored={ restored.offer(true) };session.entityCommand={ commands.offer(it) }
-        fun birth(topic:String="homeassistant/status",payload:String="online") = JSONObject().put("id",4).put("type","event")
+        session.controlPublicationRestored={ restored.offer(true) };session.entityCommand={ data, _ -> commands.offer(data) }
+        fun birth(topic:String="homeassistant/status",payload:String="online") = JSONObject().put("id",birthId.get()).put("type","event")
             .put("event",JSONObject().put("topic",topic).put("payload",payload).put("retain",true)).toString()
         try {
             session.configure(JSONObject().put("haUrl",server.url("/").toString()).put("haControlEnabled",true),true)
-            assertEquals(3,subscriptions.poll(5,TimeUnit.SECONDS)!!.getInt("id"))
+            assertTrue(subscriptions.poll(5,TimeUnit.SECONDS)!!.getString("topic").endsWith("/command"))
             val birthSubscription=subscriptions.poll(5,TimeUnit.SECONDS)!!
-            assertEquals(4,birthSubscription.getInt("id"));assertEquals("homeassistant/status",birthSubscription.getString("topic"))
+            assertTrue(birthSubscription.getInt("id") >= 100);assertEquals("homeassistant/status",birthSubscription.getString("topic"))
             val ws=currentSocket.get()
             ws.send(birth("another/status"));ws.send(birth(payload="offline"))
             assertNull(restored.poll(350,TimeUnit.MILLISECONDS))
@@ -196,12 +237,14 @@ class HaSessionTest {
         val subscriptions=LinkedBlockingQueue<JSONObject>()
         val restored=LinkedBlockingQueue<Boolean>()
         val sockets=LinkedBlockingQueue<WebSocket>()
+        val birthId=java.util.concurrent.atomic.AtomicInteger()
         fun response()=MockResponse().withWebSocketUpgrade(object:WebSocketListener() {
             override fun onOpen(ws:WebSocket,response:Response) { sockets.offer(ws);ws.send(JSONObject().put("type","auth_required").toString()) }
             override fun onMessage(ws:WebSocket,text:String) {
                 val message=JSONObject(text)
                 if(message.optString("type")=="auth")ws.send(JSONObject().put("type","auth_ok").toString())
                 if(message.optString("type")=="mqtt/subscribe") {
+                    if(!message.getString("topic").endsWith("/command")) birthId.set(message.getInt("id"))
                     subscriptions.offer(message)
                     ws.send(JSONObject().put("id",message.getInt("id")).put("type","result").put("success",true).toString())
                 }
@@ -211,22 +254,141 @@ class HaSessionTest {
         val session=HaSession(secrets,{},{},http);session.controlPublicationRestored={restored.offer(true)}
         val config=JSONObject().put("haUrl",server.url("/").toString()).put("haControlEnabled",true)
             .put("haBirthTopic","custom/ha_status").put("haBirthPayload","ready")
-        fun birth(topic:String,payload:String)=JSONObject().put("type","event").put("id",4)
+        fun birth(topic:String,payload:String)=JSONObject().put("type","event").put("id",birthId.get())
             .put("event",JSONObject().put("topic",topic).put("payload",payload)).toString()
         try {
             session.configure(config,true)
             val first=sockets.poll(5,TimeUnit.SECONDS)!!
-            assertEquals(3,subscriptions.poll(5,TimeUnit.SECONDS)!!.getInt("id"))
+            assertTrue(subscriptions.poll(5,TimeUnit.SECONDS)!!.getString("topic").endsWith("/command"))
             assertEquals("custom/ha_status",subscriptions.poll(5,TimeUnit.SECONDS)!!.getString("topic"))
             first.send(birth("homeassistant/status","online"));assertNull(restored.poll(350,TimeUnit.MILLISECONDS))
             first.send(birth("custom/ha_status","ready"));assertEquals(true,restored.poll(5,TimeUnit.SECONDS))
             session.configure(JSONObject(config.toString()).put("haBirthTopic",""),true)
             val second=sockets.poll(5,TimeUnit.SECONDS)!!
-            assertEquals(3,subscriptions.poll(5,TimeUnit.SECONDS)!!.getInt("id"))
+            assertTrue(subscriptions.poll(5,TimeUnit.SECONDS)!!.getString("topic").endsWith("/command"))
             assertNull(subscriptions.poll(350,TimeUnit.MILLISECONDS))
             second.send(birth("custom/ha_status","ready"));assertNull(restored.poll(350,TimeUnit.MILLISECONDS))
             second.send(JSONObject().put("type","event").put("id",1).put("event",JSONObject().put("event_type","homeassistant_started")).toString())
             assertEquals(true,restored.poll(5,TimeUnit.SECONDS))
+        } finally { session.close() }
+    }
+
+    @Test fun dynamicMqttSubscriptionsRemainSeparateFromInboundEntityEvents() = withServer { server,http ->
+        val ids=LinkedBlockingQueue<Int>()
+        val incoming=LinkedBlockingQueue<JSONObject>()
+        val commands=LinkedBlockingQueue<JSONObject>()
+        server.enqueue(MockResponse().withWebSocketUpgrade(object:WebSocketListener() {
+            override fun onOpen(ws:WebSocket,response:Response) { ws.send("{\"type\":\"auth_required\"}") }
+            override fun onMessage(ws:WebSocket,text:String) {
+                val request=JSONObject(text)
+                if(request.optString("type")=="auth")ws.send("{\"type\":\"auth_ok\"}")
+                if(request.optInt("id")>=100) {
+                    val id=request.getInt("id");ids.offer(id)
+                    ws.send(JSONObject().put("type","result").put("id",id).put("success",true).toString())
+                    val event=when {
+                        request.optString("type")=="mqtt/subscribe" -> JSONObject().put("topic",request.getString("topic"))
+                            .put("retain",false).put("payload",JSONObject().put("action","ac_cycle").put("value",1).toString())
+                        else -> JSONObject().put("event_type","state_changed").put("data",JSONObject().put("entity_id","sensor.fixture"))
+                    }
+                    ws.send(JSONObject().put("type","event").put("id",id).put("event",event).toString())
+                }
+            }
+        }))
+        val session=HaSession(secrets,{},{},http)
+        session.inboundConnected={ session.request(JSONObject().put("type","subscribe_events").put("event_type","state_changed")) {} }
+        session.inboundEvent={incoming.offer(it)};session.entityCommand={ data, _ -> commands.offer(data) }
+        try {
+            session.configure(JSONObject().put("haUrl",server.url("/").toString()).put("haControlEnabled",true),true)
+            assertEquals(3,(1..3).map { ids.poll(5,TimeUnit.SECONDS)!! }.toSet().size)
+            assertEquals("state_changed",incoming.poll(5,TimeUnit.SECONDS)!!.getJSONObject("event").getString("event_type"))
+            assertEquals("ac_cycle",commands.poll(5,TimeUnit.SECONDS)!!.getString("action"))
+            assertNull(incoming.poll(200,TimeUnit.MILLISECONDS));assertNull(commands.poll(200,TimeUnit.MILLISECONDS))
+        } finally { session.close() }
+    }
+    @Test fun lateMqttSetupRetriesWithoutReconnectingAndIgnoresStaleAcknowledgement() = withServer { server,http ->
+        val subscriptions=LinkedBlockingQueue<JSONObject>()
+        val socket=AtomicReference<WebSocket>()
+        val transitions=LinkedBlockingQueue<String>()
+        server.enqueue(MockResponse().withWebSocketUpgrade(object:WebSocketListener() {
+            override fun onOpen(ws:WebSocket,response:Response) { socket.set(ws);ws.send("{\"type\":\"auth_required\"}") }
+            override fun onMessage(ws:WebSocket,text:String) {
+                val message=JSONObject(text)
+                if(message.optString("type")=="auth")ws.send("{\"type\":\"auth_ok\"}")
+                if(message.optString("type")=="mqtt/subscribe")subscriptions.offer(message)
+            }
+        }))
+        val session=HaSession(secrets,{},{},http)
+        session.mqttSubscriptionChanged={ transitions.offer(session.controlState()) }
+        fun result(id:Int,success:Boolean,code:String="not_found")=JSONObject().put("type","result").put("id",id)
+            .put("success",success).put("error",JSONObject().put("code",code)).toString()
+        try {
+            session.configure(JSONObject().put("haUrl",server.url("/").toString()).put("haControlEnabled",true).put("haBirthTopic",""),true)
+            val first=subscriptions.poll(5,TimeUnit.SECONDS)!!.getInt("id")
+            socket.get().send(result(first,false))
+            assertEquals("subscribing",transitions.poll(2,TimeUnit.SECONDS))
+            assertEquals("retrying",transitions.poll(2,TimeUnit.SECONDS))
+            assertFalse(session.entitySubscription);assertEquals("not_found",session.controlError());assertNotNull(session.controlRetryAt())
+            val second=subscriptions.poll(5,TimeUnit.SECONDS)!!.getInt("id")
+            assertNotEquals(first,second)
+            socket.get().send(result(first,true))
+            assertNull(transitions.poll(200,TimeUnit.MILLISECONDS)?.takeUnless { it=="subscribing" })
+            assertFalse(session.entitySubscription)
+            socket.get().send(result(second,true))
+            assertEquals("ready",transitions.poll(2,TimeUnit.SECONDS))
+            assertTrue(session.entitySubscription);assertNull(session.controlError());assertNull(session.controlRetryAt())
+            assertEquals(1,server.requestCount)
+        } finally { session.close() }
+    }
+    @Test fun permissionFailureStopsRetryUntilExplicitSessionReconnect() = withServer { server,http ->
+        val subscriptions=LinkedBlockingQueue<JSONObject>()
+        val state=LinkedBlockingQueue<String>()
+        fun response(allowed:Boolean)=MockResponse().withWebSocketUpgrade(object:WebSocketListener() {
+            override fun onOpen(ws:WebSocket,response:Response) { ws.send("{\"type\":\"auth_required\"}") }
+            override fun onMessage(ws:WebSocket,text:String) {
+                val message=JSONObject(text)
+                if(message.optString("type")=="auth")ws.send("{\"type\":\"auth_ok\"}")
+                if(message.optString("type")=="mqtt/subscribe") {
+                    subscriptions.offer(message)
+                    ws.send(JSONObject().put("type","result").put("id",message.getInt("id")).put("success",allowed)
+                        .put("error",JSONObject().put("code","unauthorized")).toString())
+                }
+            }
+        })
+        server.enqueue(response(false));server.enqueue(response(true))
+        val session=HaSession(secrets,{},{},http);session.mqttSubscriptionChanged={state.offer(session.controlState())}
+        val config=JSONObject().put("haUrl",server.url("/").toString()).put("haControlEnabled",true).put("haBirthTopic","")
+        try {
+            session.configure(config,true)
+            assertNotNull(subscriptions.poll(5,TimeUnit.SECONDS))
+            assertEquals("subscribing",state.poll(2,TimeUnit.SECONDS));assertEquals("blocked",state.poll(2,TimeUnit.SECONDS))
+            assertEquals("unauthorized",session.controlError());assertFalse(session.entitySubscription)
+            assertNull(subscriptions.poll(2400,TimeUnit.MILLISECONDS));assertNull(session.controlRetryAt())
+            session.close();session.configure(config,true)
+            assertNotNull(subscriptions.poll(5,TimeUnit.SECONDS))
+            assertEquals("subscribing",state.poll(2,TimeUnit.SECONDS));assertEquals("ready",state.poll(2,TimeUnit.SECONDS))
+            assertTrue(session.entitySubscription);assertEquals(2,server.requestCount)
+        } finally { session.close() }
+    }
+    @Test fun mqttSubscriptionTimeoutRetriesAndCloseCancelsPendingTimers() = withServer { server,http ->
+        val subscriptions=LinkedBlockingQueue<Int>()
+        val changes=LinkedBlockingQueue<String>()
+        server.enqueue(MockResponse().withWebSocketUpgrade(object:WebSocketListener() {
+            override fun onOpen(ws:WebSocket,response:Response) { ws.send("{\"type\":\"auth_required\"}") }
+            override fun onMessage(ws:WebSocket,text:String) {
+                val message=JSONObject(text)
+                if(message.optString("type")=="auth")ws.send("{\"type\":\"auth_ok\"}")
+                if(message.optString("type")=="mqtt/subscribe") subscriptions.offer(message.getInt("id"))
+            }
+        }))
+        val session=HaSession(secrets,{},{},http);session.mqttSubscriptionChanged={changes.offer(session.controlState())}
+        try {
+            session.configure(JSONObject().put("haUrl",server.url("/").toString()).put("haControlEnabled",true).put("haBirthTopic",""),true)
+            val first=subscriptions.poll(5,TimeUnit.SECONDS)!!
+            assertEquals("subscribing",changes.poll(2,TimeUnit.SECONDS))
+            assertEquals("retrying",changes.poll(12,TimeUnit.SECONDS));assertEquals("timeout",session.controlError())
+            assertNotEquals(first,subscriptions.poll(4,TimeUnit.SECONDS))
+            session.close();assertFalse(session.entitySubscription)
+            assertNull(subscriptions.poll(2400,TimeUnit.MILLISECONDS));assertEquals("disabled",session.controlState())
         } finally { session.close() }
     }
 

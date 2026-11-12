@@ -38,7 +38,7 @@ class LocalHistoryBatchTest {
         }
         assertEquals(0,history.storageStats().getLong("batchTransactions"))
         assertEquals(1,tasks.size)
-        assertEquals(listOf(30L),delays)
+        assertEquals(listOf(120L),delays)
         tasks.single().run()
         assertEquals(1,history.storageStats().getLong("batchTransactions"))
         assertEquals(0,history.storageStats().getInt("bufferedSamples"))
@@ -63,6 +63,32 @@ class LocalHistoryBatchTest {
         val reopened = LocalHistory(context); reopened.configure(config())
         assertEquals(count+1,reopened.query(id,30).getJSONArray("points").length())
         reopened.clear()
+    }
+    @Test fun oneMiBBudgetCommitsAtCapacityBeforeTheTimerAndPreservesEveryRow() {
+        val tasks = mutableListOf<FutureTask<Unit>>()
+        val delays = mutableListOf<Long>()
+        val history = LocalHistory(context,scheduleFlush = { delay, callback -> delays.add(delay); FutureTask { callback() }.also(tasks::add) })
+        history.configure(config())
+        try {
+            repeat(300) { history.append(id,sample(it).put("padding","x".repeat(600))) }
+            var stats = history.storageStats()
+            assertEquals(0,stats.getInt("batchTransactions"))
+            assertEquals(1024L*1024,stats.getLong("bufferBudgetBytes"))
+            assertTrue(stats.getLong("bufferedBytes") > 512L*1024)
+            assertTrue(stats.getLong("bufferedBytes") <= 1024L*1024)
+            assertEquals(listOf(120L),delays)
+            for (n in 300 until 1200) history.append(id,sample(n).put("padding","x".repeat(600)))
+            stats = history.storageStats()
+            assertTrue(stats.getInt("batchTransactions") > 0)
+            assertTrue(stats.getLong("bufferedBytes") <= 1024L*1024)
+            assertTrue(tasks.first().isCancelled)
+            val before = stats.getInt("batchTransactions")
+            tasks.last().run()
+            assertEquals(before+1,history.storageStats().getInt("batchTransactions"))
+            val points = history.query(id,30).getJSONArray("points")
+            assertEquals(1200,points.length())
+            repeat(1200) { assertEquals(it,points.getJSONObject(it).getJSONObject("sample").getInt("raw")) }
+        } finally { history.clear() }
     }
     @Test fun clearCancelsPendingTimerAndNeverResurrectsDeletedSamples() {
         val tasks = mutableListOf<FutureTask<Unit>>()

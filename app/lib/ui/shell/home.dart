@@ -4,6 +4,9 @@ import 'dart:convert';
 import 'dart:math' as math;
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart' show ScrollCacheExtent;
+import '../live_field_reading.dart';
+import '../ha_control_status.dart';
 import '../../data/app_controller.dart';
 import '../../domain/models.dart';
 import '../../domain/dashboard_layout.dart';
@@ -30,6 +33,9 @@ import '../network_adb_settings.dart';
 import '../auto_adb_explanation.dart';
 import '../release_notice.dart';
 import '../laboratory.dart';
+import '../split_screen.dart';
+import '../../domain/split_screen.dart';
+import '../startup_page_picker.dart';
 
 part 'information.dart';
 part 'overlay.dart';
@@ -53,6 +59,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   bool menuOpen = false;
   final grid = GlobalKey();
   final menuKey = GlobalKey();
+  final splitPageKey = GlobalKey<SplitScreenPageState>();
   int page = 0, settingsTab = 0;
   bool editing = false, selectedOnly = false;
   Set<String>? uploadDraft;
@@ -67,6 +74,8 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
+    page = startupPageIndices[c.startupPage] ?? 0;
+    c.bridge.call('visibility', {'visible': visible, 'information': page == 0});
     WidgetsBinding.instance.addObserver(this);
     c.addListener(scheduleAge);
     c.addListener(checkStartupAuthorization);
@@ -337,6 +346,12 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                                   primary: true,
                                   width: 160,
                                 ),
+                              if (page == 4)
+                                button(
+                                  Strings.text('split_create'),
+                                  () => splitPageKey.currentState?.edit(),
+                                  width: 176,
+                                ),
                               if (page == 2) ...[
                                 if (MediaQuery.sizeOf(context).width > 1000)
                                   Text(
@@ -372,6 +387,10 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                                 0 => information(),
                                 1 => overlayPage(),
                                 2 => connectionPage(),
+                                4 => SplitScreenPage(
+                                  key: splitPageKey,
+                                  controller: c,
+                                ),
                                 _ => settings(),
                               },
                             ),

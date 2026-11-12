@@ -43,6 +43,10 @@ class RuntimeService : Service() {
         RuntimeCoordinator.get(this).execute { RuntimeCoordinator.get(this).appearanceChanged() }
     }
     override fun onBind(intent: Intent?): IBinder? = null
+    override fun dump(fd: java.io.FileDescriptor, writer: java.io.PrintWriter, args: Array<out String>?) {
+        if (BuildConfig.FLAVOR != "alpha") { writer.println("Performance diagnostics unavailable"); return }
+        RuntimeCoordinator.get(this).dumpPerformance(writer,args ?: emptyArray())
+    }
     override fun onDestroy() { RuntimeCoordinator.get(this).detach(this); super.onDestroy() }
 }
 class StartupReceiver : BroadcastReceiver() {

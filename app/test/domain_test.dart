@@ -51,7 +51,7 @@ void main() {
     expect(groups.length, 3);
     expect(groups.first.single.min, 1);
     expect(groups.first.single.max, 99);
-    expect(groups.first.single.representative, 2);
+    expect(groups.first.single.representative, 34);
   });
   test('匿名电压回归序列不会被空桶拆成短线段', () {
     final fixture =
@@ -74,8 +74,8 @@ void main() {
         end = points.last.at.add(const Duration(seconds: 1));
     final groups = aggregateHistory(points, 180, start, end);
     expect(groups.length, 1);
-    expect(groups.single.first.at, points.first.at);
-    expect(groups.single.last.at, points.last.at);
+    expect(groups.single.first.startAt, points.first.at);
+    expect(groups.single.last.lastAt, points.last.at);
     expect(
       groups.single.map((b) => b.min).reduce((a, b) => a < b ? a : b),
       points.map((p) => p.value!).reduce((a, b) => a < b ? a : b),
@@ -147,6 +147,6 @@ void main() {
     expect(groups.single.length, 2);
     expect(groups.first.first.maximumAt, start);
     expect(groups.first.first.minimumAt, start.add(const Duration(seconds: 1)));
-    expect(groups.first.first.at, start.add(const Duration(seconds: 2)));
+    expect(groups.first.first.at, start.add(const Duration(seconds: 1)));
   });
 }

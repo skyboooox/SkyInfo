@@ -360,12 +360,9 @@ class _MetricTileState extends State<MetricTile> with WidgetsBindingObserver {
                                     .name,
                             style: TextStyle(
                               fontSize: 14,
-                              color: [
-                                Palette.of(context).ink,
-                                Palette.of(context).green,
-                                Palette.of(context).blue,
-                                Palette.of(context).acid,
-                              ][i % 4],
+                              color: historySeriesColors(
+                                Palette.of(context),
+                              )[i % 4],
                             ),
                           ),
                       ],

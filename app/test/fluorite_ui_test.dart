@@ -247,7 +247,7 @@ void main() {
     await dispose(t, c);
   });
 
-  testWidgets('窄屏及字体放大四页重排，没有整页缩放或溢出', (t) async {
+  testWidgets('窄屏及字体放大页面重排，没有整页缩放或溢出', (t) async {
     viewport(t, size: const Size(390, 844), fontScale: 1.6);
     final bridge = UiBridge();
     final c = await load(t, bridge);

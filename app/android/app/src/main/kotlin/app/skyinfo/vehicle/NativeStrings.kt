@@ -76,7 +76,7 @@ object NativeStrings {
     const val text_6cd3f53d7c = "前IPM温度 · 464"
     const val text_e49e74fe9b = "后IPM温度 · DM40"
     const val text_d17f56341f = "后IPM温度 · 464"
-    const val text_5e16bb50a9 = "压缩机功耗"
+    const val text_5e16bb50a9 = "空调系统功耗"
     const val text_18142cc0cc = "空调与热管理"
     const val text_ce8cfa2701 = "PTC功耗"
     const val text_5219345efe = "车内温度"
@@ -598,7 +598,7 @@ object NativeStrings {
     const val text_3b1c665461 = "未设置显示范围"
     const val text_17fe884603 = "编辑组件"
     const val text_f645d5db37 = "低压电压"
-    const val text_5c4792f489 = "压缩机读数"
+    const val text_5c4792f489 = "空调系统功耗"
     const val text_fc29d712b1 = "热管理"
     const val text_adf04dee75 = "电池温度"
     const val text_c9ad76452e = "电芯电压"
@@ -659,6 +659,8 @@ object NativeStrings {
     const val text_b62f025730 = "搜索图标或数据名称"
     const val text_677fe3d598 = "{value0}秒前"
     const val text_b78bec3cd7 = "没有匹配的图标"
+    const val history_bucket_summary = "{start}–{end}  均值 {mean} · {count}个样本  最低 {min} @ {minTime}  最高 {max} @ {maxTime}"
+    const val history_held_value = "最近真实值 {value} @ {time}"
     const val text_a61b02882d = "{value0}  {value1}  最低 {value2} @ {value3}  最高 {value4} @ {value5}"
     const val text_beff4a1cd1 = "不可用"
     const val text_c5bf1313e8 = "仅界面预览"
@@ -1053,6 +1055,114 @@ object NativeStrings {
     const val overlay_position_stopped = "恢复运行后可调整位置。"
     const val overlay_position_error = "无法调整悬浮条位置，请确认悬浮条已显示后重试。"
     const val overlay_restore_error = "无法恢复默认位置，请重试。"
+    const val page_split = "自定义分屏"
+    const val startup_page = "启动页面"
+    const val startup_page_hint = "下次启动 SkyInfo 时进入所选页面，返回前台保留当前页。选择自定义分屏后仍需点击启动。"
+    const val split_quick = "快速分屏"
+    const val split_left_app = "左侧应用"
+    const val split_right_app = "右侧应用"
+    const val split_left = "左侧"
+    const val split_right = "右侧"
+    const val split_change = "更换"
+    const val split_select_app = "选择应用"
+    const val split_select = "选择"
+    const val split_search_app = "搜索应用名称"
+    const val split_search_activity = "搜索入口名称或组件"
+    const val split_select_activity = "选择 Activity"
+    const val split_create = "新建组合"
+    const val split_edit = "编辑组合"
+    const val split_saved = "已保存组合"
+    const val split_count = "{count} 个组合"
+    const val split_launch = "启动"
+    const val split_launch_split = "启动分屏"
+    const val split_starting = "正在发送…"
+    const val split_large_left = "左大右小"
+    const val split_large_right = "左小右大"
+    const val split_empty = "尚未保存组合。选择左右应用可直接启动，也可新建组合。"
+    const val split_preview = "分屏预览"
+    const val split_ratio_hint = "切换比例保留左右应用"
+    const val split_swap = "交换左右"
+    const val split_name = "组合名称"
+    const val split_name_hint = "默认由左右应用名称生成"
+    const val split_specify_activity = "指定 Activity"
+    const val split_default_hint = "使用应用的默认启动入口"
+    const val split_default_entry = "默认启动入口"
+    const val split_left_entry = "左侧入口"
+    const val split_right_entry = "右侧入口"
+    const val split_save = "保存组合"
+    const val split_saving = "正在保存…"
+    const val split_delete = "删除组合"
+    const val split_delete_title = "删除组合"
+    const val split_delete_message = "删除“{name}”后无法恢复。应用不受影响。"
+    const val split_discard_title = "放弃更改"
+    const val split_discard_message = "未保存的组合更改将被放弃。"
+    const val split_discard = "放弃更改"
+    const val split_continue_edit = "继续编辑"
+    const val split_back = "返回组合页"
+    const val split_save_failed = "保存失败，已保留当前输入，请重试。"
+    const val split_edit_named = "编辑组合：{name}"
+    const val split_edit_repair = "编辑修复"
+    const val split_query_failed = "应用查询失败，请检查系统权限后重试。"
+    const val split_loading = "正在加载应用"
+    const val split_no_apps = "当前用户没有可见的可启动应用"
+    const val split_no_results = "没有匹配结果"
+    const val split_no_activities = "没有可用入口"
+    const val split_retry = "重试"
+    const val split_requested = "已发送启动请求，请检查实际左右布局。"
+    const val split_partial = "{side}已发送启动请求，另一侧未发送：{reason}。可重试或编辑组合。"
+    const val split_busy = "正在发送启动请求，请稍候。"
+    const val split_limit = "最多保存64个组合，请编辑或删除已有组合。"
+    const val split_reason_invalid_target = "请选择有效应用"
+    const val split_reason_package_unavailable = "应用已卸载或当前用户不可见"
+    const val split_reason_activity_unavailable = "启动入口已移除或不可用"
+    const val split_reason_disabled = "启动入口已禁用"
+    const val split_reason_not_exported = "启动入口未向外部应用开放"
+    const val split_reason_permission_denied = "当前应用缺少调用权限"
+    const val split_reason_unsupported_device = "系统暂不支持此分屏启动方式"
+    const val split_reason_launch_rejected = "系统拒绝启动请求"
+    const val split_reason_activity_not_found = "未找到启动入口"
+    const val split_reason_launch_failed = "启动请求未完成，请重试"
+    const val split_reason_cancelled = "启动请求已取消"
+    const val split_reason_invalid_ratio = "面积比例无效"
+    const val split_reason_busy = "正在发送请求，请稍候"
+    const val split_reason_query_failed = "无法检查启动入口，请重试"
+    const val split_reason_duplicate_target = "左右两侧选择了同一启动入口，请调整应用或 Activity"
+    const val split_compatibility_title = "分屏兼容提示"
+    const val split_compatibility_message = "系统和应用可能限制左右布局与面积，部分应用首次进入时会显示兼容提示。发送启动请求后，请检查实际布局。"
+    const val split_direction_pending = "两侧已发送启动请求，系统方向未确认：{reason}。请检查实际布局后重试，或使用系统分屏调整。"
+    const val split_reason_direction_unavailable = "系统未提供可用的方向调整能力"
+    const val split_reason_direction_denied = "系统拒绝调整分屏方向"
+    const val split_reason_direction_unconfirmed = "系统方向未按所选比例更新"
+    const val split_reason_split_not_established = "系统尚未形成双区分屏"
+    const val split_reason_direction_cancelled = "方向检查已取消"
+    const val overlay_show_decimals = "显示小数"
+    const val ha_device_climate = "空调"
+    const val ha_device_driver_seat = "主驾座椅"
+    const val ha_device_passenger_seat = "副驾座椅"
+    const val ha_device_rear_left_seat = "后排左座椅"
+    const val ha_device_rear_right_seat = "后排右座椅"
+    const val ha_device_steering_wheel = "方向盘"
+    const val ha_device_windows = "车窗与遮阳帘"
+    const val ha_device_locks = "门锁"
+    const val ha_device_lights = "灯光"
+    const val ha_device_mirrors = "后视镜"
+    const val ha_device_displays = "车载显示"
+    const val ha_device_chassis = "底盘"
+    const val ha_device_driver_assistance = "驾驶辅助"
+    const val ha_device_charging = "充电与电源"
+    const val ha_device_fridge = "冰箱"
+    const val ha_device_body_equipment = "车身设备"
+    const val ha_device_sound = "声音"
+    const val ha_control_operation = "{name}操作"
+    const val ha_control_state_ready = "远控已就绪"
+    const val ha_control_state_subscribing = "正在订阅远控"
+    const val ha_control_state_retrying = "正在恢复远控"
+    const val ha_control_state_blocked = "远控订阅被拒绝"
+    const val ha_control_state_disconnected = "远控未连接"
+    const val ha_control_state_disabled = "远控已关闭"
+    const val ha_control_state_unknown = "远控状态未知"
+    const val ha_control_error_detail = "订阅错误：{error}"
+    const val ha_device_equipment = "其他设备"
     fun text(key: String, values: Map<String, Any?> = emptyMap()): String {
         val template = defaults[key] ?: key
         return Regex("\\{([a-zA-Z0-9_]+)\\}").replace(template) { match -> values[match.groupValues[1]]?.toString() ?: match.value }
@@ -1716,6 +1826,8 @@ object NativeStrings {
         "text_b62f025730" to text_b62f025730,
         "text_677fe3d598" to text_677fe3d598,
         "text_b78bec3cd7" to text_b78bec3cd7,
+        "history_bucket_summary" to history_bucket_summary,
+        "history_held_value" to history_held_value,
         "text_a61b02882d" to text_a61b02882d,
         "text_beff4a1cd1" to text_beff4a1cd1,
         "text_c5bf1313e8" to text_c5bf1313e8,
@@ -2109,6 +2221,114 @@ object NativeStrings {
         "overlay_position_empty" to overlay_position_empty,
         "overlay_position_stopped" to overlay_position_stopped,
         "overlay_position_error" to overlay_position_error,
-        "overlay_restore_error" to overlay_restore_error
+        "overlay_restore_error" to overlay_restore_error,
+        "page_split" to page_split,
+        "startup_page" to startup_page,
+        "startup_page_hint" to startup_page_hint,
+        "split_quick" to split_quick,
+        "split_left_app" to split_left_app,
+        "split_right_app" to split_right_app,
+        "split_left" to split_left,
+        "split_right" to split_right,
+        "split_change" to split_change,
+        "split_select_app" to split_select_app,
+        "split_select" to split_select,
+        "split_search_app" to split_search_app,
+        "split_search_activity" to split_search_activity,
+        "split_select_activity" to split_select_activity,
+        "split_create" to split_create,
+        "split_edit" to split_edit,
+        "split_saved" to split_saved,
+        "split_count" to split_count,
+        "split_launch" to split_launch,
+        "split_launch_split" to split_launch_split,
+        "split_starting" to split_starting,
+        "split_large_left" to split_large_left,
+        "split_large_right" to split_large_right,
+        "split_empty" to split_empty,
+        "split_preview" to split_preview,
+        "split_ratio_hint" to split_ratio_hint,
+        "split_swap" to split_swap,
+        "split_name" to split_name,
+        "split_name_hint" to split_name_hint,
+        "split_specify_activity" to split_specify_activity,
+        "split_default_hint" to split_default_hint,
+        "split_default_entry" to split_default_entry,
+        "split_left_entry" to split_left_entry,
+        "split_right_entry" to split_right_entry,
+        "split_save" to split_save,
+        "split_saving" to split_saving,
+        "split_delete" to split_delete,
+        "split_delete_title" to split_delete_title,
+        "split_delete_message" to split_delete_message,
+        "split_discard_title" to split_discard_title,
+        "split_discard_message" to split_discard_message,
+        "split_discard" to split_discard,
+        "split_continue_edit" to split_continue_edit,
+        "split_back" to split_back,
+        "split_save_failed" to split_save_failed,
+        "split_edit_named" to split_edit_named,
+        "split_edit_repair" to split_edit_repair,
+        "split_query_failed" to split_query_failed,
+        "split_loading" to split_loading,
+        "split_no_apps" to split_no_apps,
+        "split_no_results" to split_no_results,
+        "split_no_activities" to split_no_activities,
+        "split_retry" to split_retry,
+        "split_requested" to split_requested,
+        "split_partial" to split_partial,
+        "split_busy" to split_busy,
+        "split_limit" to split_limit,
+        "split_reason_invalid_target" to split_reason_invalid_target,
+        "split_reason_package_unavailable" to split_reason_package_unavailable,
+        "split_reason_activity_unavailable" to split_reason_activity_unavailable,
+        "split_reason_disabled" to split_reason_disabled,
+        "split_reason_not_exported" to split_reason_not_exported,
+        "split_reason_permission_denied" to split_reason_permission_denied,
+        "split_reason_unsupported_device" to split_reason_unsupported_device,
+        "split_reason_launch_rejected" to split_reason_launch_rejected,
+        "split_reason_activity_not_found" to split_reason_activity_not_found,
+        "split_reason_launch_failed" to split_reason_launch_failed,
+        "split_reason_cancelled" to split_reason_cancelled,
+        "split_reason_invalid_ratio" to split_reason_invalid_ratio,
+        "split_reason_busy" to split_reason_busy,
+        "split_reason_query_failed" to split_reason_query_failed,
+        "split_reason_duplicate_target" to split_reason_duplicate_target,
+        "split_compatibility_title" to split_compatibility_title,
+        "split_compatibility_message" to split_compatibility_message,
+        "split_direction_pending" to split_direction_pending,
+        "split_reason_direction_unavailable" to split_reason_direction_unavailable,
+        "split_reason_direction_denied" to split_reason_direction_denied,
+        "split_reason_direction_unconfirmed" to split_reason_direction_unconfirmed,
+        "split_reason_split_not_established" to split_reason_split_not_established,
+        "split_reason_direction_cancelled" to split_reason_direction_cancelled,
+        "overlay_show_decimals" to overlay_show_decimals,
+        "ha_device_climate" to ha_device_climate,
+        "ha_device_driver_seat" to ha_device_driver_seat,
+        "ha_device_passenger_seat" to ha_device_passenger_seat,
+        "ha_device_rear_left_seat" to ha_device_rear_left_seat,
+        "ha_device_rear_right_seat" to ha_device_rear_right_seat,
+        "ha_device_steering_wheel" to ha_device_steering_wheel,
+        "ha_device_windows" to ha_device_windows,
+        "ha_device_locks" to ha_device_locks,
+        "ha_device_lights" to ha_device_lights,
+        "ha_device_mirrors" to ha_device_mirrors,
+        "ha_device_displays" to ha_device_displays,
+        "ha_device_chassis" to ha_device_chassis,
+        "ha_device_driver_assistance" to ha_device_driver_assistance,
+        "ha_device_charging" to ha_device_charging,
+        "ha_device_fridge" to ha_device_fridge,
+        "ha_device_body_equipment" to ha_device_body_equipment,
+        "ha_device_sound" to ha_device_sound,
+        "ha_control_operation" to ha_control_operation,
+        "ha_control_state_ready" to ha_control_state_ready,
+        "ha_control_state_subscribing" to ha_control_state_subscribing,
+        "ha_control_state_retrying" to ha_control_state_retrying,
+        "ha_control_state_blocked" to ha_control_state_blocked,
+        "ha_control_state_disconnected" to ha_control_state_disconnected,
+        "ha_control_state_disabled" to ha_control_state_disabled,
+        "ha_control_state_unknown" to ha_control_state_unknown,
+        "ha_control_error_detail" to ha_control_error_detail,
+        "ha_device_equipment" to ha_device_equipment
     ) }
 }

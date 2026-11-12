@@ -15,7 +15,8 @@ fun migrateLocalHistory(config: JSONObject): Boolean {
 }
 
 class LocalHistory(private val context: Context, private val capacityBytes: Long = CAPACITY_BYTES,
-    private val scheduleFlush: ((Long, () -> Unit) -> java.util.concurrent.Future<*>)? = null) {
+    private val scheduleFlush: ((Long, () -> Unit) -> java.util.concurrent.Future<*>)? = null,
+    private val performance: PerformanceProbe? = null) {
     private data class Row(val id: String, val at: Long, val value: Double?, val state: String, val segment: String, val sample: String?) {
         val bytes: Long get() = 64L + 3L*(id.length+state.length+segment.length+(sample?.length ?: 0))
     }
@@ -46,7 +47,7 @@ class LocalHistory(private val context: Context, private val capacityBytes: Long
         const val CAPACITY_BYTES = 200L * 1024 * 1024
         const val BUFFER_BYTES = 1024L * 1024
         const val MAX_BUFFER_ROWS = 4096
-        const val FLUSH_INTERVAL_SECONDS = 30L
+        const val FLUSH_INTERVAL_SECONDS = 120L
     }
     private var database: SQLiteDatabase? = null
     private var persistent = false
@@ -124,8 +125,13 @@ class LocalHistory(private val context: Context, private val capacityBytes: Long
         val value = if (valid) sample.opt("value") else null
         val at = sample.optLong("receivedAt", System.currentTimeMillis())
         val segment = "$session|$id|${sample.optLong("sourceEpoch")}|${sample.optString("quality")}|${sample.optString("unit")}|${sample.optInt("definitionVersion",1)}"
+        val encoded = performance?.beginTiming() ?: 0L
         val row = Row(id,at,(value as? Number)?.toDouble()?.takeIf { it.isFinite() },
             if (valid) sample.optString("stateLabel",value?.toString() ?: "unavailable") else "unavailable",segment,sample.toString())
+        performance?.timing("history_append_encode",encoded)
+        performance?.add("history_append_rows")
+        performance?.add("history_append_sample_chars",row.sample?.length?.toLong() ?: 0)
+        performance?.add("history_append_estimated_bytes",row.bytes)
         if (pending.size >= MAX_BUFFER_ROWS || (pending.isNotEmpty() && pendingBytes+row.bytes > batchBytes) || gaps.isNotEmpty()) {
             val retryAllowed = android.os.SystemClock.elapsedRealtime() >= retryWriteAt
             val recovered = database != null && retryAllowed && try { flush(); true } catch (_: android.database.sqlite.SQLiteException) { false }
@@ -160,10 +166,12 @@ class LocalHistory(private val context: Context, private val capacityBytes: Long
         val db = database ?: return
         flushTask?.cancel(false); flushTask = null
         if (pending.isEmpty() && gaps.isEmpty()) return
+        val measured = performance?.beginTiming() ?: 0L
         val rows = pending + gaps.values
         val maintenance = android.os.SystemClock.elapsedRealtime() - lastPrune >= 60000
         fun commit() {
             transactionAttempts++
+            performance?.add("history_transaction_attempts")
             db.beginTransaction()
             var failure: Throwable? = null
             try {
@@ -192,9 +200,12 @@ class LocalHistory(private val context: Context, private val capacityBytes: Long
                 }
             }
             transactions++
+            performance?.add("history_committed_rows",rows.size.toLong())
+            performance?.add("history_transactions")
             if (maintenance) lastPrune = android.os.SystemClock.elapsedRealtime()
             pending.clear(); pendingBytes = 0; gaps.clear(); writeError = null; loggedWriteError = null; retryWriteAt = 0
         } catch (error: android.database.sqlite.SQLiteException) { failedWrite(error); schedule(); throw error }
+        finally { performance?.timing("history_flush",measured) }
     }
     private fun reclaimOldestWindow(db: SQLiteDatabase): Boolean {
         val cutoff = db.rawQuery("SELECT MIN(at),MAX(at) FROM samples WHERE seq NOT IN (SELECT (SELECT seq FROM samples latest WHERE latest.id=known.id ORDER BY latest.at DESC,latest.seq DESC LIMIT 1) FROM samples known GROUP BY known.id)",null).use { cursor ->
@@ -221,24 +232,29 @@ class LocalHistory(private val context: Context, private val capacityBytes: Long
         lastPrune = android.os.SystemClock.elapsedRealtime()
     }
     private fun deleteExpired(db: SQLiteDatabase) {
+        val measured = performance?.beginTiming() ?: 0L
         val cutoff = System.currentTimeMillis() - minutes * 60000L
-        db.execSQL("DELETE FROM samples WHERE at < ? AND seq NOT IN (SELECT (SELECT seq FROM samples latest WHERE latest.id=expired.id AND latest.at<? ORDER BY latest.at DESC,latest.seq DESC LIMIT 1) FROM samples expired WHERE expired.at<? GROUP BY expired.id)", arrayOf(cutoff,cutoff,cutoff))
+        try { db.execSQL("DELETE FROM samples WHERE at < ? AND seq NOT IN (SELECT (SELECT seq FROM samples latest WHERE latest.id=expired.id AND latest.at<? ORDER BY latest.at DESC,latest.seq DESC LIMIT 1) FROM samples expired WHERE expired.at<? GROUP BY expired.id)", arrayOf(cutoff,cutoff,cutoff)) }
+        finally { performance?.timing("history_prune",measured) }
     }
-    @Synchronized fun query(id: String, window: Int, field: JSONObject? = null): JSONObject {
+    @Synchronized fun query(id: String, window: Int, field: JSONObject? = null, includeSample: Boolean = true): JSONObject {
         val db = database ?: return JSONObject().put("error", NativeStrings.text_fdedaa14ba)
+        val measured = performance?.beginTiming() ?: 0L
         val points = JSONArray()
         val rows = mutableListOf<Row>()
         val queriedAt = System.currentTimeMillis()
         val from = queriedAt - minOf(window,minutes)*60000L
-        db.rawQuery(HISTORY_WINDOW_QUERY,
+        db.rawQuery(if (includeSample) HISTORY_WINDOW_QUERY else HISTORY_WINDOW_LIGHT_QUERY,
             arrayOf(id,from.toString(),queriedAt.toString(),id,from.toString(),queriedAt.toString())).use { cursor ->
             while (cursor.moveToNext()) rows.add(Row(id,cursor.getLong(0),if (cursor.isNull(1)) null else cursor.getDouble(1),cursor.getString(2),cursor.getString(3),if (cursor.isNull(4)) null else cursor.getString(4)))
         }
         rows.addAll((pending + gaps.values).filter { it.id == id && it.at <= queriedAt })
         val ordered = rows.sortedBy { it.at }
         val predecessor = ordered.indexOfLast { it.at < from }
+        var returnedSampleChars = 0L
         for ((index,row) in ordered.withIndex()) {
             if (row.at < from && index != predecessor) continue
+                if (measured != 0L && includeSample) returnedSampleChars += row.sample?.length ?: 0
                 val segment = row.segment
                 val legacy = (field?.has("valueOffset") == true || field?.has("valueScale") == true) && segment.substringAfterLast('|').toIntOrNull() == 1
                 val unitMismatch = field?.has("unitField") == true && (field.optString("unit").isEmpty() ||
@@ -249,13 +265,26 @@ class LocalHistory(private val context: Context, private val capacityBytes: Long
                 points.put(JSONObject().put("at", Instant.ofEpochMilli(row.at).toString())
                     .put("value", value ?: JSONObject.NULL).put("state", if (unitMismatch || invalidLegacyCurrent) "unavailable" else if (legacy && value != null) value.toString() else field?.optJSONObject("stateLabels")?.optString(row.state)?.takeIf(String::isNotEmpty) ?: row.state)
                     .put("segment", if (legacy) "$segment|converted:${field.optInt("definitionVersion",1)}" else segment)
-                    .put("sample",if ((row.sample == null)) JSONObject.NULL else JSONObject(row.sample)))
+                    .also { point -> if (includeSample) point.put("sample",if (row.sample == null) JSONObject.NULL else JSONObject(row.sample)) })
         }
         if (points.length() > 0 && recording && id in ids) {
             val last = points.getJSONObject(points.length()-1)
             if (!last.isNull("value") && last.getString("segment").startsWith("$session|")) last.put("observedUntil",queriedAt)
         }
+        performance?.add("history_queries"); performance?.add("history_returned_points",points.length().toLong())
+        performance?.add("history_returned_sample_chars",returnedSampleChars)
+        performance?.timing("history_query",measured)
         return JSONObject().put("points", points).put("queriedAt",queriedAt)
+    }
+    @Synchronized fun performanceSettings(): JSONObject {
+        val db = database ?: return JSONObject().put("open",false)
+        val result = JSONObject().put("open",true)
+        try {
+            for (key in listOf("journal_mode","synchronous","page_size","wal_autocheckpoint","cache_size","cache_spill")) {
+                db.rawQuery("PRAGMA $key",null).use { cursor -> if (cursor.moveToFirst()) result.put(key,cursor.getString(0)) }
+            }
+        } catch (error: android.database.sqlite.SQLiteException) { result.put("error",error.javaClass.simpleName) }
+        return result
     }
     @Synchronized fun pause() {
         if (recording) ids.forEach { append(it,JSONObject().put("quality","paused").put("receivedAt",System.currentTimeMillis())) }
@@ -276,3 +305,5 @@ class LocalHistory(private val context: Context, private val capacityBytes: Long
 
 /** The visible range and its predecessor use separate ranges of the existing field/time index. */
 internal const val HISTORY_WINDOW_QUERY = "SELECT at,value,state,segment,sample,seq FROM samples WHERE id=? AND at>=? AND at<=? UNION ALL SELECT at,value,state,segment,sample,seq FROM (SELECT at,value,state,segment,sample,seq FROM samples WHERE id=? AND at<? AND at<=? ORDER BY at DESC,seq DESC LIMIT 1) ORDER BY at,seq"
+/** Identical ranges/order; the UI does not need stored sample JSON. */
+internal val HISTORY_WINDOW_LIGHT_QUERY = HISTORY_WINDOW_QUERY.replace("segment,sample,seq","segment,NULL AS sample,seq")

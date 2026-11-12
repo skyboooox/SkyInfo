@@ -17,10 +17,10 @@ import java.io.ByteArrayOutputStream
 import java.time.Instant
 import java.util.UUID
 import java.util.concurrent.TimeUnit
-import javax.net.ssl.SSLSocketFactory
 
 class ConnectionClient(private val context: Context, private val store: SecretStore, private val client: OkHttpClient = OkHttpClient.Builder().callTimeout(12, TimeUnit.SECONDS)
-        .connectTimeout(5, TimeUnit.SECONDS).followRedirects(false).followSslRedirects(false).build(), private val mqttSocketFactory: javax.net.SocketFactory = SSLSocketFactory.getDefault()) {
+        .connectTimeout(5, TimeUnit.SECONDS).followRedirects(false).followSslRedirects(false).build(), private val mqttSocketFactory: javax.net.SocketFactory? = null, private val controlClock: () -> Long = { android.os.SystemClock.elapsedRealtime() }) {
+    private val mqttTlsFactory by lazy { mqttSocketFactory ?: NetworkTls.socketFactory(checkNotNull(client.x509TrustManager)) }
     private val gate = PublicationGate()
     fun retryPublication() { gate.reset(); publicationFailure = null }
     fun publicationWaitMillis(): Long? = gate.waitMillis()
@@ -117,7 +117,7 @@ class ConnectionClient(private val context: Context, private val store: SecretSt
             })
             val options = org.eclipse.paho.mqttv5.client.MqttConnectionOptions().apply {
                 isCleanStart = true; connectionTimeout = 5; keepAliveInterval = 60
-                if (secure) socketFactory = mqttSocketFactory; isHttpsHostnameVerificationEnabled = true
+                if (secure) socketFactory = mqttTlsFactory; isHttpsHostnameVerificationEnabled = true
                 if (config.optString("mqttUser").isNotEmpty()) userName = config.getString("mqttUser")
                 val secret = store.secret("mqttPassword"); if (secret.isNotEmpty()) password = secret.toByteArray()
                 setWill("$topic/availability", org.eclipse.paho.mqttv5.common.MqttMessage("offline".toByteArray()).apply { qos = 1; isRetained = true })
@@ -137,7 +137,7 @@ class ConnectionClient(private val context: Context, private val store: SecretSt
             isCleanSession = true
             connectionTimeout = 5
             keepAliveInterval = 60
-            if (secure) socketFactory = mqttSocketFactory
+            if (secure) socketFactory = mqttTlsFactory
             isHttpsHostnameVerificationEnabled = true
             if (config.optString("mqttUser").isNotEmpty()) userName = config.getString("mqttUser")
             val secret = store.secret("mqttPassword")
@@ -301,7 +301,15 @@ class ConnectionClient(private val context: Context, private val store: SecretSt
         val key = controlPublicationKey(config)
         if (controlPublication.getString(key,null) != state) check(controlPublication.edit().putString(key,state).commit())
     }
-    fun invalidateControlStates() { controlStates.clear() }
+    private var controlSyncPass = 0
+    private var controlSyncDue: Long? = null
+    private var controlSyncInFlight = false
+    private fun scheduleControlSync() { controlSyncPass = 0; controlSyncInFlight = false; controlSyncDue = controlClock() + 1000 }
+    fun controlSyncWaitMillis(): Long? = controlSyncDue?.let { (it - controlClock()).coerceAtLeast(0) }
+    fun invalidateControlStates(rediscover: Boolean = false) {
+        controlStates.clear(); scheduleControlSync()
+        if (rediscover) controlTopic = ""
+    }
     fun publishControlEntities(config: JSONObject, samples: Map<String, JSONObject>, commandTopic: String, online: Boolean) {
         if (config.optString("connection","ha") != "ha") return
         val enabled = config.optBoolean("haControlEnabled")
@@ -309,18 +317,28 @@ class ConnectionClient(private val context: Context, private val store: SecretSt
         requirePublication()
         val stateTarget = controlPublicationKey(config)
         if (controlStateTarget != stateTarget) {
-            controlStateTarget = stateTarget; controlStates.clear(); controlTopic = ""
+            controlStateTarget = stateTarget; controlStates.clear(); controlTopic = ""; controlSyncDue = null; controlSyncInFlight = false
         }
         val version = appVersion
         val ready = online && config.optBoolean("haControlEnabled")
         val connectionKey = config.optString("haUrl")+"|"+commandTopic
         if (enabled && controlTopic != connectionKey) {
             val definitions = controlDefinitions.flatMap { haControlDefinitions(deviceId,config.optString("prefix",device.prefix),version,it,commandTopic) }
-            mqttViaHa(config,"homeassistant/device/skyinfo_${deviceId}_controls/config",haControlDeviceDiscovery(definitions,version).toString(),true)
+            val discoveryTopic = "homeassistant/device/skyinfo_${deviceId}_controls/config"
+            val layoutKey = "layout_$stateTarget"
+            if (controlPublication.getString(stateTarget,null) != null && !controlPublication.getBoolean(layoutKey,false)) {
+                mqttViaHa(config,discoveryTopic,haControlDeviceDiscovery(definitions,version,haRemovedControlComponents(deviceId,controlDefinitions)).toString(),true)
+            }
+            mqttViaHa(config,discoveryTopic,haControlDeviceDiscovery(definitions,version).toString(),true)
+            check(controlPublication.edit().putBoolean(layoutKey,true).commit())
+            scheduleControlSync()
             controlTopic = connectionKey
             controlPublicationState(config,"active")
         }
         if (enabled) controlPublicationState(config,"active")
+        if (enabled && controlSyncDue?.let { it <= controlClock() } == true && !controlSyncInFlight) {
+            controlStates.clear(); controlSyncInFlight = true
+        }
         for (entity in controlDefinitions) {
             val state = haControlState(entity,samples,ready)
             val updatedAt = state.remove("updatedAt") ?: JSONObject.NULL
@@ -332,7 +350,12 @@ class ConnectionClient(private val context: Context, private val store: SecretSt
                 controlStates[topic] = semantic
             }
         }
-        if (!enabled) controlPublicationState(config,"offline")
+        if (!enabled) { controlPublicationState(config,"offline"); controlSyncDue = null; controlSyncInFlight = false }
+        else if (controlSyncInFlight) {
+            controlSyncInFlight = false
+            controlSyncPass++
+            controlSyncDue = when (controlSyncPass) { 1 -> controlClock() + 3000; 2 -> controlClock() + 7000; else -> null }
+        }
         retryPublication()
     }
     fun publishState(config: JSONObject, samples: Map<String, JSONObject>, fields: Map<String, JSONObject>) {

@@ -16,8 +16,15 @@ class BuildChannelTest {
     @Test fun channelDoesNotDependOnDebugMode() {
         assertEquals(BuildConfig.FLAVOR in listOf("alpha", "beta"), ChannelDiagnostics.enabled)
         assertEquals("app.skyinfo.vehicle", BuildConfig.APPLICATION_ID)
-        if (BuildConfig.FLAVOR == "stable") assertFalse(Regex("-(alpha|beta)[.][0-9]+$").containsMatchIn(BuildConfig.VERSION_NAME))
-        else assertTrue(Regex("-${BuildConfig.FLAVOR}[.][0-9]+$").containsMatchIn(BuildConfig.VERSION_NAME))
+        val baseVersion = "[0-9]+[.][0-9]+[.][0-9]+"
+        val versionPattern = when (BuildConfig.FLAVOR) {
+            "alpha" -> "$baseVersion-alpha[.][0-9]+"
+            "beta" -> "${baseVersion}b"
+            "stable" -> baseVersion
+            else -> error("Unknown build channel: ${BuildConfig.FLAVOR}")
+        }
+        assertTrue("Unexpected ${BuildConfig.FLAVOR} version: ${BuildConfig.VERSION_NAME}",
+            Regex(versionPattern).matches(BuildConfig.VERSION_NAME))
     }
 
     @Test fun stableCannotInvokeAuditAndTestChannelsCanCompleteAnEmptyOfflineAudit() {

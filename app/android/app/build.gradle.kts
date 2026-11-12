@@ -31,11 +31,11 @@ android {
     productFlavors {
         create("alpha") {
             dimension = "channel"
-            versionNameSuffix = "-alpha.7"
+            versionNameSuffix = "-alpha.16"
         }
         create("beta") {
             dimension = "channel"
-            versionNameSuffix = "-beta.2"
+            versionNameSuffix = "b"
         }
         create("stable") { dimension = "channel" }
     }
@@ -69,15 +69,15 @@ dependencies {
     implementation(project(":libadb"))
     implementation("org.conscrypt:conscrypt-android:2.5.3")
     implementation("org.bouncycastle:bcpkix-jdk15to18:1.81")
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("com.squareup.okhttp3:okhttp:4.12.1")
     implementation("org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5")
     implementation("org.eclipse.paho:org.eclipse.paho.mqttv5.client:1.2.5")
     implementation("com.caverock:androidsvg-aar:1.4")
     testImplementation("org.conscrypt:conscrypt-openjdk-uber:2.5.2")
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.robolectric:robolectric:4.14.1")
-    testImplementation("com.squareup.okhttp3:mockwebserver:4.12.0")
-    testImplementation("com.squareup.okhttp3:okhttp-tls:4.12.0")
+    testImplementation("com.squareup.okhttp3:mockwebserver:4.12.1")
+    testImplementation("com.squareup.okhttp3:okhttp-tls:4.12.1")
 }
 
 tasks.configureEach {

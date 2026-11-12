@@ -43,7 +43,11 @@ class _OverlayEditorState extends State<_OverlayEditor> {
   late String? unit = widget.existing == null || widget.existing!.unitAuto
       ? null
       : widget.existing!.unit;
-  late int digits = widget.existing?.digits ?? 1;
+  late bool showDecimals = (widget.existing?.digits ?? 0) > 0;
+  late int digits = (widget.existing?.digits ?? 1) > 0
+      ? widget.existing?.digits ?? 1
+      : 1;
+  int get displayDigits => showDecimals ? digits : 0;
   bool deleting = false;
   String? error;
   late final lease = widget.c.acquirePreview([field]);
@@ -66,7 +70,7 @@ class _OverlayEditorState extends State<_OverlayEditor> {
     unit: unit ?? '',
     unitAuto: unit == null,
     alignment: alignment,
-    digits: digits,
+    digits: displayDigits,
   );
   @override
   Widget build(BuildContext context) => DesignDialog(
@@ -138,7 +142,7 @@ class _OverlayEditorState extends State<_OverlayEditor> {
                     unit: unit ?? '',
                     unitAuto: unit == null,
                     alignment: alignment,
-                    digits: digits,
+                    digits: displayDigits,
                   ),
                 ),
         ),
@@ -221,6 +225,17 @@ class _OverlayEditorState extends State<_OverlayEditor> {
                 ),
               ),
               ParameterRow(
+                Strings.text('overlay_show_decimals'),
+                onTap: () => setState(() => showDecimals = !showDecimals),
+                trailing: Semantics(
+                  label: Strings.text('overlay_show_decimals'),
+                  child: XCheck(
+                    value: showDecimals,
+                    onChanged: (value) => setState(() => showDecimals = value),
+                  ),
+                ),
+              ),
+              ParameterRow(
                 Strings.text('text_39df92f27c'),
                 trailing: SizedBox(
                   width: 432,
@@ -248,10 +263,12 @@ class _OverlayEditorState extends State<_OverlayEditor> {
                     isExpanded: true,
                     value: digits,
                     items: [
-                      for (final value in [0, 1, 2, 3, 4])
+                      for (final value in [1, 2, 3, 4])
                         DropdownMenuItem(value: value, child: Text('$value')),
                     ],
-                    onChanged: (value) => setState(() => digits = value!),
+                    onChanged: showDecimals
+                        ? (value) => setState(() => digits = value!)
+                        : null,
                   ),
                 ),
               ),

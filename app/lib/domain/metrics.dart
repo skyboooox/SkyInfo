@@ -316,8 +316,18 @@ class OverlaySpec {
     required this.unit,
     this.unitAuto = false,
     this.alignment = 'left',
-    this.digits = 1,
+    this.digits = 0,
   });
+  String formatted(Sample sample) {
+    final value = sample.value;
+    if (!['available', 'unverified'].contains(sample.quality) ||
+        value == null) {
+      return '—';
+    }
+    return sample.stateLabel ??
+        (value is num ? value.toStringAsFixed(digits) : value.toString());
+  }
+
   factory OverlaySpec.fromJson(Map<String, dynamic> j) => OverlaySpec(
     id: j['id'],
     field: j['field'],

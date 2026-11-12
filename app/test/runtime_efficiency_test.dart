@@ -170,11 +170,18 @@ void main() {
       final bridge = EfficiencyBridge();
       final c = AppController(bridge: bridge);
       final request = c.history('field', 120);
+      expect(bridge.calls.last.$2!['includeSample'], false);
       bridge.historyReplies.single.complete({
         'queriedAt': 1794283200000,
         'points': [
           {'at': '2026-11-10T11:59:00Z', 'value': 1},
-          {'at': '2026-11-10T12:00:00Z', 'value': 2},
+          {
+            'at': '2026-11-10T12:00:00Z',
+            'value': 2,
+            'state': 'ready',
+            'segment': 'current',
+            'observedUntil': 1794283200000,
+          },
         ],
       });
       final points = await request;
@@ -183,6 +190,9 @@ void main() {
         isTrue,
       );
       expect(() => points.clear(), throwsUnsupportedError);
+      expect(points.last.state, 'ready');
+      expect(points.last.segment, 'current');
+      expect(points.last.observedUntil, points.last.snapshotAt);
       c.dispose();
       unawaited(bridge.updates.close());
     },

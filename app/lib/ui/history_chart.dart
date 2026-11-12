@@ -1,9 +1,12 @@
 import '../l10n/strings.dart';
+import 'dart:async';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show listEquals;
 import '../domain/models.dart';
 import 'industrial.dart';
+
+List<Color> historySeriesColors(Palette p) => [p.blue, p.rose, p.green, p.ink];
 
 class HistoryChart extends StatefulWidget {
   final List<List<HistoryPoint>> series;
@@ -22,8 +25,50 @@ class HistoryChart extends StatefulWidget {
   State<HistoryChart> createState() => _HistoryChartState();
 }
 
-class _HistoryChartState extends State<HistoryChart> {
+class _HistoryChartState extends State<HistoryChart>
+    with WidgetsBindingObserver {
   double? selection;
+  Timer? _selectionTimer;
+  int _activePointers = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  void _restartSelectionTimer() {
+    _selectionTimer?.cancel();
+    if (selection == null || _activePointers > 0) return;
+    _selectionTimer = Timer(const Duration(seconds: 2), _clearSelection);
+  }
+
+  void _select(Offset position, double width) {
+    setState(() => selection = ((position.dx - 40) / (width - 48)).clamp(0, 1));
+    _restartSelectionTimer();
+  }
+
+  void _clearSelection() {
+    _selectionTimer?.cancel();
+    _selectionTimer = null;
+    if (mounted && selection != null) setState(() => selection = null);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state != AppLifecycleState.resumed) {
+      _activePointers = 0;
+      _clearSelection();
+    }
+  }
+
+  @override
+  void dispose() {
+    _selectionTimer?.cancel();
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
   List<List<HistoryPoint>>? _snapshot;
   DateTime? _snapshotEnd;
   _ChartProjection? _projection;
@@ -59,7 +104,7 @@ class _HistoryChartState extends State<HistoryChart> {
     return LayoutBuilder(
       builder: (context, box) {
         final projection = project(
-          math.max(1, (box.maxWidth / 3).floor()),
+          math.max(1, ((box.maxWidth - 48) / 3).floor()),
           start,
           end,
         );
@@ -83,76 +128,102 @@ class _HistoryChartState extends State<HistoryChart> {
                 ),
               );
         final selected = target == null
-            ? <HistoryBucket>[]
+            ? <({HistoryBucket bucket, bool held})>[]
             : groups
-                  .map((segments) {
-                    for (final segment in segments) {
-                      final first = segment.first.startAt ?? segment.first.at;
-                      final last =
-                          segment.last.observedUntil ?? segment.last.at;
-                      if (target.isBefore(first) || target.isAfter(last)) {
-                        continue;
-                      }
-                      return segment
-                          .where((b) => !(b.startAt ?? b.at).isAfter(target))
-                          .lastOrNull;
-                    }
-                    return null;
-                  })
-                  .whereType<HistoryBucket>()
+                  .map((segments) => historySelectionAt(segments, target))
+                  .whereType<({HistoryBucket bucket, bool held})>()
                   .toList();
-        return GestureDetector(
-          onTapDown: (details) => setState(
-            () => selection =
-                ((details.localPosition.dx - 40) / (box.maxWidth - 48)).clamp(
-                  0,
-                  1,
-                ),
-          ),
-          onLongPress: () => setState(() => selection = null),
-          child: Stack(
-            children: [
-              Positioned.fill(
-                child: RepaintBoundary(
-                  child: CustomPaint(
-                    size: Size(box.maxWidth, box.maxHeight),
-                    painter: _ChartPainter(
-                      projection,
-                      p,
-                      widget.minimum,
-                      widget.maximum,
+        return Listener(
+          onPointerDown: (_) {
+            _activePointers++;
+            _selectionTimer?.cancel();
+          },
+          onPointerUp: (_) {
+            _activePointers = math.max(0, _activePointers - 1);
+            _restartSelectionTimer();
+          },
+          onPointerCancel: (_) {
+            _activePointers = math.max(0, _activePointers - 1);
+            _restartSelectionTimer();
+          },
+          child: GestureDetector(
+            onTapUp: (_) => _restartSelectionTimer(),
+            onTapDown: (details) =>
+                _select(details.localPosition, box.maxWidth),
+            onHorizontalDragStart: (details) =>
+                _select(details.localPosition, box.maxWidth),
+            onHorizontalDragUpdate: (details) =>
+                _select(details.localPosition, box.maxWidth),
+            onHorizontalDragEnd: (_) => _restartSelectionTimer(),
+            onLongPress: _clearSelection,
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  child: RepaintBoundary(
+                    child: CustomPaint(
+                      size: Size(box.maxWidth, box.maxHeight),
+                      painter: _ChartPainter(
+                        projection,
+                        p,
+                        widget.minimum,
+                        widget.maximum,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              if (selected.isNotEmpty)
-                Positioned(
-                  left: 40,
-                  right: 8,
-                  top: 12,
-                  child: Container(
-                    color: p.paper,
-                    padding: EdgeInsets.all(8),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        for (final b in selected)
-                          Text(
-                            Strings.text('text_a61b02882d', {
-                              'value0': time(b.representativeAt ?? b.at),
-                              'value1': b.representative.toStringAsFixed(2),
-                              'value2': b.min.toStringAsFixed(2),
-                              'value3': time(b.minimumAt),
-                              'value4': b.max.toStringAsFixed(2),
-                              'value5': time(b.maximumAt),
-                            }),
-                            style: TextStyle(fontSize: 14),
-                          ),
-                      ],
+                if (selected.isNotEmpty)
+                  Positioned(
+                    left: 40,
+                    right: 8,
+                    top: 12,
+                    child: Container(
+                      color: p.paper,
+                      padding: EdgeInsets.all(8),
+                      constraints: BoxConstraints(
+                        maxHeight: math.max(0, box.maxHeight - 24),
+                      ),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            for (final item in selected)
+                              Text(
+                                item.held
+                                    ? Strings.text('history_held_value', {
+                                        'time': time(
+                                          item.bucket.sampleCount == 0
+                                              ? item.bucket.representativeAt
+                                              : item.bucket.lastAt,
+                                        ),
+                                        'value':
+                                            (item.bucket.lastValue ??
+                                                    item.bucket.representative)
+                                                .toStringAsFixed(2),
+                                      })
+                                    : Strings.text('history_bucket_summary', {
+                                        'start': time(item.bucket.rangeStart),
+                                        'end': time(item.bucket.rangeEnd),
+                                        'mean': item.bucket.representative
+                                            .toStringAsFixed(2),
+                                        'count': item.bucket.sampleCount,
+                                        'min': item.bucket.min.toStringAsFixed(
+                                          2,
+                                        ),
+                                        'minTime': time(item.bucket.minimumAt),
+                                        'max': item.bucket.max.toStringAsFixed(
+                                          2,
+                                        ),
+                                        'maxTime': time(item.bucket.maximumAt),
+                                      }),
+                                style: TextStyle(fontSize: 14),
+                              ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
-                ),
-            ],
+              ],
+            ),
           ),
         );
       },
@@ -196,7 +267,7 @@ class _ChartGeometry {
 }
 
 class _ChartStroke {
-  final List<Rect> ranges;
+  final List<(Path, bool)> ranges;
   final Path line;
   final Offset? dot;
   _ChartStroke(this.ranges, this.line, this.dot);
@@ -265,17 +336,30 @@ class _ChartPainter extends CustomPainter {
       final strokes = <_ChartStroke>[];
       for (var i = 0; i < projection.groups[s].length; i++) {
         final segment = projection.groups[s][i];
-        final band = <Rect>[];
-        for (final b in segment) {
-          if (b.min == b.max ||
-              b.rangeStart == null ||
-              b.rangeEnd == null ||
-              !b.rangeEnd!.isAfter(b.rangeStart!)) {
+        final band = <(Path, bool)>[];
+        for (final run in historyEnvelopeRuns(segment)) {
+          if (run.length == 1) {
+            final b = run.single;
+            if (b.sampleCount < 2 || b.min == b.max) continue;
+            final left = x(b.startAt!), right = x(b.lastAt!);
+            final path = Path()
+              ..moveTo(left, y(b.max))
+              ..lineTo(right, y(b.max))
+              ..lineTo(right, y(b.min))
+              ..lineTo(left, y(b.min))
+              ..close();
+            band.add((path, left == right));
             continue;
           }
-          band.add(
-            Rect.fromLTRB(x(b.rangeStart!), y(b.max), x(b.rangeEnd!), y(b.min)),
-          );
+          final path = Path()..moveTo(x(run.first.at), y(run.first.max));
+          for (final b in run.skip(1)) {
+            path.lineTo(x(b.at), y(b.max));
+          }
+          for (final b in run.reversed) {
+            path.lineTo(x(b.at), y(b.min));
+          }
+          path.close();
+          band.add((path, false));
         }
         final vertices = historyLineVertices(segment);
         final line = Path()..moveTo(x(vertices.first.$1), y(vertices.first.$2));
@@ -324,18 +408,26 @@ class _ChartPainter extends CustomPainter {
     }
     c.save();
     c.clipRect(plot);
-    final colors = [p.ink, p.blue, p.rose, p.green];
+    final colors = historySeriesColors(p);
     for (var s = 0; s < data.series.length; s++) {
       final color = colors[s % colors.length];
       final fill = Paint()
-        ..color = color.withValues(alpha: p == Palette.dark ? 0.16 : 0.12);
+        ..color = color.withValues(alpha: p == Palette.dark ? 0.24 : 0.18);
       final stroke = Paint()
         ..color = color
         ..strokeWidth = 2
         ..style = PaintingStyle.stroke;
       for (final segment in data.series[s]) {
         for (final range in segment.ranges) {
-          c.drawRect(range, fill);
+          c.drawPath(
+            range.$1,
+            range.$2
+                ? (Paint()
+                    ..color = fill.color
+                    ..style = PaintingStyle.stroke
+                    ..strokeWidth = 1)
+                : fill,
+          );
         }
         c.drawPath(segment.line, stroke);
         if (segment.dot != null) {

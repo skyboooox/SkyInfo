@@ -30,8 +30,12 @@ class RuntimeCoordinator private constructor(context: Context) {
     private val session: VehicleSession
     private var callbackFlush: ScheduledFuture<*>? = null
     private val callbackChanged = mutableSetOf<String>()
+    private val uiChanged = mutableSetOf<String>()
+    private var uiFull = true
     private val samples = mutableMapOf<String, JSONObject>()
-    private val localHistory = LocalHistory(this.context, scheduleFlush = { delay, task -> worker.schedule(task,delay,TimeUnit.SECONDS) })
+    private val performance = PerformanceProbe()
+    private var performanceStop: ScheduledFuture<*>? = null
+    private val localHistory = LocalHistory(this.context, scheduleFlush = { delay, task -> worker.schedule(task,delay,TimeUnit.SECONDS) }, performance = performance)
     private val publisher = ConnectionClient(this.context, store)
     private val haSession = HaSession(store, { execute { publishControlEntities(); if (enabled() && config.optBoolean("publishEnabled")) { readCurrent(); publishSelected() } } }, { state -> execute { publisher.connectionState(state); publishControlEntities(); emit() } })
     private var overlayPermissionWatcher: android.app.AppOpsManager.OnOpChangedListener? = null
@@ -56,7 +60,7 @@ class RuntimeCoordinator private constructor(context: Context) {
                 emit(full)
             },100,TimeUnit.MILLISECONDS)
         }, { id, sample ->
-            samples[id] = sample; localHistory.append(id,sample)
+            samples[id] = sample; uiChanged.add(id); localHistory.append(id,sample)
         }, { entity -> haEntityUpdates[entity.getString("id")] = entity })
     private fun displayFields(): Map<String,JSONObject> {
         val saved = config.optJSONObject("haFields") ?: JSONObject()
@@ -97,17 +101,21 @@ class RuntimeCoordinator private constructor(context: Context) {
     private var previousDemand = setOf<String>()
     private var previewDemand = emptySet<String>()
     init {
-        haSession.entityCommand = { data -> execute {
-            if (!store.stopped() && config.optString("connection","ha") == "ha" && config.optBoolean("haControlEnabled") && haSession.entitySubscription) {
+        haSession.entityCommand = { data, context -> execute {
+            if (!store.stopped() && config.optString("connection","ha") == "ha" && config.optBoolean("haControlEnabled") && haSession.acceptsCommand(context)) {
                 try {
                     val value = data.get("value"); require(value is Number && value.toDouble().isFinite() && value.toDouble() == value.toInt().toDouble())
                     val action = data.getString("action"); VehicleControls.definition(action).validate(value.toInt())
-                    performCommand(java.util.UUID.randomUUID().toString(),action,value.toInt())
+                    val captured = generation
+                    performCommand(java.util.UUID.randomUUID().toString(),action,value.toInt()) {
+                        captured == generation && !store.stopped() && haSession.acceptsCommand(context)
+                    }
                 } catch (_: Throwable) { commandError = NativeStrings.invalid }
             }
         } }
-        haSession.command = { event -> execute { handleCommand(event) } }
+        haSession.command = { event, context -> execute { handleCommand(event, currentSession = { haSession.acceptsCommand(context) }) } }
         haSession.controlPublicationRestored = { execute { restoreControlPublication() } }
+        haSession.mqttSubscriptionChanged = { execute { emit() } }
         publisher.command = { data, nonce, retained -> execute { handleCommand(data, "mqtt", nonce, retained) } }
         fields = EntityCatalog.fields(this.context)
         unitDependents = fields.entries.filter { it.value.has("unitField") }
@@ -123,16 +131,20 @@ class RuntimeCoordinator private constructor(context: Context) {
     }
     fun execute(action: () -> Unit) { worker.execute(action) }
     private fun receiveSample(id: String, fresh: JSONObject) {
+        performance.sample(id)
+        val measured = performance.beginTiming()
         callbackChanged.addAll(accept(id, fresh))
+        performance.timing("receive_sample",measured)
         if (callbackFlush == null) callbackFlush = worker.schedule({
             callbackFlush = null; val batch = callbackChanged.toSet(); callbackChanged.clear()
             emit(); publishControlEntities(); if (batch.isNotEmpty()) publishSelected(batch)
         }, 100, TimeUnit.MILLISECONDS)
     }
 
-    private fun handleCommand(event: JSONObject, transport: String = "ha", nonce: String = "", retained: Boolean = false) {
+    private fun handleCommand(event: JSONObject, transport: String = "ha", nonce: String = "", retained: Boolean = false,
+        currentSession: () -> Boolean = { true }) {
         val flag = if (transport == "ha") "haControlEnabled" else "mqttControlEnabled"
-        if (store.stopped() || !config.optBoolean(flag) || config.optString("connection","ha") != transport) return
+        if (store.stopped() || !config.optBoolean(flag) || config.optString("connection","ha") != transport || !currentSession()) return
         val command = try {
             if (transport == "ha") commands.validate(event,config.optString("prefix",deviceIdentity.prefix))
             else {
@@ -141,7 +153,10 @@ class RuntimeCoordinator private constructor(context: Context) {
             }
         } catch (error: Throwable) { commandError = "${error.javaClass.simpleName}: ${error.message}"; return }
         commandError = null
-        performCommand(command.getString("id"),command.getString("action"),command.getInt("value"))
+        val captured = generation
+        performCommand(command.getString("id"),command.getString("action"),command.getInt("value")) {
+            captured == generation && !store.stopped() && currentSession() && (transport != "mqtt" || nonce == publisher.commandSession)
+        }
     }
     fun controlLocal(action: String, value: Int): JSONObject {
         VehicleControls.definition(action).validate(value)
@@ -150,7 +165,8 @@ class RuntimeCoordinator private constructor(context: Context) {
         if (store.stopped()) return JSONObject().put("status","stopped")
         return performCommand(java.util.UUID.randomUUID().toString(),action,value)
     }
-    private fun performCommand(id: String, action: String, value: Int): JSONObject {
+    private fun performCommand(id: String, action: String, value: Int, stillCurrent: () -> Boolean = { true }): JSONObject {
+        if (!stillCurrent()) return JSONObject().put("status","session_mismatch")
         val result = if (action in RemoteCommands.appActions) {
             try {
                 if (action == "app_refresh") { if (value == 1) refresh() }
@@ -162,8 +178,8 @@ class RuntimeCoordinator private constructor(context: Context) {
                 JSONObject().put("status","confirmed").put("actual",value)
             } catch (_: Throwable) { JSONObject().put("status","error") }
         } else try {
-            val task = source.submit<JSONObject> { session.control(action,value) }
-            try { task.get(5,TimeUnit.SECONDS) } catch (_: java.util.concurrent.TimeoutException) { task.cancel(true); source.purge(); JSONObject().put("status","timeout_unconfirmed") }
+            val task = source.submit<JSONObject?> { if (stillCurrent()) session.control(action,value) else null }
+            try { task.get(5,TimeUnit.SECONDS) ?: return JSONObject().put("status","session_mismatch") } catch (_: java.util.concurrent.TimeoutException) { task.cancel(true); source.purge(); JSONObject().put("status","timeout_unconfirmed") }
         } catch (_: Throwable) { JSONObject().put("status","error") }
         lastCommand = result.put("id",id).put("action",action).put("requested",value).put("received_at",System.currentTimeMillis())
         if (remoteControlEnabled()) {
@@ -207,8 +223,14 @@ class RuntimeCoordinator private constructor(context: Context) {
             execute { callback(JSONObject().put("result", status)) }
         }
     }
-    fun listen(value: EventChannel.EventSink?) { sink = value; execute { emit() } }
+    fun listen(value: EventChannel.EventSink?) { sink = value; execute {
+        if (sink !== value) return@execute
+        if (value != null) uiFull = true
+        emit()
+    } }
     fun status(): JSONObject = JSONObject().put("stopped",store.stopped())
+        .put("haControlState",haSession.controlState()).put("haControlError",haSession.controlError() ?: JSONObject.NULL)
+        .put("haControlRetryAt",haSession.controlRetryAt() ?: JSONObject.NULL)
         .put("vehicle", runtimeError ?: if (samples.values.any { it.optString("quality") in listOf("available", "unverified") && it.has("value") }) NativeStrings.text_c6f7c57883 else NativeStrings.text_38093d864b)
         .put("path", session.identity)
         .put("adb", session.adbState)
@@ -218,7 +240,7 @@ class RuntimeCoordinator private constructor(context: Context) {
         .put("overlay", if (Settings.canDrawOverlays(context)) NativeStrings.text_284cc0bae1 else NativeStrings.text_86bddceb9d)
         .put("overlayInteraction",overlayInteraction).put("haImport",haSource.state)
         .put("subscription", session.state)
-        .put("connection", if (config.optString("connection","ha") == "ha" && config.optBoolean("haControlEnabled") && haSession.sessionState == NativeStrings.text_09f11a24a6) NativeStrings.text_65fe35c45e else publisher.status)
+        .put("connection", if (config.optString("connection","ha") == "ha" && config.optBoolean("haControlEnabled") && haSession.entitySubscription) NativeStrings.text_65fe35c45e else publisher.status)
     fun snapshot(): JSONObject = JSONObject().put("config", config).put("samples", JSONObject(samples as Map<*, *>)).put("status", status()).put("haDirectory",haDirectory())
     private var positionResetTime = 0L
     private fun overlayChanged(state: JSONObject) {
@@ -274,12 +296,24 @@ class RuntimeCoordinator private constructor(context: Context) {
     private fun emit(directory: Boolean = false) {
         val consumer = sink
         if (visible && consumer != null) {
-            val message = JSONObject().put("samples", JSONObject(samples as Map<*, *>)).put("status", status())
+            val measured = performance.beginTiming()
+            val outgoing = if (uiFull || directory) samples else linkedMapOf<String,JSONObject>().also { update ->
+                for (id in uiChanged) samples[id]?.let { update[id] = it }
+            }
+            val message = JSONObject().put("status", status())
                 .put("overlayPosition",JSONObject().put("x",config.opt("overlayX") ?: JSONObject.NULL).put("y",config.opt("overlayY") ?: JSONObject.NULL))
+            if (outgoing.isNotEmpty() || uiFull || directory) message.put("samples",JSONObject(outgoing as Map<*,*>))
             if (directory) message.put("haDirectory",haDirectory())
             else if (haEntityUpdates.isNotEmpty()) message.put("haEntityUpdates",JSONArray(haEntityUpdates.values.toList()))
             val payload = jsonMap(message)
-            main.post { if (visible && sink === consumer) consumer.success(payload) }
+            performance.timing("event_prepare_convert",measured)
+            performance.add("events_prepared"); performance.add("event_sample_entries",outgoing.size.toLong())
+            uiChanged.clear(); uiFull = false
+            main.post { if (visible && sink === consumer) {
+                val delivered = performance.beginTiming()
+                consumer.success(payload)
+                performance.timing("event_codec_send",delivered); performance.add("events_delivered")
+            } }
         }
         haEntityUpdates.clear()
         drawOverlay()
@@ -304,6 +338,15 @@ class RuntimeCoordinator private constructor(context: Context) {
             if (remoteOverlay) target?.close() else target?.update(overlayConfig, overlayFields, overlaySamples)
             if (!remoteOverlay && (target?.failure != null || session.adbState == "connected")) lastOverlayPayload = null
         }
+    }
+    fun saveSplitPreferences(changes: JSONObject) {
+        require(changes.length() > 0 && changes.keys().asSequence().all { it in SplitPreferences.keys })
+        val next = JSONObject(config.toString())
+        changes.keys().asSequence().forEach { next.put(it, changes.get(it)) }
+        SplitPreferences.normalize(next)
+        store.save(next)
+        config = next
+        emit()
     }
     fun save(next: JSONObject, secrets: Map<String, String>) {
         val autoAdbWasEnabled = config.optBoolean("autoSystemAdb")
@@ -351,6 +394,7 @@ class RuntimeCoordinator private constructor(context: Context) {
     fun setVisible(value: Boolean, information: Boolean? = null) {
         if (!value) overlayStyleDraft = null
         val resumed = value && !visible
+        if (resumed) uiFull = true
         if (resumed) appearance.refresh()
         visible = value; if (information != null) informationVisible = information
         reconfigure()
@@ -370,7 +414,7 @@ class RuntimeCoordinator private constructor(context: Context) {
         catch (_: Exception) { runtimeError = if (fromBoot) NativeStrings.text_30caebe3f1 else NativeStrings.text_aa00745af5 }
     }
     fun attach(current: Service) { lastOverlayPayload = null; service = current; overlay = OverlayWindow(current,changed = { value -> execute { if (service === current) overlayChanged(value) } }); execute { network.execute { publisher.configure(config) }; reconfigure() } }
-    fun detach(current: Service) { if (service === current) { overlay?.close(); overlay = null; service = null; execute { if (!visible) { altitude.close(); session.close(); markDisconnected(); previousDemand = emptySet() }; poll?.cancel(false); poll = null; try { localHistory.flush() } catch (_: android.database.sqlite.SQLiteException) { } } } }
+    fun detach(current: Service) { if (service === current) { overlay?.close(); overlay = null; service = null; execute { finishPerformance(performance.snapshot().optLong("session"),"service_detached"); if (!visible) { altitude.close(); session.close(); markDisconnected(); previousDemand = emptySet() }; poll?.cancel(false); poll = null; try { localHistory.flush() } catch (_: android.database.sqlite.SQLiteException) { } } } }
     private fun registeredFields() = session.registered + if (altitude.subscribed) setOf(GNSS_ALTITUDE) else emptySet()
     fun reconfigure() {
         appearance.setActive(visible || (!store.stopped() && config.optBoolean("overlayEnabled")))
@@ -463,11 +507,13 @@ class RuntimeCoordinator private constructor(context: Context) {
         }, maxOf(delay*1000,publicationWait), TimeUnit.MILLISECONDS)
     }
     private fun accept(id: String, fresh: JSONObject): Set<String> {
+        performance.add("samples_accepted")
         val before = samples[id]?.let(::semantic)
         val changed = mutableSetOf<String>()
         resolvePairedUnit(id, fresh, samples, fields)
         stampSampleTimes(fresh, samples[id], sourceEpoch)
         samples[id] = fresh
+        uiChanged.add(id)
         if (before != semantic(fresh)) changed.add(id)
         localHistory.append(id, fresh)
         unitDependents[id].orEmpty().forEach { dependent ->
@@ -527,7 +573,7 @@ class RuntimeCoordinator private constructor(context: Context) {
         val captured = ++controlRestoreGeneration
         controlRestoreKey = controlConnectionKey(); controlRestoreAttempts = 0
         network.execute {
-            publisher.invalidateControlStates()
+            publisher.invalidateControlStates(rediscover = true)
             execute { if (captured == controlRestoreGeneration && controlRestoreKey == controlConnectionKey() && canRestoreControlPublication()) publishControlEntities() }
         }
     }
@@ -541,6 +587,7 @@ class RuntimeCoordinator private constructor(context: Context) {
             if (captured == controlRestoreGeneration && controlRestoreKey == controlConnectionKey() && canRestoreControlPublication()) publishControlEntities()
         }, delay, TimeUnit.SECONDS)
     }
+    private var controlSyncRetry: ScheduledFuture<*>? = null
     private var entityRetry: ScheduledFuture<*>? = null
     private fun publishControlEntities() {
         if (config.optString("connection","ha") != "ha" || (!config.optBoolean("haControlEnabled") && !publisher.controlAvailabilityPending(config))) return
@@ -560,10 +607,18 @@ class RuntimeCoordinator private constructor(context: Context) {
                 execute { entitiesPublishing = false; publishControlEntities() }; return@execute
             }
             val error = try { publisher.publishControlEntities(settings,snapshot,topic,online); null } catch (error: Throwable) { error.javaClass.simpleName }
+            val syncDelay = publisher.controlSyncWaitMillis()
             execute {
                 entitiesPublishing = false
                 if (error != null) commandError = error
                 finishControlRestore(restoration,key,error)
+                controlSyncRetry?.cancel(false); controlSyncRetry = null
+                if (error == null && syncDelay != null && key == controlConnectionKey() && canRestoreControlPublication()) {
+                    controlSyncRetry = worker.schedule({
+                        controlSyncRetry = null
+                        if (key == controlConnectionKey() && canRestoreControlPublication()) publishControlEntities()
+                    },syncDelay.coerceAtLeast(1),TimeUnit.MILLISECONDS)
+                }
                 if (error != null && entityRetry == null) publisher.publicationWaitMillis()?.let { delay ->
                     entityRetry = worker.schedule({ entityRetry = null; publishControlEntities() },delay.coerceAtLeast(1000),TimeUnit.MILLISECONDS)
                 }
@@ -613,11 +668,58 @@ class RuntimeCoordinator private constructor(context: Context) {
     fun checkConnection(callback: (JSONObject) -> Unit) {
         network.execute { publisher.configure(config); publisher.check(); execute { callback(status()); publishSelected(); flushReceipts(); publishControlEntities(); emit() } }
     }
-    fun history(id: String, minutes: Int, callback: (JSONObject) -> Unit) {
+    fun history(id: String, minutes: Int, callback: (JSONObject) -> Unit, includeSample: Boolean = true) {
         require(displayFields().containsKey(id))
         val field = JSONObject(displayFields().getValue(id).toString())
         if (field.has("unitField")) field.put("unit",samples[id]?.optString("unit") ?: "")
-        callback(localHistory.query(id, minutes.coerceIn(1, 1440), field))
+        callback(localHistory.query(id, minutes.coerceIn(1, 1440), field,includeSample))
+    }
+    fun dumpPerformance(writer: java.io.PrintWriter, args: Array<out String>) {
+        if (BuildConfig.FLAVOR != "alpha") { writer.println("Performance diagnostics unavailable"); return }
+        when (args.firstOrNull()) {
+            "perf-start" -> {
+                val seconds = args.getOrNull(1)?.toIntOrNull() ?: 120
+                if (seconds !in 1..180) { writer.println("duration must be 1..180 seconds"); return }
+                execute {
+                    val metadata = JSONObject().put("version",context.packageManager.getPackageInfo(context.packageName,0).versionName)
+                        .put("startedAtMillis",System.currentTimeMillis()).put("pid",android.os.Process.myPid()).put("uid",android.os.Process.myUid())
+                        .put("visible",visible).put("informationVisible",informationVisible).put("demandFields",wanted().size)
+                        .put("cachedFields",samples.size).put("registeredFields",registeredFields().size).put("tiles",config.optJSONArray("tiles")?.length() ?: 0)
+                    for (key in listOf("collect","localHistory","retainHistory","reduceMotion","overlayEnabled","publishEnabled","haImportEnabled","haControlEnabled","fallbackPolling")) metadata.put(key,config.optBoolean(key))
+                    metadata.put("storage",localHistory.performanceSettings())
+                    performance.start(seconds,metadata)?.let { id ->
+                        performanceControl(id,"start")
+                        performanceStop = worker.schedule({ finishPerformance(id,"timeout") },seconds.toLong(),TimeUnit.SECONDS)
+                    }
+                }
+                writer.println("Performance start queued; read perf-status for session/state")
+            }
+            "perf-stop" -> {
+                execute { finishPerformance(performance.snapshot().optLong("session"),"stopped") }
+                writer.println("Performance stop queued; read perf-status for summary")
+            }
+            "perf-status" -> writer.println(performance.snapshot().toString(2))
+            else -> writer.println("Alpha diagnostics: perf-start [1..180 seconds], perf-status, perf-stop")
+        }
+    }
+    private fun performanceControl(id: Long, action: String) {
+        val consumer = sink ?: return
+        val payload = mapOf("performanceControl" to mapOf("session" to id,"action" to action,
+            "durationMillis" to performance.snapshot().optLong("remainingMillis")))
+        main.post { if (sink === consumer) consumer.success(payload) }
+    }
+    private fun finishPerformance(id: Long, reason: String) {
+        if (performance.stop(id,reason)) {
+            performanceStop?.cancel(false); performanceStop = null
+            performanceControl(id,"stop")
+        }
+    }
+    fun performanceReport(id: Long, report: JSONObject) = performance.acceptFlutter(id,report)
+    fun responseMap(value: JSONObject): Map<String,Any?> {
+        val measured = performance.beginTiming()
+        val result = jsonMap(value)
+        performance.timing("method_response_convert",measured)
+        return result
     }
     private fun releaseOverlayWatcher() {
         overlayPermissionWatcher?.let { context.getSystemService(android.app.AppOpsManager::class.java).stopWatchingMode(it) }
@@ -634,7 +736,7 @@ class RuntimeCoordinator private constructor(context: Context) {
         .put("adaptation_audit",adaptationAudit ?: JSONObject.NULL)
         .put("last_command",lastCommand ?: JSONObject.NULL)
         .put("ha_control_enabled",config.optBoolean("haControlEnabled")).put("mqtt_control_enabled",config.optBoolean("mqttControlEnabled")).put("pending_command_receipts",receipts.size)
-        .put("ha_entity_subscription",haSession.entitySubscription).put("ha_import_state",haSource.state)
+        .put("ha_entity_subscription",haSession.entitySubscription).put("ha_mqtt_subscription",haSession.mqttSubscriptionDiagnostics()).put("ha_import_state",haSource.state)
         .put("ha_command_subscription",haSession.commandSubscription).put("ha_command_events",haSession.commandEvents)
         .put("ha_session",haSession.sessionState).put("command_error",commandError ?: JSONObject.NULL)
         .put("read_transports",JSONObject(samples.values.groupingBy { it.optString("transport", if (it.optString("source").startsWith("system.")) "system" else "unknown") }.eachCount()))
@@ -668,7 +770,9 @@ class RuntimeCoordinator private constructor(context: Context) {
         ensureRunning(); reconfigure(); publishSelected()
     }
     fun stop() {
+        finishPerformance(performance.snapshot().optLong("session"),"runtime_stopped")
         appearance.setActive(visible)
+        controlSyncRetry?.cancel(false); controlSyncRetry = null
         controlRestoreGeneration++; controlRestoreKey = null; controlRestoreRetry?.cancel(false); controlRestoreRetry = null; entityRetry?.cancel(false); entityRetry = null
         store.stopped(true); altitude.close(); (service as? RuntimeService)?.setLocationActive(false); publishControlEntities(); receipts.clear(); receiptRetry?.cancel(false); receiptRetry = null; haSession.close(); releaseOverlayWatcher(); releaseNetworkMonitor(); heartbeat?.cancel(false); heartbeat = null; session.close(); callbackFlush?.cancel(false); callbackFlush = null; callbackChanged.clear(); generation++; poll?.cancel(false); poll = null; retry?.cancel(false); retry = null; pendingFields.clear()
         markDisconnected()

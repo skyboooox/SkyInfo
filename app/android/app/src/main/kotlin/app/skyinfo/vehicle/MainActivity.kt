@@ -16,6 +16,8 @@ import org.json.JSONObject
 
 class MainActivity : FlutterActivity() {
     private val main = Handler(Looper.getMainLooper())
+    private val splitScreenDelegate = lazy { SplitScreen(this) }
+    private val splitScreen by splitScreenDelegate
     private var locationReply: MethodChannel.Result? = null
     private val runtime by lazy { RuntimeCoordinator.get(this) }
     private val overlayAuthorization by lazy {
@@ -34,6 +36,9 @@ class MainActivity : FlutterActivity() {
                 result.notImplemented(); return@setMethodCallHandler
             }
             when (call.method) {
+                "splitApps" -> splitScreen.apps(result::success)
+                "splitActivities" -> splitScreen.activities((call.arguments as? Map<*, *>)?.get("packageName") as? String, result::success)
+                "launchSplit" -> splitScreen.launch(call.arguments, result::success)
                 "requestLocation" -> {
                     if (locationReply != null) { result.error("pending",NativeStrings.text_245a5a7f18,null); return@setMethodCallHandler }
                     val prefs = getSharedPreferences("location_permission", MODE_PRIVATE)
@@ -61,7 +66,9 @@ class MainActivity : FlutterActivity() {
                     result.success(null)
                 }
                 else -> runtime.execute {
-                    fun reply(value: JSONObject) { main.post { result.success(RuntimeCoordinator.jsonMap(value)) } }
+                    fun reply(value: JSONObject) {
+                        main.post { result.success(runtime.responseMap(value)) }
+                    }
                     try {
                         when (call.method) {
                             "load" -> { runtime.applicationStarted(); reply(runtime.snapshot()) }
@@ -78,6 +85,11 @@ class MainActivity : FlutterActivity() {
                             "haDirectory" -> reply(runtime.haDirectory())
                             "haControl" -> runtime.haControl(call.argument<String>("field") ?: "",call.argument<String>("function") ?: "",call.argument<Any>("value"),call.argument<Boolean>("confirmed") == true,::reply)
                             "diagnostics" -> reply(runtime.diagnostics())
+                            "performanceReport" -> {
+                                if (BuildConfig.FLAVOR != "alpha") main.post { result.notImplemented() }
+                                else reply(JSONObject().put("accepted",runtime.performanceReport(call.argument<Number>("session")?.toLong() ?: -1,
+                                    JSONObject(call.argument<Map<String, Any?>>("report") ?: emptyMap<String,Any?>()))))
+                            }
                             "auditFields" -> reply(runtime.auditFields())
                             "controls" -> reply(runtime.controls())
                             "controlDefinitions" -> reply(JSONObject().put("controls",org.json.JSONArray(EntityCatalog.controls(this))))
@@ -89,6 +101,7 @@ class MainActivity : FlutterActivity() {
                             "clearCredentials" -> { runtime.clearCredentials(); reply(runtime.snapshot()) }
                             "clearHistory" -> { runtime.clearHistory(); reply(runtime.snapshot()) }
                             "refresh" -> { runtime.refresh(); reply(runtime.snapshot()) }
+                            "saveSplitPreferences" -> { runtime.saveSplitPreferences(JSONObject(call.arguments as? Map<*, *> ?: throw IllegalArgumentException())); reply(runtime.snapshot()) }
                             "saveOverlayAppearance" -> { runtime.saveOverlayAppearance(JSONObject(call.argument<Map<String, Any?>>("style") ?: throw IllegalArgumentException())); reply(runtime.snapshot()) }
                             "previewOverlayStyle" -> { runtime.previewOverlayStyle(call.argument<Map<String, Any?>>("style")?.let { JSONObject(it) }); reply(JSONObject()) }
                             "previewFields" -> { runtime.preview((call.argument<List<String>>("fields") ?: emptyList()).toSet()); reply(runtime.snapshot()) }
@@ -98,7 +111,7 @@ class MainActivity : FlutterActivity() {
                             "resume" -> { runtime.resume(); reply(runtime.snapshot()) }
                             "visibility" -> { runtime.setVisible(call.argument<Boolean>("visible") ?: false, call.argument<Boolean>("information")); reply(JSONObject()) }
                             "checkConnection" -> runtime.checkConnection { reply(JSONObject().put("status", it)) }
-                            "history" -> runtime.history(call.argument<String>("field")!!, call.argument<Int>("minutes") ?: 30, ::reply)
+                            "history" -> runtime.history(call.argument<String>("field")!!, call.argument<Int>("minutes") ?: 30, ::reply, call.argument<Boolean>("includeSample") != false)
                             else -> main.post { result.notImplemented() }
                         }
                     } catch (_: Throwable) { main.post { result.error("runtime", NativeStrings.text_245a5a7f18, null) } }
@@ -115,6 +128,7 @@ class MainActivity : FlutterActivity() {
         }
     }
     override fun onDestroy() {
+        if (splitScreenDelegate.isInitialized()) splitScreen.close()
         locationReply?.success(null); locationReply = null
         super.onDestroy()
     }

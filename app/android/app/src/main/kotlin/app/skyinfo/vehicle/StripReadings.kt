@@ -16,7 +16,8 @@ internal fun prepareStripGroups(config: JSONObject, fields: Map<String,JSONObjec
         val field = fields[id]
         val sample = samples[id]?.takeIf { field != null }
         val raw = sample?.opt("value")
-        val text = if (sample?.optString("quality") !in listOf("available","unverified") || raw == null) "—"
+        val text = if (sample?.optString("quality") !in listOf("available","unverified") || raw == null || raw == JSONObject.NULL) "—"
+            else if (sample != null && !sample.isNull("stateLabel")) sample.getString("stateLabel")
             else if (raw is Number) String.format(Locale.ROOT,"%.${module.optInt("digits",1).coerceIn(0,4)}f",raw.toDouble()) else raw.toString()
         val custom = module.optString("unit")
         val unit = if (module.optBoolean("unitAuto")) sample?.optString("unit") ?: field?.optString("unit") ?: ""

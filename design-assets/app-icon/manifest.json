@@ -25,7 +25,7 @@
       "sha256": "ffae1725b4f2107a9dc893d66114a0802382a1e403b2b359d17fae7ac5cee025"
     },
     {
-      "path": "skyinfo-launcher.png",
+      "path": "../../app/android/app/src/main/res/mipmap-nodpi/ic_launcher.png",
       "bytes": 6627,
       "sha256": "6f0a99d7450c76c35e652d1090f73672219da42b47a3744f9f3c925734086d8b"
     }

@@ -104,7 +104,7 @@ void main() {
       });
       await t.pumpAndSettle();
       expect(find.text('需要网络ADB授权'), findsNothing);
-      expect(b.calls, ['load']);
+      expect(b.calls, ['load', 'visibility']);
     },
   );
 
@@ -119,7 +119,7 @@ void main() {
     await t.pumpAndSettle();
     expect(find.text('需要网络ADB授权'), findsNothing);
     expect(find.text('无法连接网络ADB'), findsNothing);
-    expect(b.calls, ['load']);
+    expect(b.calls, ['load', 'visibility']);
   });
 
   testWidgets(
@@ -139,7 +139,7 @@ void main() {
       });
       await t.pumpAndSettle();
       expect(find.text('需要网络ADB授权'), findsNothing);
-      expect(b.calls, ['load']);
+      expect(b.calls, ['load', 'visibility']);
       b.updates.add({
         'status': {'adb': 'connected'},
       });
@@ -238,7 +238,7 @@ void main() {
       await t.tap(find.text('授权连接'));
       await t.pumpAndSettle();
       expect(find.byType(NetworkAdbSettings), findsOneWidget);
-      expect(b.calls, ['load']);
+      expect(b.calls, ['load', 'visibility']);
       expect(find.text('需要ADB授权，请在连接设置中授权连接'), findsOneWidget);
     },
   );

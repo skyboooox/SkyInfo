@@ -55,9 +55,7 @@ class OverlayStripPreview extends StatelessWidget {
                               const SizedBox(width: 6),
                             ],
                             Text(
-                              ['available', 'unverified'].contains(s.quality)
-                                  ? s.formatted(module.digits)
-                                  : '—',
+                              module.formatted(s),
                               style: TextStyle(
                                 fontFamily: s.value is num
                                     ? 'IBMPlexMono'

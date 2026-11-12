@@ -24,7 +24,7 @@ internal fun overlayRequest(config: JSONObject, samples: Map<String, JSONObject>
 /** Strip rendering depends on the selected readings, never their refresh timestamps. */
 internal fun overlayRenderKey(config: JSONObject, fields: Map<String,JSONObject>, samples: Map<String,JSONObject>): String {
     val readings = samples.mapValues { (_,sample) -> JSONObject().also { value ->
-        for (key in listOf("value","quality","unit")) if (sample.has(key)) value.put(key,sample.get(key))
+        for (key in listOf("value","quality","unit","stateLabel")) if (sample.has(key)) value.put(key,sample.get(key))
     } }
     return overlayRequest(config,readings).toString() + JSONObject(fields as Map<*,*>).toString()
 }

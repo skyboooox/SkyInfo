@@ -1,6 +1,6 @@
 # SkyInfo 工作约定
 
-工程在 `app/`，工具在 `tools/`。先读[需求](docs/需求说明.md)、[架构](docs/项目规划.md)和[验证与兼容性](docs/验证与兼容性.md)。
+工程在 `app/`，工具在 `tools/`。先读[需求](docs/需求说明.md)、[架构](docs/架构.md)和[验证与兼容性](docs/验证与兼容性.md)。
 
 ## 设计与开发
 
@@ -18,7 +18,7 @@
 
 ## 检查与发布
 
-本地构建、安装与实机测试使用 alpha；beta 仅供公开测试，公开序号连续，本地迭代不占用。渠道、版本与 Android 构建号规则见[构建与发布](docs/构建与发布.md#版本与升级)。
+本地构建、安装与实机测试使用 alpha；beta 仅供公开测试，公开发行标识按构建指南维护，内部候选不占用公开版本。渠道、版本与 Android 构建号规则见[构建与发布](docs/构建与发布.md#版本与升级)。
 
 运行 `python3 tools/check_public.py`、`python3 tools/check_project.py`；代码改动按范围做 Docker 回归。凭据、实车数据、厂商二进制和私有 QA 不提交；Gradle wrapper 可随源码维护。
 

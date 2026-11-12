@@ -5,12 +5,13 @@ import org.json.JSONObject
 
 object ConfigValidator {
     private val tileKeys = setOf("id", "title", "kind", "fields", "columns", "rows", "time", "icons", "units", "labels", "digits", "historyMinutes", "minimum", "maximum", "column", "row", "icon", "fontSize", "glanceColumns", "rowHeight", "showTitle", "showUnits", "showIcon", "showDataIcons", "hiddenControls")
-    private val keys = setOf("autoSystemAdb", "adbEnabled", "adbHost", "adbPort", "adbMode", "deviceId", "mqttTransport", "haBirthTopic", "haBirthPayload", "insecureAcknowledgements", "localHistoryPolicyVersion", "schema", "tiles", "overlays", "uploaded", "theme", "dashboardSize", "connection", "haUrl", "prefix", "mqttHost", "mqttPort", "mqttTopic", "mqttUser", "reduceMotion", "autoStart", "collect", "overlayEnabled", "publishEnabled", "fallbackPolling", "overlayFont", "overlayOpacity", "overlayX", "overlayY", "localHistory", "retainHistory", "localHistoryMinutes", "mqttProtocol", "mqttState", "entityMappings", "haControlEnabled", "mqttControlEnabled", "haConnectionId", "haImportEnabled", "haFields")
+    private val keys = SplitPreferences.keys + setOf("autoSystemAdb", "adbEnabled", "adbHost", "adbPort", "adbMode", "deviceId", "mqttTransport", "haBirthTopic", "haBirthPayload", "insecureAcknowledgements", "localHistoryPolicyVersion", "schema", "tiles", "overlays", "uploaded", "theme", "dashboardSize", "connection", "haUrl", "prefix", "mqttHost", "mqttPort", "mqttTopic", "mqttUser", "reduceMotion", "autoStart", "collect", "overlayEnabled", "publishEnabled", "fallbackPolling", "overlayFont", "overlayOpacity", "overlayX", "overlayY", "localHistory", "retainHistory", "localHistoryMinutes", "mqttProtocol", "mqttState", "entityMappings", "haControlEnabled", "mqttControlEnabled", "haConnectionId", "haImportEnabled", "haFields")
     fun validate(input: JSONObject, fields: Map<String, JSONObject>): JSONObject {
         AdbEndpoint.from(input)
         require(input.optInt("schema", 1) in 1..2)
         val config = JSONObject(input.toString()); config.keys().asSequence().filter { it !in keys }.toList().forEach(config::remove)
         config.put("schema", 2)
+        SplitPreferences.normalize(config)
         if (input.has("autoSystemAdb")) {
             require(input.get("autoSystemAdb") is Boolean) { "invalid_boolean:autoSystemAdb" }
         }

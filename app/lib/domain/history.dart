@@ -19,31 +19,40 @@ class HistoryPoint {
 }
 
 class HistoryBucket {
+  /// Representative time and arithmetic mean of actual samples in this bucket.
   final DateTime at;
   final double min, max, representative;
-  final double? firstValue;
-  final List<HistoryPoint> points;
+  final double? firstValue, lastValue;
+  final int sampleCount;
+  final bool continuousFromPrevious, holdFromPrevious;
   final DateTime? minimumAt,
       maximumAt,
       startAt,
+      lastAt,
       rangeStart,
       rangeEnd,
       observedUntil,
-      representativeAt;
+      representativeAt,
+      validBefore;
   const HistoryBucket(
     this.at,
     this.min,
     this.max,
     this.representative, {
     this.firstValue,
-    this.points = const [],
+    this.lastValue,
+    this.sampleCount = 0,
+    this.continuousFromPrevious = false,
+    this.holdFromPrevious = false,
     this.minimumAt,
     this.maximumAt,
     this.startAt,
+    this.lastAt,
     this.rangeStart,
     this.rangeEnd,
     this.observedUntil,
     this.representativeAt,
+    this.validBefore,
   });
 }
 
@@ -68,37 +77,25 @@ List<List<HistoryBucket>> aggregateHistory(
 ) {
   if (buckets < 1 || !end.isAfter(start)) return [];
   final ordered = input.where((p) => !p.at.isAfter(end)).toList();
-  // SQLite snapshots are chronological. Preserve the general unordered input
-  // contract without sorting the usual already ordered history again.
+  // Immutable SQLite snapshots are normally already chronological.
   for (var i = 1; i < ordered.length; i++) {
     if (ordered[i].at.isBefore(ordered[i - 1].at)) {
       ordered.sort((a, b) => a.at.compareTo(b.at));
       break;
     }
   }
-  final spanMilliseconds = end.difference(start).inMilliseconds;
-  final startMilliseconds = start.millisecondsSinceEpoch;
+  final span = end.difference(start).inMicroseconds;
   final visible = ordered.where((p) => !p.at.isBefore(start)).toList();
   final preceding = ordered.where((p) => p.at.isBefore(start)).lastOrNull;
   bool valid(HistoryPoint p) => p.value != null && p.value!.isFinite;
+  HistoryPoint? boundary;
   if (preceding != null &&
       valid(preceding) &&
       ((preceding.observedUntil?.isAfter(start) ?? false) ||
           (visible.isNotEmpty &&
               (visible.first.segment == preceding.segment ||
                   !valid(visible.first))))) {
-    visible.insert(
-      0,
-      HistoryPoint(
-        start,
-        preceding.value,
-        segment: preceding.segment,
-        state: preceding.state,
-        sourceAt: preceding.sourceAt ?? preceding.at,
-        observedUntil: preceding.observedUntil,
-        snapshotAt: preceding.snapshotAt,
-      ),
-    );
+    boundary = preceding;
   }
   final result = <List<HistoryBucket>>[];
   var segment = <HistoryPoint>[];
@@ -107,75 +104,140 @@ List<List<HistoryBucket>> aggregateHistory(
       : t.isAfter(end)
       ? end
       : t;
-  void flush([DateTime? unavailableAt]) {
-    if (segment.isEmpty) return;
-    final until = clampTime(
-      segment.last.observedUntil ?? unavailableAt ?? segment.last.at,
+  int bucketOf(DateTime at) => math.min(
+    buckets - 1,
+    (at.difference(start).inMicroseconds * buckets / span).floor(),
+  );
+  void flush([DateTime? boundaryAt, bool holdToBoundary = false]) {
+    if (segment.isEmpty && boundary == null) return;
+    final last = segment.lastOrNull ?? boundary!;
+    var until = clampTime(
+      last.observedUntil ?? (holdToBoundary ? boundaryAt : null) ?? last.at,
     );
-    final groups = <int, List<HistoryPoint>>{};
-    for (final p in segment) {
-      final key = math.min(
-        buckets - 1,
-        ((p.at.millisecondsSinceEpoch - startMilliseconds) *
-                buckets /
-                spanMilliseconds)
-            .floor(),
-      );
-      groups.putIfAbsent(key, () => []).add(p);
+    if (boundaryAt != null && until.isAfter(boundaryAt)) {
+      until = clampTime(boundaryAt);
     }
+    if (segment.isEmpty && !until.isAfter(start)) {
+      boundary = null;
+      return;
+    }
+    final intervals = <int>[];
+    for (var i = 1; i < segment.length; i++) {
+      final delta = segment[i].at.difference(segment[i - 1].at).inMicroseconds;
+      if (delta > 0) intervals.add(delta);
+    }
+    intervals.sort();
+    final continuousInterval = intervals.isEmpty
+        ? 5000000
+        : (((intervals[(intervals.length - 1) ~/ 2] +
+                          intervals[intervals.length ~/ 2]) /
+                      2) *
+                  3)
+              .round()
+              .clamp(5000000, 30000000);
     final current = <HistoryBucket>[];
-    final lastGroup = groups.keys.last;
-    for (final entry in groups.entries) {
-      final g = entry.value;
-      var minimum = g.first, maximum = g.first;
-      var low = minimum.value!, high = maximum.value!;
-      for (var i = 1; i < g.length; i++) {
-        final point = g[i], value = point.value!;
-        if (value < low) minimum = point;
-        if (value > high) maximum = point;
-        low = math.min(low, value);
-        high = math.max(high, value);
+    final predecessor = boundary;
+    if (predecessor != null) {
+      current.add(
+        HistoryBucket(
+          start,
+          predecessor.value!,
+          predecessor.value!,
+          predecessor.value!,
+          firstValue: predecessor.value,
+          lastValue: predecessor.value,
+          startAt: start,
+          lastAt: start,
+          representativeAt: predecessor.sourceAt ?? predecessor.at,
+          observedUntil: segment.isEmpty ? until : null,
+          validBefore: segment.isEmpty ? boundaryAt : null,
+        ),
+      );
+    }
+    // A bucket contains only actual samples. Long gaps start a separate run,
+    // even if both updates fall in the same wide time bucket.
+    var from = 0;
+    int? previousKey;
+    while (from < segment.length) {
+      final first = segment[from], key = bucketOf(first.at);
+      var to = from + 1;
+      while (to < segment.length &&
+          bucketOf(segment[to].at) == key &&
+          segment[to].at.difference(segment[to - 1].at).inMicroseconds <=
+              continuousInterval) {
+        to++;
       }
+      var minimum = first, maximum = first;
+      var mean = 0.0, timeSum = 0.0;
+      for (var i = from; i < to; i++) {
+        final point = segment[i];
+        mean += (point.value! - mean) / (i - from + 1);
+        timeSum += point.at.difference(first.at).inMicroseconds;
+        if (point.value! < minimum.value!) minimum = point;
+        if (point.value! > maximum.value!) maximum = point;
+      }
+      final last = segment[to - 1];
+      final at = first.at.add(
+        Duration(microseconds: (timeSum / (to - from)).round()),
+      );
       final left = start.add(
-        Duration(milliseconds: (spanMilliseconds * entry.key / buckets).ceil()),
+        Duration(microseconds: (span * key / buckets).ceil()),
       );
       final right = start.add(
-        Duration(
-          milliseconds: (spanMilliseconds * (entry.key + 1) / buckets).ceil(),
-        ),
+        Duration(microseconds: (span * (key + 1) / buckets).ceil()),
       );
       current.add(
         HistoryBucket(
-          g.last.at,
-          low,
-          high,
-          g.last.value!,
-          firstValue: g.first.value!,
-          points: List.unmodifiable(g),
-          startAt: g.first.at,
-          representativeAt: g.last.sourceAt ?? g.last.at,
+          at,
+          minimum.value!,
+          maximum.value!,
+          mean,
+          firstValue: first.value,
+          lastValue: last.value,
+          sampleCount: to - from,
+          validBefore: to == segment.length ? boundaryAt : null,
+          startAt: first.at,
+          lastAt: last.at,
+          representativeAt: at,
           minimumAt: minimum.sourceAt ?? minimum.at,
           maximumAt: maximum.sourceAt ?? maximum.at,
-          rangeStart: left.isBefore(segment.first.at) ? segment.first.at : left,
-          rangeEnd: right.isAfter(until) ? until : right,
-          observedUntil: entry.key == lastGroup && until.isAfter(g.last.at)
+          rangeStart: left.isBefore(first.at) ? first.at : left,
+          rangeEnd:
+              to == segment.length ||
+                  segment[to].at.difference(last.at).inMicroseconds >
+                      continuousInterval
+              ? last.at
+              : (right.isAfter(until) ? until : right),
+          holdFromPrevious: from == 0
+              ? predecessor != null
+              : first.at.difference(segment[from - 1].at).inMicroseconds >
+                    continuousInterval,
+          continuousFromPrevious:
+              previousKey != null &&
+              key == previousKey + 1 &&
+              first.at.difference(segment[from - 1].at).inMicroseconds <=
+                  continuousInterval,
+          observedUntil: to == segment.length && until.isAfter(last.at)
               ? until
               : null,
         ),
       );
+      previousKey = key;
+      from = to;
     }
     result.add(current);
     segment = [];
+    boundary = null;
   }
 
-  String? lastSegment;
+  String? lastSegment = boundary?.segment;
   for (final p in visible) {
     if (!valid(p)) {
-      flush(p.at);
+      flush(p.at, true);
       lastSegment = null;
       continue;
     }
-    if (lastSegment != null && lastSegment != p.segment) flush();
+    if (lastSegment != null && lastSegment != p.segment) flush(p.at);
     segment.add(p);
     lastSegment = p.segment;
   }
@@ -184,29 +246,6 @@ List<List<HistoryBucket>> aggregateHistory(
 }
 
 List<(DateTime, double)> historyLineVertices(List<HistoryBucket> segment) {
-  final points = segment
-      .expand(
-        (b) => b.points.isNotEmpty
-            ? b.points
-            : [
-                HistoryPoint(
-                  b.startAt ?? b.at,
-                  b.firstValue ?? b.representative,
-                ),
-                if (b.startAt != null && b.startAt != b.at)
-                  HistoryPoint(b.at, b.representative),
-              ],
-      )
-      .toList();
-  final intervals = <int>[];
-  for (var i = 1; i < points.length; i++) {
-    final delta = points[i].at.difference(points[i - 1].at).inMilliseconds;
-    if (delta > 0) intervals.add(delta);
-  }
-  intervals.sort();
-  final continuousInterval = intervals.isEmpty
-      ? 5000
-      : (intervals[intervals.length ~/ 2] * 3).clamp(5000, 30000);
   final vertices = <(DateTime, double)>[];
   void add(DateTime at, double value) {
     if (vertices.isEmpty || vertices.last != (at, value)) {
@@ -214,21 +253,69 @@ List<(DateTime, double)> historyLineVertices(List<HistoryBucket> segment) {
     }
   }
 
-  for (var i = 0; i < points.length; i++) {
-    final point = points[i];
-    if (i > 0 &&
-        point.at
-                .difference(points[i - 1].sourceAt ?? points[i - 1].at)
-                .inMilliseconds >
-            continuousInterval) {
-      add(point.at, points[i - 1].value!);
+  for (var i = 0; i < segment.length; i++) {
+    final bucket = segment[i];
+    if (i > 0 && bucket.holdFromPrevious) {
+      final previous = segment[i - 1];
+      final value = previous.lastValue ?? previous.representative;
+      add(previous.lastAt ?? previous.at, value);
+      add(bucket.startAt ?? bucket.at, value);
     }
-    add(point.at, point.value!);
+    add(bucket.at, bucket.representative);
   }
   if (segment.isNotEmpty && segment.last.observedUntil != null) {
-    add(segment.last.observedUntil!, segment.last.representative);
+    final last = segment.last;
+    final value = last.lastValue ?? last.representative;
+    add(last.lastAt ?? last.at, value);
+    add(last.observedUntil!, value);
   }
   return vertices;
+}
+
+/// Selection resolves summaries and known-value holds separately.
+({HistoryBucket bucket, bool held})? historySelectionAt(
+  List<List<HistoryBucket>> segments,
+  DateTime target,
+) {
+  for (final segment in segments) {
+    final first = segment.first.startAt ?? segment.first.at;
+    final last =
+        segment.last.observedUntil ?? segment.last.lastAt ?? segment.last.at;
+    if (target.isBefore(first) ||
+        target.isAfter(last) ||
+        (segment.last.validBefore != null &&
+            !target.isBefore(segment.last.validBefore!))) {
+      continue;
+    }
+    for (var i = segment.length - 1; i >= 0; i--) {
+      final bucket = segment[i];
+      if (target.isBefore(bucket.startAt ?? bucket.at)) continue;
+      final afterSamples = target.isAfter(bucket.lastAt ?? bucket.at);
+      final holdsAfter =
+          i == segment.length - 1 || segment[i + 1].holdFromPrevious;
+      final withinRange =
+          bucket.rangeEnd != null && !target.isAfter(bucket.rangeEnd!);
+      return (
+        bucket: bucket,
+        held:
+            bucket.sampleCount == 0 ||
+            (afterSamples && (holdsAfter || !withinRange)),
+      );
+    }
+  }
+  return null;
+}
+
+/// Consecutive occupied buckets form one extrema envelope. Boundary holds and
+/// empty buckets never create ranges or bridge the envelope.
+List<List<HistoryBucket>> historyEnvelopeRuns(List<HistoryBucket> segment) {
+  final runs = <List<HistoryBucket>>[];
+  for (final bucket in segment) {
+    if (bucket.sampleCount == 0) continue;
+    if (!bucket.continuousFromPrevious || runs.isEmpty) runs.add([]);
+    runs.last.add(bucket);
+  }
+  return runs;
 }
 
 bool comparableFields(List<String> fields, List<Metric> catalog) {

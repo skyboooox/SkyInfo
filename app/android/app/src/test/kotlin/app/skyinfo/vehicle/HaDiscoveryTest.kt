@@ -196,4 +196,72 @@ class HaDiscoveryTest {
         assertTrue(messages.all { !it.getBoolean("retain") })
     }
 
+    @Test fun delayedHaStateSubscriptionReceivesFiniteNonRetainedSynchronization() {
+        var clock=0L
+        var subscribed=false
+        val messages=mutableListOf<JSONObject>()
+        val received=mutableMapOf<String,JSONObject>()
+        val http=OkHttpClient.Builder().addInterceptor { chain ->
+            val body=okio.Buffer();chain.request().body!!.writeTo(body)
+            val message=JSONObject(body.readUtf8());messages.add(message)
+            if(subscribed && !message.getBoolean("retain")) received[message.getString("topic")]=JSONObject(message.getString("payload"))
+            Response.Builder().request(chain.request()).protocol(Protocol.HTTP_1_1).code(200).message("OK").body("[]".toResponseBody()).build()
+        }.build()
+        val publisher=ConnectionClient(RuntimeEnvironment.getApplication(),secret,http,controlClock={clock})
+        val settings=JSONObject(config.toString()).put("haControlEnabled",true)
+        publisher.publishControlEntities(settings,emptyMap(),"current/command",false)
+        assertEquals(174,messages.size);assertTrue(received.isEmpty());assertEquals(1000L,publisher.controlSyncWaitMillis())
+        subscribed=true;messages.clear()
+        for(at in listOf(1000L,4000L,11000L)) {
+            clock=at;publisher.publishControlEntities(settings,emptyMap(),"current/command",true)
+            assertEquals(173,messages.size);assertTrue(messages.all { !it.getBoolean("retain") });messages.clear()
+        }
+        assertEquals(173,received.size);assertNull(publisher.controlSyncWaitMillis())
+        assertTrue(received.entries.first { it.key.endsWith("/rear_wind/state") }.value.getBoolean("available"))
+        assertFalse(received.entries.first { it.key.endsWith("/wireless_charging/state") }.value.getBoolean("available"))
+        clock=9999999;repeat(20) { publisher.publishControlEntities(settings,emptyMap(),"current/command",true) }
+        assertTrue(messages.isEmpty())
+        publisher.invalidateControlStates(rediscover=true)
+        publisher.publishControlEntities(settings,emptyMap(),"current/command",true)
+        assertEquals(174,messages.size);assertTrue(messages.first().getBoolean("retain"));assertEquals(1000L,publisher.controlSyncWaitMillis())
+    }
+    @Test fun existingAggregateMigratesInPlaceWithOnlyReplacedComponentsRemoved() {
+        val context: android.content.Context=RuntimeEnvironment.getApplication()
+        val settings=JSONObject(config.toString()).put("haControlEnabled",true)
+        val id=DeviceIdentity(context).id
+        val key=java.security.MessageDigest.getInstance("SHA-256")
+            .digest((HaEndpoint.identity(settings.getString("haUrl"))+"|"+id+"|"+settings.getString("prefix")).toByteArray())
+            .joinToString("") { "%02x".format(it) }
+        val prefs=context.getSharedPreferences("skyinfo.ha.control-publication",android.content.Context.MODE_PRIVATE)
+        prefs.edit().putBoolean("initialized",true).putString(key,"active").commit()
+        val messages=mutableListOf<JSONObject>()
+        var failFinal=true
+        val http=OkHttpClient.Builder().addInterceptor { chain ->
+            val body=okio.Buffer();chain.request().body!!.writeTo(body);val message=JSONObject(body.readUtf8())
+            if(message.getBoolean("retain") && JSONObject(message.getString("payload")).getJSONObject("components").length()==0 && failFinal) {
+                failFinal=false;throw java.io.IOException("simulated interrupted discovery update")
+            }
+            messages.add(message)
+            Response.Builder().request(chain.request()).protocol(Protocol.HTTP_1_1).code(200).message("OK").body("[]".toResponseBody()).build()
+        }.build()
+        var publisher=ConnectionClient(context,secret,http)
+        assertThrows(java.io.IOException::class.java) { publisher.publishControlEntities(settings,emptyMap(),"current/command",true) }
+        assertFalse(prefs.getBoolean("layout_$key",false));assertEquals(1,messages.size)
+        publisher=ConnectionClient(context,secret,http);messages.clear()
+        publisher.publishControlEntities(settings,emptyMap(),"current/command",true)
+        val discoveries=messages.filter { it.getBoolean("retain") }
+        assertEquals(2,discoveries.size)
+        assertTrue(discoveries.all { it.getString("topic")=="homeassistant/device/skyinfo_${id}_controls/config" && it.getString("payload").isNotEmpty() })
+        val migration=JSONObject(discoveries.first().getString("payload"));val final=JSONObject(discoveries.last().getString("payload"))
+        val removed=migration.getJSONObject("components")
+        assertEquals(472,removed.length());assertEquals(0,final.getJSONObject("components").length())
+        assertFalse(removed.has("skyinfo_${id}_control_ac_power"));assertTrue(removed.has("skyinfo_${id}_control_ac_wind_level"))
+        assertEquals("skyinfo_$id",final.getJSONObject("device").getJSONArray("identifiers").getString(0))
+        assertEquals(17,final.getJSONArray("child_devices").length());assertTrue(prefs.getBoolean("layout_$key",false))
+        messages.clear();publisher=ConnectionClient(context,secret,http)
+        publisher.publishControlEntities(settings,emptyMap(),"new/command",true)
+        assertEquals(1,messages.count { it.getBoolean("retain") })
+        assertTrue(messages.all { it.getString("topic")!="current/command" && it.getString("topic")!="new/command" })
+    }
+
 }
